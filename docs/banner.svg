@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" role="img" aria-label="Taller de equipos">
+  <defs>
+    <linearGradient id="fondo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00123F"/>
+      <stop offset="0.55" stop-color="#001E5E"/>
+      <stop offset="1" stop-color="#0A2F7D"/>
+    </linearGradient>
+    <linearGradient id="brillo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="320" fill="url(#fondo)"/>
+  <rect width="1280" height="320" fill="url(#brillo)"/>
+
+  <g opacity="0.10" stroke="#FFFFFF" stroke-width="1">
+    <path d="M0 260h1280M0 200h1280M0 140h1280M0 80h1280"/>
+    <path d="M160 0v320M400 0v320M640 0v320M880 0v320M1120 0v320"/>
+  </g>
+
+  <circle cx="1080" cy="70" r="150" fill="#D80A18" opacity="0.16"/>
+  <circle cx="600" cy="330" r="190" fill="#1D50B4" opacity="0.20"/>
+  <circle cx="1188" cy="248" r="46" fill="none" stroke="#D80A18" stroke-width="3" opacity="0.55"/>
+
+  <g transform="translate(78 92)">
+    <rect x="0" y="0" width="136" height="136" rx="30" fill="#FFFFFF" opacity="0.10"/>
+    <rect x="14" y="14" width="108" height="108" rx="24" fill="#001E5E"/>
+    <g fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M52 48h-4a13 13 0 000 26h4"/>
+      <path d="M84 48h4a13 13 0 010 26h-4"/>
+      <path d="M68 42v52"/>
+    </g>
+    <circle cx="68" cy="68" r="9" fill="#D80A18"/>
+  </g>
+
+  <text x="252" y="140" font-family="system-ui, 'Segoe UI', Roboto, Arial, sans-serif"
+        font-size="58" font-weight="800" fill="#FFFFFF" letter-spacing="-1">Taller de equipos</text>
+  <text x="254" y="182" font-family="system-ui, 'Segoe UI', Roboto, Arial, sans-serif"
+        font-size="21" fill="#C2D3F5">Registro y control de equipos de soporte técnico</text>
+
+  <g font-family="system-ui, 'Segoe UI', Roboto, Arial, sans-serif" font-size="15" fill="#E3EBFB">
+    <rect x="254" y="206" width="150" height="34" rx="17" fill="#FFFFFF" opacity="0.12"/>
+    <text x="272" y="228">PySide6 · Qt 6</text>
+    <rect x="416" y="206" width="176" height="34" rx="17" fill="#FFFFFF" opacity="0.12"/>
+    <text x="434" y="228">SQLAlchemy 2.0</text>
+    <rect x="604" y="206" width="164" height="34" rx="17" fill="#FFFFFF" opacity="0.12"/>
+    <text x="622" y="228">PostgreSQL 18</text>
+  </g>
+</svg>

@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Database artifacts
+*.dump
+*.sql.gz
+*.bak
+
+# Editors & OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local runtime state
+.atl/
+
+# Generated migration reports
+reports/
+
+# Respaldos de base (nunca se commitean)
+respaldos/
+
+# Artefactos de empaquetado (se regeneran con scripts/empaquetar.sh)
+packaging/icono.png
+packaging/icono.ico

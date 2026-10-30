@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Taller de equipos
+GenericName=Registro de equipos
+# Ajustá las dos rutas si instalás la carpeta en otro lugar.
+Exec=/opt/taller-equipos/taller-equipos
+Icon=/opt/taller-equipos/_internal/taller/ui/assets/logo.png
+Terminal=false
+Categories=Office;Database;
+Keywords=inventario;equipos;taller;soporte;
+StartupWMClass=taller-equipos

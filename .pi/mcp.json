@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "postgres-taller": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://taller_ro@localhost:5432/taller_dev"
+      ],
+      "description": "Read-only SQL access to the taller_dev database. The taller_ro role can only SELECT, so an agent can inspect the schema and verify queries without being able to write."
+    }
+  }
+}
