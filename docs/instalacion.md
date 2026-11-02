@@ -78,6 +78,23 @@ El instalador de Windows:
 
 ### Linux
 
+Primero, mirar qué hay instalado sin borrar nada — el programa puede estar en
+`~/.local` (instalación de usuario) o en `/usr/local` (instalación con `sudo`):
+
+```bash
+scripts/desinstalar.sh                 # solo muestra lo que encontró
+scripts/desinstalar.sh --si            # lo borra
+```
+
+Si lo instalaste con `sudo`, el lanzador en `/usr/local/bin` es de `root` y el
+desinstalador necesita `sudo`:
+
+```bash
+sudo scripts/desinstalar.sh --si --prefijo /usr/local
+```
+
+Y si preferís el desinstalador que dejó la propia instalación:
+
 ```bash
 # quita el programa y deja la configuración
 <prefijo>/share/taller-equipos/desinstalar.sh
