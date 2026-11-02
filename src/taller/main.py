@@ -113,7 +113,9 @@ def conectar(servicio: ServicioTaller) -> bool:
             None,
             "Sin conexión con el servidor",
             f"No se pudo conectar con la base de datos.\n\n{detalle}\n\n"
-            "Avisá al administrador o reintentá cuando el servidor esté disponible.",
+            "Lo más común: el servidor no está encendido. Si es esta computadora, "
+            "corre scripts/bd.sh start. Si es un servidor de red, avisá a quien lo "
+            "administra. Después reintentá.",
             QMessageBox.StandardButton.Retry | QMessageBox.StandardButton.Close,
             QMessageBox.StandardButton.Retry,
         )
