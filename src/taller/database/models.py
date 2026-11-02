@@ -83,10 +83,11 @@ class Tecnico(Base):
 
 
 class Usuario(Base):
-    """Application user, used for audit attribution.
+    """Application user, and the person the audit attributes changes to.
 
-    Authentication is deliberately not designed here: the audit column records
-    who the application says acted, never ``getpass.getuser()``.
+    ``password_hash`` is nullable because rows created by a migration or by the
+    import are not people: they attribute a bulk change, and nobody may log in as
+    them. A user without a hash simply cannot authenticate.
     """
 
     __tablename__ = "usuario"
@@ -94,6 +95,13 @@ class Usuario(Base):
     id: Mapped[int] = mapped_column(Integer, Identity(), primary_key=True)
     nombre: Mapped[str] = mapped_column(String(80), nullable=False, unique=True)
     activo: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("true"))
+    password_hash: Mapped[str | None] = mapped_column(Text, nullable=True)
+    es_admin: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("false")
+    )
+    ultimo_acceso: Mapped[dt.datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     creado_en: Mapped[dt.datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )

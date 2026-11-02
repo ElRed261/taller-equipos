@@ -43,6 +43,8 @@ from taller.schemas.movimiento import (
     ResumenEstados,
     validar_orden_fechas,
 )
+from taller.schemas.usuario import UsuarioLeido
+from taller.seguridad import clave_aceptable, hashear, necesita_rehash, verificar
 
 ModeloCatalogo = TypeVar("ModeloCatalogo", Area, Tecnico, TipoEquipo)
 
@@ -589,3 +591,156 @@ __all__ = [
     "MovimientoRepository",
     "NombreDuplicado",
 ]
+
+
+class UsuarioNoEncontrado(LookupError):
+    """El usuario pedido no existe."""
+
+
+class UsuarioDuplicado(ValueError):
+    """Ya hay un usuario con ese nombre (sin distinguir mayúsculas)."""
+
+
+class UsuarioRepository:
+    """Cuentas de la aplicación y autenticación.
+
+    La regla que hace útil a la auditoría: el nombre que se guarda en cada cambio
+    sale de acá, de una cuenta con contraseña, no de un campo de texto.
+    """
+
+    def __init__(self, session: Session) -> None:
+        self._s = session
+
+    def listar(self) -> list[UsuarioLeido]:
+        filas = self._s.scalars(select(Usuario).order_by(Usuario.nombre)).all()
+        return [UsuarioLeido.model_validate(fila) for fila in filas]
+
+    def obtener(self, usuario_id: int) -> UsuarioLeido:
+        return UsuarioLeido.model_validate(self._orm(usuario_id))
+
+    def hay_administrador(self) -> bool:
+        return bool(
+            self._s.scalar(
+                select(func.count())
+                .select_from(Usuario)
+                .where(Usuario.es_admin.is_(True), Usuario.activo.is_(True))
+            )
+        )
+
+    def contar_activos(self) -> int:
+        return int(
+            self._s.scalar(
+                select(func.count()).select_from(Usuario).where(Usuario.activo.is_(True))
+            )
+            or 0
+        )
+
+    def contar_administradores(self) -> int:
+        return int(
+            self._s.scalar(
+                select(func.count())
+                .select_from(Usuario)
+                .where(Usuario.es_admin.is_(True), Usuario.activo.is_(True))
+            )
+            or 0
+        )
+
+    def autenticar(self, nombre: str, clave: str) -> UsuarioLeido | None:
+        """La cuenta, solo si el nombre existe, está activa y la clave coincide.
+
+        Devuelve ``None`` en todos los casos de fallo, sin distinguir cuál fue:
+        quien prueba contraseñas no tiene por qué enterarse de qué usuarios hay.
+        """
+        limpio = nombre.strip()
+        if not limpio or not clave:
+            return None
+        fila = self._s.scalar(
+            select(Usuario).where(func.lower(Usuario.nombre) == limpio.lower())
+        )
+        if fila is None or not fila.activo:
+            return None
+        if not verificar(fila.password_hash, clave):
+            return None
+        if necesita_rehash(fila.password_hash):
+            # Los parámetros de argon2 suben con el tiempo; el que entra se
+            # re-hashea mientras la contraseña está en la mano.
+            fila.password_hash = hashear(clave)
+        fila.ultimo_acceso = dt.datetime.now(dt.UTC)
+        self._s.flush()
+        return UsuarioLeido.model_validate(fila)
+
+    def crear(
+        self, nombre: str, clave: str, *, es_admin: bool = False
+    ) -> UsuarioLeido:
+        motivo = clave_aceptable(clave)
+        if motivo:
+            raise ValueError(motivo)
+        limpio = nombre.strip()
+        if not limpio:
+            raise ValueError("hace falta un nombre de usuario")
+        repetido = self._s.scalar(
+            select(Usuario).where(func.lower(Usuario.nombre) == limpio.lower())
+        )
+        if repetido is not None:
+            raise UsuarioDuplicado(f"ya existe un usuario «{repetido.nombre}»")
+        fila = Usuario(
+            nombre=limpio, password_hash=hashear(clave), es_admin=es_admin
+        )
+        self._s.add(fila)
+        self._s.flush()
+        return UsuarioLeido.model_validate(fila)
+
+    def fijar_clave_de_existente(
+        self, nombre: str, clave: str, *, es_admin: bool = True
+    ) -> UsuarioLeido:
+        """Da contraseña a una cuenta que ya existía sin ella.
+
+        Es el caso de los usuarios que creó la importación o una migración: no son
+        gente con contraseña, pero el nombre puede ser el de alguien real que ahora
+        necesita entrar sin que queden dos cuentas con el mismo nombre.
+        """
+        motivo = clave_aceptable(clave)
+        if motivo:
+            raise ValueError(motivo)
+        fila = self._s.scalar(
+            select(Usuario).where(func.lower(Usuario.nombre) == nombre.strip().lower())
+        )
+        if fila is None:
+            raise UsuarioNoEncontrado(nombre)
+        fila.password_hash = hashear(clave)
+        fila.es_admin = es_admin
+        fila.activo = True
+        self._s.flush()
+        return UsuarioLeido.model_validate(fila)
+
+    def cambiar_clave(self, usuario_id: int, clave: str) -> None:
+        motivo = clave_aceptable(clave)
+        if motivo:
+            raise ValueError(motivo)
+        self._orm(usuario_id).password_hash = hashear(clave)
+        self._s.flush()
+
+    def alternar_activo(self, usuario_id: int) -> UsuarioLeido:
+        fila = self._orm(usuario_id)
+        if fila.activo and fila.es_admin and self.contar_administradores() <= 1:
+            raise ValueError(
+                "no se puede desactivar al último administrador activo: "
+                "nadie podría volver a administrar el sistema"
+            )
+        fila.activo = not fila.activo
+        self._s.flush()
+        return UsuarioLeido.model_validate(fila)
+
+    def hacer_administrador(self, usuario_id: int, *, es_admin: bool) -> UsuarioLeido:
+        fila = self._orm(usuario_id)
+        if fila.es_admin and not es_admin and self.contar_administradores() <= 1:
+            raise ValueError("no se puede quitar el último administrador activo")
+        fila.es_admin = es_admin
+        self._s.flush()
+        return UsuarioLeido.model_validate(fila)
+
+    def _orm(self, usuario_id: int) -> Usuario:
+        fila = self._s.get(Usuario, usuario_id)
+        if fila is None:
+            raise UsuarioNoEncontrado(f"no existe el usuario {usuario_id}")
+        return fila

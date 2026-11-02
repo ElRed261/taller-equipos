@@ -18,7 +18,11 @@ from sqlalchemy import select
 
 from taller.database.connection import session_scope
 from taller.database.models import Area, Movimiento, Tecnico, TipoEquipo
-from taller.database.repositories import CatalogoRepository, MovimientoRepository
+from taller.database.repositories import (
+    CatalogoRepository,
+    MovimientoRepository,
+    UsuarioRepository,
+)
 from taller.schemas.movimiento import (
     CatalogoConUso,
     CatalogoLeido,
@@ -28,6 +32,7 @@ from taller.schemas.movimiento import (
     MovimientoLeido,
     ResumenEstados,
 )
+from taller.schemas.usuario import UsuarioLeido
 
 CATALOGOS: dict[str, type[Area] | type[Tecnico] | type[TipoEquipo]] = {
     "area": Area,
@@ -39,10 +44,11 @@ CATALOGOS: dict[str, type[Area] | type[Tecnico] | type[TipoEquipo]] = {
 class ServicioTaller:
     """One instance per running application, bound to the logged-in user."""
 
-    def __init__(self, usuario: str) -> None:
+    def __init__(self, usuario: str, *, es_admin: bool = False) -> None:
         if not usuario.strip():
             raise ValueError("hace falta un usuario para atribuir los cambios")
         self.usuario = usuario.strip()
+        self.es_admin = es_admin
 
     # -------------------------------------------------------------- lecturas
 
@@ -166,6 +172,63 @@ class ServicioTaller:
         with session_scope() as sesion:
             return CatalogoRepository(sesion).listar(
                 CATALOGOS[dimension], solo_activos=solo_activos
+            )
+
+    # --------------------------------------------------------------- usuarios
+
+    @staticmethod
+    def autenticar(nombre: str, clave: str) -> UsuarioLeido | None:
+        """La cuenta que corresponde a esas credenciales, o ``None``."""
+        with session_scope() as sesion:
+            return UsuarioRepository(sesion).autenticar(nombre, clave)
+
+    @staticmethod
+    def hay_administrador() -> bool:
+        with session_scope() as sesion:
+            return UsuarioRepository(sesion).hay_administrador()
+
+    @staticmethod
+    def cuentas_existentes() -> list[UsuarioLeido]:
+        """Todas las cuentas, para ofrecer los nombres que ya están en uso."""
+        with session_scope() as sesion:
+            return UsuarioRepository(sesion).listar()
+
+    @staticmethod
+    def crear_administrador(nombre: str, clave: str) -> UsuarioLeido:
+        """Crea la primera cuenta administradora, o le pone clave a una existente."""
+        with session_scope() as sesion:
+            repositorio = UsuarioRepository(sesion)
+            existente = [
+                u
+                for u in repositorio.listar()
+                if u.nombre.lower() == nombre.strip().lower()
+            ]
+            if existente:
+                return repositorio.fijar_clave_de_existente(nombre, clave, es_admin=True)
+            return repositorio.crear(nombre, clave, es_admin=True)
+
+    def listar_usuarios(self) -> list[UsuarioLeido]:
+        with session_scope() as sesion:
+            return UsuarioRepository(sesion).listar()
+
+    def crear_usuario(
+        self, nombre: str, clave: str, *, es_admin: bool = False
+    ) -> UsuarioLeido:
+        with session_scope() as sesion:
+            return UsuarioRepository(sesion).crear(nombre, clave, es_admin=es_admin)
+
+    def cambiar_clave_usuario(self, usuario_id: int, clave: str) -> None:
+        with session_scope() as sesion:
+            UsuarioRepository(sesion).cambiar_clave(usuario_id, clave)
+
+    def alternar_usuario(self, usuario_id: int) -> UsuarioLeido:
+        with session_scope() as sesion:
+            return UsuarioRepository(sesion).alternar_activo(usuario_id)
+
+    def asignar_administrador(self, usuario_id: int, *, es_admin: bool) -> UsuarioLeido:
+        with session_scope() as sesion:
+            return UsuarioRepository(sesion).hacer_administrador(
+                usuario_id, es_admin=es_admin
             )
 
     # ------------------------------------------------------------------ salud

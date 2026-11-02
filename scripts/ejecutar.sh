@@ -8,11 +8,9 @@
 #   2. espera a que la base acepte conexiones (no alcanza con que el proceso viva);
 #   3. abre la ventana.
 #
-# El usuario de la aplicación sale de TALLER_USUARIO. Si no está definido, la
-# aplicación lo pregunta al arrancar: cada edición queda auditada a ese nombre,
-# y por eso no se toma del sistema operativo.
-#
-#   TALLER_USUARIO=ana scripts/ejecutar.sh
+# La cuenta se elige al entrar, con su contraseña, y cada edición queda auditada a
+# ese nombre. No hay variable de entorno que lo imponga: si la hubiera, cualquiera
+# podría escribir a nombre de otro y la auditoría no valdría nada.
 set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

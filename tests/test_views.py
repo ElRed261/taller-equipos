@@ -64,9 +64,14 @@ class ServicioFalso:
     """In-memory double of ``ServicioTaller``."""
 
     def __init__(
-        self, usuario: str = "operador", filas: list[MovimientoLeido] | None = None
+        self,
+        usuario: str = "operador",
+        filas: list[MovimientoLeido] | None = None,
+        *,
+        es_admin: bool = False,
     ) -> None:
         self.usuario = usuario
+        self.es_admin = es_admin
         self.filas = filas if filas is not None else [
             fila(id=1, estado="en_taller", fecha_salida=None),
             fila(

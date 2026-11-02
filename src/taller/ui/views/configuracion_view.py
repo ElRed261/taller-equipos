@@ -39,6 +39,7 @@ from taller.ui.iconos import icono
 from taller.ui.models.catalogo_table_model import CatalogoTableModel, ColumnaCatalogo
 from taller.ui.models.filtro_movimientos import FiltroMovimientos
 from taller.ui.models.movimientos_table_model import Columna, MovimientosTableModel
+from taller.ui.models.usuarios_table_model import UsuariosTableModel
 from taller.ui.tema import COLORES
 
 ETIQUETAS = {
@@ -567,6 +568,196 @@ class PanelSistema(QWidget):
         return True
 
 
+class PanelUsuarios(QWidget):
+    """Cuentas de la aplicación: quién puede entrar y quién administra.
+
+    Solo la ve un administrador, y la pestaña ni siquiera se crea para los demás:
+    esconder un botón no es lo mismo que no ofrecerlo.
+    """
+
+    cambio = Signal()
+    mensaje = Signal(str)
+
+    def __init__(self, servicio: ServicioTaller, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self._servicio = servicio
+        self._modelo = UsuariosTableModel()
+
+        titulo = QLabel("Usuarios")
+        titulo.setObjectName("TituloVista")
+        detalle = QLabel(
+            "Cada cambio queda registrado a nombre de quien entró con su contraseña. "
+            "Un usuario inactivo no puede entrar, pero conserva su historial."
+        )
+        detalle.setObjectName("SubtituloVista")
+        detalle.setWordWrap(True)
+
+        self.tabla = QTableView()
+        self.tabla.setModel(self._modelo)
+        self.tabla.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.tabla.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        self.tabla.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.tabla.verticalHeader().setVisible(False)
+        self.tabla.setAlternatingRowColors(True)
+        cabecera = self.tabla.horizontalHeader()
+        cabecera.setStretchLastSection(True)
+        cabecera.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.tabla.selectionModel().selectionChanged.connect(self._actualizar_botones)
+        self.tabla.doubleClicked.connect(lambda *_: self.cambiar_clave())
+
+        self.boton_nuevo = QPushButton("Nuevo usuario")
+        self.boton_nuevo.setObjectName("BotonPrimario")
+        self.boton_nuevo.setIcon(icono("nuevo", COLORES["blanco"]))
+        self.boton_nuevo.clicked.connect(self.nuevo)
+
+        self.boton_clave = QPushButton("Cambiar contraseña…")
+        self.boton_clave.setIcon(icono("editar", COLORES["gris-700"]))
+        self.boton_clave.clicked.connect(self.cambiar_clave)
+
+        self.boton_estado = QPushButton("Desactivar")
+        self.boton_estado.clicked.connect(self.alternar)
+
+        self.boton_admin = QPushButton("Hacer administrador")
+        self.boton_admin.clicked.connect(self.alternar_admin)
+
+        acciones = QHBoxLayout()
+        acciones.setSpacing(8)
+        for boton in (
+            self.boton_nuevo,
+            self.boton_clave,
+            self.boton_estado,
+            self.boton_admin,
+        ):
+            acciones.addWidget(boton)
+        acciones.addStretch(1)
+
+        caja = QVBoxLayout(self)
+        caja.setContentsMargins(18, 16, 18, 16)
+        caja.setSpacing(10)
+        caja.addWidget(titulo)
+        caja.addWidget(detalle)
+        caja.addWidget(self.tabla, 1)
+        caja.addLayout(acciones)
+
+        self.recargar()
+
+    # ------------------------------------------------------------------ estado
+
+    def recargar(self) -> None:
+        self._modelo.reemplazar(self._servicio.listar_usuarios())
+        self._actualizar_botones()
+
+    def seleccionado(self):
+        indices = self.tabla.selectionModel().selectedRows()
+        if not indices:
+            return None
+        return self._modelo.fila(indices[0].row())
+
+    def _actualizar_botones(self, *_args: object) -> None:
+        cuenta = self.seleccionado()
+        hay = cuenta is not None
+        for boton in (self.boton_clave, self.boton_estado, self.boton_admin):
+            boton.setEnabled(hay)
+        if cuenta is None:
+            self.boton_estado.setText("Desactivar")
+            self.boton_admin.setText("Hacer administrador")
+            return
+        self.boton_estado.setText("Activar" if not cuenta.activo else "Desactivar")
+        # A uno mismo no se le quita la cuenta: se quedaría afuera del sistema.
+        propio = cuenta.nombre == self._servicio.usuario
+        self.boton_estado.setEnabled(hay and not propio)
+        self.boton_admin.setText(
+            "Quitar administrador" if cuenta.es_admin else "Hacer administrador"
+        )
+
+    # ------------------------------------------------------------------ acción
+
+    def nuevo(self) -> None:
+        from taller.ui.views.ingreso_view import DialogoClave
+
+        dialogo = DialogoClave(
+            self,
+            titulo="Nuevo usuario",
+            detalle="La persona entra con este nombre y esta contraseña.",
+        )
+        if dialogo.exec() != QDialog.DialogCode.Accepted or dialogo.clave is None:
+            return
+        try:
+            self._servicio.crear_usuario(
+                dialogo.nombre.text().strip(), dialogo.clave
+            )
+        except ValueError as error:
+            self._avisar(str(error))
+            return
+        self.recargar()
+        self.cambio.emit()
+        self.mensaje.emit("Usuario creado.")
+
+    def cambiar_clave(self) -> None:
+        from taller.ui.views.ingreso_view import DialogoClave
+
+        cuenta = self.seleccionado()
+        if cuenta is None:
+            return
+        dialogo = DialogoClave(
+            self,
+            titulo="Cambiar contraseña",
+            detalle=f"Contraseña nueva para {cuenta.nombre}.",
+            nombre=cuenta.nombre,
+        )
+        if dialogo.exec() != QDialog.DialogCode.Accepted or dialogo.clave is None:
+            return
+        try:
+            self._servicio.cambiar_clave_usuario(cuenta.id, dialogo.clave)
+        except ValueError as error:
+            self._avisar(str(error))
+            return
+        self.mensaje.emit(f"Contraseña de {cuenta.nombre} cambiada.")
+
+    def alternar(self) -> bool:
+        cuenta = self.seleccionado()
+        if cuenta is None:
+            return False
+        accion = "activar" if not cuenta.activo else "desactivar"
+        if not self._confirmar(f"¿{accion.capitalize()} a {cuenta.nombre}?"):
+            return False
+        try:
+            self._servicio.alternar_usuario(cuenta.id)
+        except ValueError as error:
+            self._avisar(str(error))
+            return False
+        self.recargar()
+        self.cambio.emit()
+        return True
+
+    def alternar_admin(self) -> bool:
+        cuenta = self.seleccionado()
+        if cuenta is None:
+            return False
+        try:
+            self._servicio.asignar_administrador(cuenta.id, es_admin=not cuenta.es_admin)
+        except ValueError as error:
+            self._avisar(str(error))
+            return False
+        self.recargar()
+        self.cambio.emit()
+        return True
+
+    def _confirmar(self, pregunta: str) -> bool:
+        respuesta = QMessageBox.question(
+            self,
+            "Confirmar",
+            pregunta,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        return respuesta == QMessageBox.StandardButton.Yes
+
+    def _avisar(self, texto: str) -> None:
+        QMessageBox.warning(self, "No se pudo", texto)
+        self.mensaje.emit(texto)
+
+
 class ConfiguracionView(QWidget):
     """The three catalogs, one tab each."""
 
@@ -595,6 +786,14 @@ class ConfiguracionView(QWidget):
         self.sistema.configuracion_cambiada.connect(self.configuracion_cambiada.emit)
         self.pestanas.addTab(self.sistema, "Sistema")
 
+        # El panel ni se construye si quien entró no administra: no es un botón
+        # escondido, es una capacidad que no está en la pantalla.
+        self.usuarios = PanelUsuarios(servicio) if servicio.es_admin else None
+        if self.usuarios is not None:
+            self.usuarios.cambio.connect(self.catalogo_cambiado.emit)
+            self.usuarios.mensaje.connect(self.mensaje.emit)
+            self.pestanas.addTab(self.usuarios, "Usuarios")
+
         caja = QVBoxLayout(self)
         caja.setContentsMargins(20, 18, 20, 18)
         caja.setSpacing(10)
@@ -605,6 +804,8 @@ class ConfiguracionView(QWidget):
             panel.recargar()
         self.administracion.recargar()
         self.sistema.recargar()
+        if self.usuarios is not None:
+            self.usuarios.recargar()
 
     def panel(self, dimension: str) -> PanelCatalogo:
         return self.paneles[dimension]

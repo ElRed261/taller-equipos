@@ -4,9 +4,10 @@ Tres guardas antes de mostrar la ventana, porque es un sistema en red:
 
 1. **Sin configuración no se entra.** La primera vez se piden la marca, la
    conexión y se crean las tablas desde el asistente.
-2. **Sin usuario no se entra.** La auditoría atribuye cada edición a un nombre; un
-   sistema que no sabe quién escribe no puede auditar nada. El nombre se pide o
-   viene de ``TALLER_USUARIO``, nunca de ``getpass``.
+2. **Sin cuenta no se entra.** La auditoría atribuye cada edición a una cuenta con
+   contraseña, verificada contra la base. No hay forma de elegir el nombre por
+   fuera: ni un campo de texto, ni una variable de entorno. Si todavía no existe
+   ninguna cuenta, se crea la primera, que administra el sistema.
 3. **Sin base no se entra con un traceback.** Si el servidor está caído aparece un
    diálogo con el motivo y la opción de reintentar.
 
@@ -19,37 +20,55 @@ from __future__ import annotations
 import sys
 
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (
-    QApplication,
-    QDialog,
-    QInputDialog,
-    QLineEdit,
-    QMessageBox,
-)
+from PySide6.QtWidgets import QApplication, QDialog, QMessageBox
 
 from taller.arranque import configuracion_completa, hay_configuracion_externa, reiniciar_cache
-from taller.config.settings import get_settings
 from taller.database.connection import reset_engine
 from taller.servicios import ServicioTaller
 from taller.ui.main_window import VentanaPrincipal
 from taller.ui.marca import cargar_marca
 from taller.ui.tema import hoja_de_estilo
 from taller.ui.views.configuracion_inicial import ConfiguracionInicialDialog
+from taller.ui.views.ingreso_view import DialogoIngreso, DialogoPrimerAdministrador
 
 
-def resolver_usuario(settings_usuario: str) -> str | None:
-    """Ask for the application user. Returns ``None`` when the user cancels."""
-    if settings_usuario.strip():
-        return settings_usuario.strip()
-    nombre, aceptado = QInputDialog.getText(
-        None,
-        "Taller de equipos",
-        "¿Quién está usando el sistema?\n(Cada edición queda registrada a tu nombre.)",
-        QLineEdit.EchoMode.Normal,
-    )
-    if not aceptado or not nombre.strip():
-        return None
-    return nombre.strip()
+def autenticar() -> tuple[str, bool] | None:
+    """Get the account that will own this session, or ``None`` if nobody entered.
+
+    Sin administrador no hay quién dé de alta a los demás, así que la primera vez
+    se crea uno. Si la base no responde, se ofrece reintentar en vez de terminar
+    con un error que no dice nada.
+    """
+    while True:
+        try:
+            hay_administrador = ServicioTaller.hay_administrador()
+            existentes = (
+                [] if hay_administrador
+                else [cuenta.nombre for cuenta in ServicioTaller.cuentas_existentes()]
+            )
+        except Exception as error:  # noqa: BLE001 - se muestra el motivo
+            respuesta = QMessageBox.critical(
+                None,
+                "Sin conexión con el servidor",
+                f"No se pudo consultar la base de datos.\n\n{error}\n\n"
+                "Avisá al administrador o reintentá cuando el servidor esté disponible.",
+                QMessageBox.StandardButton.Retry | QMessageBox.StandardButton.Close,
+                QMessageBox.StandardButton.Retry,
+            )
+            if respuesta != QMessageBox.StandardButton.Retry:
+                return None
+            continue
+
+        if not hay_administrador:
+            primero = DialogoPrimerAdministrador(existentes=existentes)
+            if primero.exec() != QDialog.DialogCode.Accepted or not primero.usuario:
+                return None
+            return primero.usuario, True
+
+        ingreso = DialogoIngreso()
+        if ingreso.exec() != QDialog.DialogCode.Accepted or not ingreso.usuario:
+            return None
+        return ingreso.usuario, ingreso.es_admin
 
 
 def conectar(servicio: ServicioTaller) -> bool:
@@ -102,11 +121,12 @@ def main(argv: list[str] | None = None) -> int:
     app.setOrganizationName(marca.organizacion)
     app.setWindowIcon(QIcon(str(marca.logo)))
 
-    usuario = resolver_usuario(get_settings().usuario)
-    if usuario is None:
-        return 1
+    cuenta = autenticar()
+    if cuenta is None:
+        return 0  # cancelar no es un error: la persona decidió no entrar
 
-    servicio = ServicioTaller(usuario)
+    usuario, es_admin = cuenta
+    servicio = ServicioTaller(usuario, es_admin=es_admin)
     if not conectar(servicio):
         return 1
 
