@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from taller.arranque import ingreso_obligatorio
 from taller.database.connection import reset_engine
 from taller.schemas.movimiento import MovimientoLeido
 from taller.servicios import ServicioTaller
@@ -159,8 +160,19 @@ class VentanaPrincipal(QMainWindow):
         barra = self.statusBar()
         self._total = QLabel("0 registros")
         self._total.setStyleSheet("color:#6B7684;padding-right:14px;")
-        self._usuario = QLabel(self._servicio.usuario)
-        self._usuario.setStyleSheet("color:#6B7684;padding-right:14px;")
+        # Con el ingreso desactivado, el nombre de la barra no está respaldado por
+        # una contraseña: tiene que verse distinto para que nadie lo confunda con
+        # una sesión autenticada.
+        if ingreso_obligatorio():
+            self._usuario = QLabel(self._servicio.usuario)
+            self._usuario.setStyleSheet("color:#6B7684;padding-right:14px;")
+        else:
+            self._usuario = QLabel(f"sin ingreso · {self._servicio.usuario}")
+            self._usuario.setStyleSheet("color:#A50310;padding-right:14px;")
+            self._usuario.setToolTip(
+                "El ingreso con contraseña está desactivado en la configuración: "
+                "los cambios se registran a nombre de esta cuenta sin verificarla."
+            )
         barra.addPermanentWidget(self._total)
         barra.addPermanentWidget(self._usuario)
         self._actualizar_total()

@@ -4,10 +4,12 @@ Tres guardas antes de mostrar la ventana, porque es un sistema en red:
 
 1. **Sin configuración no se entra.** La primera vez se piden la marca, la
    conexión y se crean las tablas desde el asistente.
-2. **Sin cuenta no se entra.** La auditoría atribuye cada edición a una cuenta con
-   contraseña, verificada contra la base. No hay forma de elegir el nombre por
-   fuera: ni un campo de texto, ni una variable de entorno. Si todavía no existe
-   ninguna cuenta, se crea la primera, que administra el sistema.
+2. **Sin cuenta no se entra**, salvo que el ingreso esté desactivado en la
+   configuración. Con el ingreso encendido, la auditoría atribuye cada edición a una
+   cuenta con contraseña verificada contra la base, y no hay forma de elegir el
+   nombre por fuera. Apagado, se entra con la cuenta por defecto y la ventana lo
+   dice en la barra inferior: una auditoría sin contraseña tiene que verse, no
+   parecer lo mismo que una con contraseña.
 3. **Sin base no se entra con un traceback.** Si el servidor está caído aparece un
    diálogo con el motivo y la opción de reintentar.
 
@@ -22,7 +24,13 @@ import sys
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QDialog, QMessageBox
 
-from taller.arranque import configuracion_completa, hay_configuracion_externa, reiniciar_cache
+from taller.arranque import (
+    configuracion_completa,
+    hay_configuracion_externa,
+    ingreso_obligatorio,
+    reiniciar_cache,
+    usuario_por_defecto,
+)
 from taller.database.connection import reset_engine
 from taller.servicios import ServicioTaller
 from taller.ui.main_window import VentanaPrincipal
@@ -32,6 +40,19 @@ from taller.ui.views.configuracion_inicial import ConfiguracionInicialDialog
 from taller.ui.views.ingreso_view import DialogoIngreso, DialogoPrimerAdministrador
 
 
+def cuenta_de_entrada_directa() -> tuple[str, bool] | None:
+    """The account used when the login is disabled, or ``None`` if it cannot be resolved.
+
+    Sin una cuenta clara no se inventa un nombre: se cae al ingreso normal, que es
+    lo único que deja la auditoría en pie.
+    """
+    pedida = usuario_por_defecto()
+    cuenta = ServicioTaller.cuenta_sin_contrasena(pedida)
+    if cuenta is None:
+        return None
+    return cuenta.nombre, cuenta.es_admin
+
+
 def autenticar() -> tuple[str, bool] | None:
     """Get the account that will own this session, or ``None`` if nobody entered.
 
@@ -39,6 +60,12 @@ def autenticar() -> tuple[str, bool] | None:
     se crea uno. Si la base no responde, se ofrece reintentar en vez de terminar
     con un error que no dice nada.
     """
+    if not ingreso_obligatorio():
+        directa = cuenta_de_entrada_directa()
+        if directa is not None:
+            return directa
+        # Sin cuenta por defecto no hay a quién atribuir los cambios: se pregunta.
+
     while True:
         try:
             hay_administrador = ServicioTaller.hay_administrador()

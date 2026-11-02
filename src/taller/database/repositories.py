@@ -736,6 +736,21 @@ class UsuarioRepository:
             or 0
         )
 
+    def cuenta_unica_con_clave(self) -> UsuarioLeido | None:
+        """La única cuenta activa con contraseña, o ``None`` si no es única.
+
+        Las cuentas de importación y de migración no tienen hash: no son personas y
+        no cuentan como candidatas a entrar sin pedir contraseña.
+        """
+        filas = self._s.scalars(
+            select(Usuario).where(
+                Usuario.activo.is_(True), Usuario.password_hash.is_not(None)
+            )
+        ).all()
+        if len(filas) != 1:
+            return None
+        return UsuarioLeido.model_validate(filas[0])
+
     def autenticar(self, nombre: str, clave: str) -> UsuarioLeido | None:
         """La cuenta, solo si el nombre existe, está activa y la clave coincide.
 

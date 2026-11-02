@@ -140,6 +140,11 @@ class ConfiguracionArranque:
     organizacion: str = ""
     descripcion: str = ""
     logo: Path | None = None
+    #: Pedir usuario y contraseña al entrar. Se puede apagar; la autenticación y las
+    #: cuentas siguen existiendo, y volver a encenderlo es una casilla.
+    login_obligatorio: bool = True
+    #: Cuenta con la que se entra cuando no se pide contraseña.
+    usuario_por_defecto: str = ""
 
     @property
     def completa(self) -> bool:
@@ -153,6 +158,10 @@ class ConfiguracionArranque:
                 "organizacion": self.organizacion,
                 "descripcion": self.descripcion,
                 "logo": str(self.logo) if self.logo else "",
+            },
+            "acceso": {
+                "login_obligatorio": self.login_obligatorio,
+                "usuario_por_defecto": self.usuario_por_defecto,
             },
         }
 
@@ -191,14 +200,46 @@ def cargar_configuracion(*, refrescar: bool = False) -> ConfiguracionArranque:
     logo = marca.get("logo")
     ruta_logo = Path(str(logo)) if isinstance(logo, str) and logo else None
 
+    acceso = crudo.get("acceso")
+    acceso = acceso if isinstance(acceso, dict) else {}
+    # Sin la clave, se pide contraseña: el valor seguro es el que no deja entrar a
+    # nadie sin identificarse, y apagarlo es una decisión explícita.
+    login = acceso.get("login_obligatorio", True)
+
     _cache = ConfiguracionArranque(
         database_url=str(crudo.get("database_url") or ""),
         nombre=str(marca.get("nombre") or ""),
         organizacion=str(marca.get("organizacion") or ""),
         descripcion=str(marca.get("descripcion") or ""),
         logo=ruta_logo if ruta_logo and ruta_logo.is_file() else None,
+        login_obligatorio=bool(login) if not isinstance(login, str) else _si_no(login),
+        usuario_por_defecto=str(acceso.get("usuario_por_defecto") or ""),
     )
     return _cache
+
+
+def _si_no(valor: str) -> bool:
+    return valor.strip().lower() not in ("0", "no", "off", "false", "")
+
+
+def ingreso_obligatorio() -> bool:
+    """¿Hay que identificarse para entrar?
+
+    ``TALLER_LOGIN=off`` lo apaga para una corrida sin tocar la configuración
+    guardada: sirve para una demostración o para una máquina de consulta.
+    """
+    impuesto = os.environ.get("TALLER_LOGIN")
+    if impuesto is not None:
+        return _si_no(impuesto)
+    return cargar_configuracion().login_obligatorio
+
+
+def usuario_por_defecto() -> str:
+    """La cuenta con la que se entra cuando no se pide contraseña."""
+    impuesto = os.environ.get("TALLER_USUARIO_POR_DEFECTO")
+    if impuesto and impuesto.strip():
+        return impuesto.strip()
+    return cargar_configuracion().usuario_por_defecto
 
 
 def hay_configuracion_externa() -> bool:

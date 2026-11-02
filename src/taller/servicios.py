@@ -176,6 +176,11 @@ class ServicioTaller:
                 CATALOGOS[dimension], nombre, usuario=self.usuario
             )
 
+    def historial_catalogo(self, *, limite: int = 200) -> list[dict[str, Any]]:
+        """Cambios de catálogo registrados, lo más nuevo primero."""
+        with session_scope() as sesion:
+            return CatalogoRepository(sesion).historial(limite=limite)
+
     def _catalogo(self, dimension: str, *, solo_activos: bool) -> list[CatalogoLeido]:
         with session_scope() as sesion:
             return CatalogoRepository(sesion).listar(
@@ -189,6 +194,23 @@ class ServicioTaller:
         """La cuenta que corresponde a esas credenciales, o ``None``."""
         with session_scope() as sesion:
             return UsuarioRepository(sesion).autenticar(nombre, clave)
+
+    @staticmethod
+    def cuenta_sin_contrasena(nombre: str = "") -> UsuarioLeido | None:
+        """La cuenta con la que se entra cuando el ingreso está desactivado.
+
+        Con nombre, esa cuenta si está activa. Sin nombre, sirve solo cuando hay
+        una única cuenta con contraseña: elegir entre varias sería adivinar, y la
+        auditoría quedaría a nombre de quien no fue.
+        """
+        with session_scope() as sesion:
+            repositorio = UsuarioRepository(sesion)
+            if nombre.strip():
+                for cuenta in repositorio.listar():
+                    if cuenta.nombre.lower() == nombre.strip().lower() and cuenta.activo:
+                        return cuenta
+                return None
+            return repositorio.cuenta_unica_con_clave()
 
     @staticmethod
     def hay_administrador() -> bool:

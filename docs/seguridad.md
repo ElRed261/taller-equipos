@@ -133,6 +133,25 @@ Tres decisiones que hacen esto defendible:
 - **Regla de contraseña solo por largo** (12 caracteres). Las reglas de mayúsculas y
   símbolos empujan a la gente a contraseñas cortas y predecibles.
 
+**Se puede apagar.** Configuración → Sistema → «Pedir usuario y contraseña al
+entrar». Apagado, el programa entra directo con una cuenta por defecto
+(`usuario_por_defecto`), y la barra inferior muestra `sin ingreso · <cuenta>` en
+rojo: una sesión sin contraseña tiene que distinguirse a simple vista de una
+verificada, o en seis meses nadie sabe qué auditoría está mirando.
+
+Qué se pierde y qué no:
+
+- **No se pierde** el registro: cada cambio sigue anotando quién, con la fila en
+  `auditoria_catalogo` y `auditoria_edicion`.
+- **Se pierde la prueba**: el nombre deja de estar respaldado por una contraseña,
+  así que la auditoría vuelve a ser una declaración. Sirve para ordenar el trabajo,
+  no como evidencia.
+- **No se borra nada**: las cuentas, los hashes y la pantalla de Usuarios siguen
+  ahí, y volver a encenderlo es una casilla.
+
+Para una corrida suelta, sin tocar lo guardado: `TALLER_LOGIN=on` fuerza a pedir
+contraseña y `TALLER_LOGIN=off` a no pedirla.
+
 Lo que queda: **no hay bloqueo por intentos fallidos**. Si te importa la fuerza
 bruta desde la red, agregalo; con la base en una LAN cerrada no es lo primero.
 

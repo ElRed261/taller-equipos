@@ -425,3 +425,107 @@ class TestHistorialDeCatalogo:
 
         assert vista.historial._modelo.rowCount() == 1
         assert vista.historial.vacio.isHidden() is True
+
+
+class TestEntradaSinPedirContrasena:
+    """Con el ingreso apagado hay que saber a nombre de quién queda cada cambio."""
+
+    def test_por_nombre_encuentra_una_cuenta_real(self) -> None:
+        # Se prueba contra la base real: el servicio abre su propia transacción, así
+        # que solo ve lo que otra transacción confirmó.
+        cuenta = ServicioTaller.cuenta_sin_contrasena("STWARD")
+        assert cuenta is not None
+        assert cuenta.nombre.lower() == "stward"
+
+    def test_una_cuenta_inexistente_no_se_inventa(self) -> None:
+        assert ServicioTaller.cuenta_sin_contrasena("prueba-nadie-9999") is None
+
+    def test_una_fila_sin_contrasena_no_sirve_para_entrar(self, session) -> None:  # noqa: ANN001
+        from taller.database.models import Usuario
+        from taller.database.repositories import UsuarioRepository as Repo
+
+        session.add(Usuario(nombre="prueba-sin-clave"))
+        session.flush()
+        repo = Repo(session)
+        # La fila existe, pero no tiene hash: no puede ser la cuenta de entrada.
+        assert any(u.nombre == "prueba-sin-clave" for u in repo.listar())
+        unica = repo.cuenta_unica_con_clave()
+        assert unica is None or unica.nombre != "prueba-sin-clave"
+
+    def test_sin_nombre_solo_vale_si_hay_una_unica_cuenta(self, session) -> None:  # noqa: ANN001
+        from taller.database.repositories import UsuarioRepository as Repo
+
+        repo = Repo(session)
+        # Con una sola cuenta con contraseña la devuelve; con dos, no elige.
+        assert repo.cuenta_unica_con_clave() is not None
+        repo.crear("prueba-segunda", CLAVE)
+        assert repo.cuenta_unica_con_clave() is None
+
+
+
+
+class TestHistorialConElServicioReal:
+    """La pantalla usa el servicio de verdad, no un doble.
+
+    Esta prueba existe porque una vez no existió: la pestaña Historial andaba con el
+    doble de las pruebas y reventaba con el servicio real.
+    """
+
+    def test_el_servicio_expone_el_historial(self) -> None:
+        servicio = ServicioTaller("stward", es_admin=True)
+        filas = servicio.historial_catalogo(limite=5)
+        assert isinstance(filas, list)
+        assert len(filas) <= 5
+        for fila in filas:
+            assert set(fila) == {
+                "catalogo",
+                "registro_id",
+                "accion",
+                "campo",
+                "valor_anterior",
+                "valor_nuevo",
+                "usuario",
+                "ocurrido_en",
+            }
+
+    def test_un_cambio_de_catalogo_aparece_en_el_historial(self) -> None:
+        import uuid
+
+        from sqlalchemy import delete
+        from sqlalchemy import text as sql
+
+        from taller.database.connection import session_scope
+        from taller.database.models import Area, AuditoriaCatalogo
+
+        # El servicio confirma la transacción, así que la prueba limpia lo suyo:
+        # un nombre único evita chocar con una corrida anterior y el finally deja
+        # la base como estaba.
+        nombre = f"prueba-historial-{uuid.uuid4().hex[:8]}"
+        servicio = ServicioTaller("stward", es_admin=True)
+        creada = servicio.crear_catalogo("area", nombre)
+        try:
+            filas = servicio.historial_catalogo(limite=50)
+            assert any(
+                fila["registro_id"] == creada.id and fila["accion"] == "crear"
+                for fila in filas
+            ), "el alta no quedó registrada"
+        finally:
+            with session_scope() as sesion:
+                sesion.execute(
+                    delete(AuditoriaCatalogo).where(
+                        AuditoriaCatalogo.registro_id == creada.id,
+                        AuditoriaCatalogo.catalogo == "area",
+                    )
+                )
+                sesion.execute(delete(Area).where(Area.id == creada.id))
+            assert sql  # el import se usa solo si hace falta depurar
+
+    def test_las_pestanas_de_la_ventana_funcionan_con_el_servicio_real(
+        self, qtbot: object
+    ) -> None:
+        from taller.ui.views.configuracion_view import ConfiguracionView
+
+        vista = ConfiguracionView(ServicioTaller("stward", es_admin=True))
+        qtbot.addWidget(vista)  # type: ignore[attr-defined]
+        titulos = [vista.pestanas.tabText(i) for i in range(vista.pestanas.count())]
+        assert "Historial" in titulos

@@ -306,3 +306,75 @@ class TestPermisosDelArchivo:
         )
         modo = stat.S_IMODE(os.stat(ruta_configuracion()).st_mode)
         assert modo == 0o600, f"el archivo con la contraseña quedó en {oct(modo)}"
+
+
+class TestInterruptorDeIngreso:
+    """El ingreso se puede apagar; la autenticación y las cuentas siguen ahí."""
+
+    def test_por_defecto_se_pide_contrasena(self, carpeta: Path) -> None:
+        from taller.arranque import ingreso_obligatorio, reiniciar_cache
+
+        reiniciar_cache()
+        assert ingreso_obligatorio() is True
+
+    def test_se_puede_apagar_y_queda_guardado(self, carpeta: Path) -> None:
+        from taller.arranque import (
+            ConfiguracionArranque,
+            cargar_configuracion,
+            ingreso_obligatorio,
+            reiniciar_cache,
+        )
+
+        guardar_configuracion(
+            ConfiguracionArranque(
+                database_url="postgresql+psycopg://u:p@h/d",
+                nombre="X",
+                login_obligatorio=False,
+                usuario_por_defecto="stward",
+            )
+        )
+        reiniciar_cache()
+        assert ingreso_obligatorio() is False
+        assert cargar_configuracion().usuario_por_defecto == "stward"
+
+    def test_la_variable_de_entorno_gana_sin_tocar_lo_guardado(
+        self, carpeta: Path, monkeypatch
+    ) -> None:
+        from taller.arranque import ingreso_obligatorio, reiniciar_cache
+
+        monkeypatch.setenv("TALLER_LOGIN", "off")
+        reiniciar_cache()
+        assert ingreso_obligatorio() is False
+
+        monkeypatch.setenv("TALLER_LOGIN", "on")
+        assert ingreso_obligatorio() is True
+
+    def test_un_archivo_sin_la_clave_pide_contrasena(self, carpeta: Path) -> None:
+        from taller.arranque import ingreso_obligatorio, reiniciar_cache, ruta_configuracion
+
+        ruta_configuracion().parent.mkdir(parents=True, exist_ok=True)
+        ruta_configuracion().write_text(
+            '{"database_url": "x", "branding": {"nombre": "Y"}}', encoding="utf-8"
+        )
+        reiniciar_cache()
+        # Un archivo viejo no puede dejar el sistema abierto por omisión.
+        assert ingreso_obligatorio() is True
+
+    def test_la_cuenta_por_defecto_sale_de_la_configuracion(
+        self, carpeta: Path, monkeypatch
+    ) -> None:
+        from taller.arranque import (
+            ConfiguracionArranque,
+            guardar_configuracion,
+            reiniciar_cache,
+            usuario_por_defecto,
+        )
+
+        guardar_configuracion(
+            ConfiguracionArranque(usuario_por_defecto="stward", login_obligatorio=False)
+        )
+        reiniciar_cache()
+        assert usuario_por_defecto() == "stward"
+
+        monkeypatch.setenv("TALLER_USUARIO_POR_DEFECTO", "ana")
+        assert usuario_por_defecto() == "ana"

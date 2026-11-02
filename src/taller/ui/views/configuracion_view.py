@@ -12,6 +12,8 @@ historial, y por eso muestra cuántos movimientos se van a mover antes de tocarl
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
@@ -32,7 +34,11 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from taller.arranque import campos_desde_url, cargar_configuracion
+from taller.arranque import (
+    campos_desde_url,
+    cargar_configuracion,
+    guardar_configuracion,
+)
 from taller.schemas.movimiento import CatalogoConUso, MovimientoLeido
 from taller.servicios import ServicioTaller
 from taller.ui.iconos import icono
@@ -496,6 +502,14 @@ class PanelSistema(QWidget):
         columna_tarjeta.addSpacing(4)
         columna_tarjeta.addWidget(self.previa)
 
+        self.check_ingreso = QCheckBox("Pedir usuario y contraseña al entrar")
+        self.check_ingreso.setToolTip(
+            "Apagado, el programa entra directo con la cuenta por defecto."
+        )
+        self.nota_ingreso = QLabel()
+        self.nota_ingreso.setObjectName("AyudaCampo")
+        self.nota_ingreso.setWordWrap(True)
+
         self.boton_cambiar = QPushButton("Cambiar configuración…")
         self.boton_cambiar.setObjectName("BotonPrimario")
         self.boton_cambiar.setIcon(icono("ajustes", COLORES["blanco"]))
@@ -517,6 +531,8 @@ class PanelSistema(QWidget):
         caja.addWidget(detalle)
         caja.addSpacing(4)
         caja.addWidget(tarjeta)
+        caja.addWidget(self.check_ingreso)
+        caja.addWidget(self.nota_ingreso)
         caja.addWidget(self.aviso)
         caja.addStretch(1)
         caja.addLayout(acciones)
@@ -544,6 +560,12 @@ class PanelSistema(QWidget):
             for clave in ("servidor", "base", "usuario"):
                 self._valores[clave].setText("sin configurar")
 
+        # Se bloquea la señal para que recargar no guarde nada por su cuenta.
+        self.check_ingreso.blockSignals(True)
+        self.check_ingreso.setChecked(configuracion.login_obligatorio)
+        self.check_ingreso.blockSignals(False)
+        self._actualizar_nota_ingreso()
+
         if configuracion.logo is not None and configuracion.logo.is_file():
             pixmap = QPixmap(str(configuracion.logo))
             self.previa.setPixmap(
@@ -551,6 +573,31 @@ class PanelSistema(QWidget):
             )
         else:
             self.previa.setText("Logo genérico del programa")
+
+    def _cambiar_ingreso(self, pedirlo: bool) -> None:
+        """Guardar el interruptor y explicar qué implica en cada estado."""
+        actual = cargar_configuracion(refrescar=True)
+        guardar_configuracion(replace(actual, login_obligatorio=pedirlo))
+        self._actualizar_nota_ingreso()
+        self.aviso.setText(
+            "Guardado. El cambio se aplica la próxima vez que se abra el programa."
+        )
+        self.aviso.show()
+        self.configuracion_cambiada.emit()
+
+    def _actualizar_nota_ingreso(self) -> None:
+        if self.check_ingreso.isChecked():
+            self.nota_ingreso.setText(
+                "Cada persona entra con su cuenta y contraseña, y cada cambio queda "
+                "a nombre de una sesión verificada."
+            )
+        else:
+            self.nota_ingreso.setText(
+                "Se entra directo con la cuenta por defecto y los cambios quedan a su "
+                "nombre sin verificar la contraseña. La auditoría sigue registrando "
+                "quién, pero deja de poder probarlo. Las cuentas no se borran: se "
+                "puede volver a encender cuando quieras."
+            )
 
     def abrir_configuracion(self) -> bool:
         from taller.ui.views.configuracion_inicial import ConfiguracionInicialDialog

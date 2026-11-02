@@ -536,11 +536,26 @@ class TestVentanaPrincipal:
         assert ventana.seccion_actual == SECCION_REGISTRAR, "seguimos en la casa"
         assert ventana.grid.tabla.model().rowCount() == 4
 
-    def test_el_estado_muestra_el_total_y_el_usuario(self, qtbot: object) -> None:
+    def test_el_estado_muestra_el_total_y_el_usuario(
+        self, qtbot: object, monkeypatch
+    ) -> None:
+        import taller.ui.main_window as modulo
+
+        monkeypatch.setattr(modulo, "ingreso_obligatorio", lambda: True)
         ventana = VentanaPrincipal(ServicioFalso())
         qtbot.addWidget(ventana)  # type: ignore[attr-defined]
         assert "3 registros" in ventana._total.text()
         assert ventana._usuario.text() == "operador"
+
+    def test_con_el_ingreso_apagado_la_barra_lo_dice(self, qtbot: object, monkeypatch) -> None:
+        import taller.ui.main_window as modulo
+
+        monkeypatch.setattr(modulo, "ingreso_obligatorio", lambda: False)
+        ventana = VentanaPrincipal(ServicioFalso())
+        qtbot.addWidget(ventana)  # type: ignore[attr-defined]
+        # Sin contraseña el nombre no está verificado: la barra no puede mostrarlo
+        # igual que una sesión autenticada.
+        assert ventana._usuario.text() == "sin ingreso · operador"
 
 
 class TestConfiguracion:
