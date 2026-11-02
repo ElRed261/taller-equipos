@@ -28,9 +28,11 @@ from taller.arranque import (
     configuracion_completa,
     hay_configuracion_externa,
     ingreso_obligatorio,
+    preparar_base,
     reiniciar_cache,
     usuario_por_defecto,
 )
+from taller.config.settings import get_settings
 from taller.database.connection import reset_engine
 from taller.servicios import ServicioTaller
 from taller.ui.main_window import VentanaPrincipal
@@ -147,6 +149,13 @@ def main(argv: list[str] | None = None) -> int:
     app.setApplicationName(marca.nombre)
     app.setOrganizationName(marca.organizacion)
     app.setWindowIcon(QIcon(str(marca.logo)))
+
+    # La base primero: sin tablas no hay usuarios que consultar. Si es la primera
+    # vez, esto las crea; si ya existía, solo se conecta.
+    lista, motivo = preparar_base(get_settings().database_url)
+    if not lista:
+        QMessageBox.critical(None, "No se pudo preparar la base", motivo)
+        return 1
 
     cuenta = autenticar()
     if cuenta is None:

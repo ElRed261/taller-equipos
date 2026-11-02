@@ -12,8 +12,10 @@ imagen original, la aplicación sigue mostrando su marca.
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
+import re
 import shutil
 import sys
 from dataclasses import dataclass
@@ -80,6 +82,85 @@ def aplicar_migraciones(database_url: str) -> None:
     configuracion.set_main_option("script_location", str(carpeta_migraciones()))
     configuracion.set_main_option("sqlalchemy.url", database_url)
     command.upgrade(configuracion, "head")
+
+
+def _url_de_mantenimiento(url: str) -> str:
+    """La misma conexión, pero a la base ``postgres``: sirve para ver qué hay."""
+    from sqlalchemy.engine import make_url
+
+    return make_url(url).set(database="postgres").render_as_string(hide_password=False)
+
+
+def preparar_base(url: str) -> tuple[bool, str]:
+    """Deja la base lista para usar, o explica por qué no puede.
+
+    Al abrir el programa: si la base no existe se crea (cuando el rol tiene
+    permiso), y si existe se le aplican las migraciones que falten. Así una
+    instalación nueva no pide ningún paso en la consola, y una que ya funcionaba
+    solo se conecta.
+
+    Devuelve ``(True, "")`` cuando quedó lista. Nunca levanta: el llamador muestra
+    el mensaje tal cual.
+    """
+    from sqlalchemy import create_engine, text
+    from sqlalchemy.engine import make_url
+
+    try:
+        destino = make_url(url)
+    except Exception as error:  # noqa: BLE001 - una URL inválida se cuenta tal cual
+        return False, f"La dirección de la base no es válida: {error}"
+
+    nombre = destino.database or ""
+    usuario = destino.username or "el usuario de la aplicación"
+    motor = None
+    try:
+        motor = create_engine(_url_de_mantenimiento(url), isolation_level="AUTOCOMMIT")
+        with motor.connect() as conexion:
+            existe = conexion.execute(
+                text("select 1 from pg_database where datname = :nombre"),
+                {"nombre": nombre},
+            ).first()
+            crear = existe is None
+            if crear:
+                try:
+                    conexion.execute(
+                        text(f'create database "{nombre}" owner "{usuario}"')
+                    )
+                except Exception as error:  # noqa: BLE001
+                    # Sin CREATEDB no se puede, y está bien que no se pueda: crear
+                    # bases es del administrador, no de la aplicación.
+                    motivo = re.sub(
+                        r"^\((?:[\w.]+\.)?\w+\)\s*", "", str(error).splitlines()[0]
+                    )
+                    return False, (
+                        f"La base «{nombre}» no existe y «{usuario}» no puede crearla "
+                        f"({motivo}).\n\nUn administrador tiene que ejecutar una vez:\n\n"
+                        f'    CREATE DATABASE "{nombre}" OWNER "{usuario}";\n\n'
+                        "Después volvé a abrir el programa: las tablas se crean solas."
+                    )
+    except Exception as error:  # noqa: BLE001
+        mensaje = str(error).splitlines()[0]
+        if "does not exist" in mensaje and nombre:
+            return False, (
+                f"La base «{nombre}» no existe y no se pudo crear. Pedile a un "
+                f"administrador:\n\n    CREATE DATABASE \"{nombre}\" OWNER \"{usuario}\";"
+            )
+        return False, f"No se pudo conectar con la base:\n\n{mensaje}"
+    finally:
+        if motor is not None:
+            with contextlib.suppress(Exception):
+                motor.dispose()
+
+    try:
+        aplicar_migraciones(url)
+    except Exception as error:  # noqa: BLE001
+        mensaje = str(error).splitlines()[0]
+        return False, (
+            ("Se creó la base pero no se pudieron crear las tablas.\n\n" if crear
+             else "No se pudieron actualizar las tablas.\n\n")
+            + f"{mensaje}"
+        )
+    return True, ""
 
 
 def ruta_configuracion() -> Path:

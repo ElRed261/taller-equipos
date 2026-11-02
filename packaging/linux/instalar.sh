@@ -98,17 +98,38 @@ DESKTOP_ENTRY
 mkdir -p "$PREFIJO/share/taller-equipos"
 cat > "$PREFIJO/share/taller-equipos/desinstalar.sh" <<'DESINSTALADOR'
 #!/usr/bin/env bash
-# Quita el programa. No toca la configuración ni la base de datos.
+# Quita el programa. Por defecto NO toca la configuración ni la base de datos.
+#
+#   desinstalar.sh                        quita el programa, deja la configuración
+#   desinstalar.sh --con-configuracion    quita también la configuración guardada
+#
+# La base de datos no se toca nunca: los datos no son del programa.
 set -eu
-DESTINO_APP="$1"
-PREFIJO="$2"
+DESTINO_APP="__DESTINO_APP__"
+PREFIJO="__PREFIJO__"
+BORRAR_CONFIG=0
+[[ "${1:-}" == "--con-configuracion" ]] && BORRAR_CONFIG=1
+
 rm -rf "$DESTINO_APP"
 rm -f "$PREFIJO/bin/taller-equipos" \
       "$PREFIJO/share/applications/taller-equipos.desktop" \
       "$PREFIJO/share/icons/hicolor/256x256/apps/taller-equipos.png"
 rm -rf "$PREFIJO/share/taller-equipos"
-echo "Desinstalado. La configuración queda en la carpeta personal del usuario."
+
+if [[ "$BORRAR_CONFIG" == "1" ]]; then
+  CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/Taller de equipos"
+  rm -rf "$CONFIG"
+  echo "Programa y configuración eliminados ($CONFIG)."
+else
+  echo "Programa eliminado. La configuración sigue en ${XDG_CONFIG_HOME:-$HOME/.config}/Taller de equipos"
+  echo "Para borrarla también: desinstalar.sh --con-configuracion"
+fi
+echo "La base de datos no se tocó: los datos no son del programa."
 DESINSTALADOR
+# Las rutas se escriben después, para que el desinstalador no dependa de dónde se
+# lo llame ni de variables de entorno (quizás ya no exista ninguna).
+sed -i "s|__DESTINO_APP__|$DESTINO_APP|; s|__PREFIJO__|$PREFIJO|" \
+    "$PREFIJO/share/taller-equipos/desinstalar.sh"
 chmod 755 "$PREFIJO/share/taller-equipos/desinstalar.sh"
 
 # El menú de aplicaciones relee sus entradas; si no está, no es un error.
@@ -121,7 +142,7 @@ verde "Instalado."
 echo "  programa:   $DESTINO_APP"
 echo "  lanzador:   $BIN"
 echo "  versión:    $VERSION"
-echo "  desinstalar: $PREFIJO/share/taller-equipos/desinstalar.sh \"$DESTINO_APP\" \"$PREFIJO\""
+echo "  desinstalar: $PREFIJO/share/taller-equipos/desinstalar.sh"
 case ":$PATH:" in
   *":$PREFIJO/bin:"*) ;;
   *) echo; echo "Aviso: $PREFIJO/bin no está en el PATH. Abrí el programa desde el menú de"

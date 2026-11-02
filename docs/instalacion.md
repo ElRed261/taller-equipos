@@ -74,6 +74,44 @@ El instalador de Windows:
   conexión y cuenta administradora;
 - incluye desinstalador, y **no borra la configuración personal** ni toca la base.
 
+## Desinstalar por completo
+
+### Linux
+
+```bash
+# quita el programa y deja la configuración
+<prefijo>/share/taller-equipos/desinstalar.sh
+
+# quita el programa Y la configuración guardada
+<prefijo>/share/taller-equipos/desinstalar.sh --con-configuracion
+```
+
+El desinstalador **nunca toca la base de datos**: los datos no son del programa.
+Borra el programa, el lanzador, la entrada del menú y el icono. Con
+`--con-configuracion` borra además `~/.config/Taller de equipos/` (nombre, logo,
+conexión guardada y el ajuste del ingreso).
+
+### Windows
+
+Configuración → Aplicaciones → *Taller de equipos* → Desinstalar. Después, si querés
+borrar también lo que la persona configuró:
+
+```powershell
+Remove-Item -Recurse "$env:APPDATA\Taller de equipos"
+```
+
+### Lo que queda y hay que decidir aparte
+
+| Qué | Dónde | Cómo se quita |
+| --- | --- | --- |
+| La base de datos y sus roles | El servidor PostgreSQL | `DROP DATABASE taller_dev; DROP ROLE taller_app, taller_ro;` — **borra los datos** |
+| El `.env` del proyecto | Solo en desarrollo | `rm .env` |
+| La carpeta de construcción | `dist/`, `build/` | `rm -rf dist build` |
+| El servicio que arranca PostgreSQL | `brew services` | `brew services stop postgresql@18` |
+
+Ninguno de esos pasos es parte de «desinstalar el programa»: son decisiones sobre
+datos e infraestructura, y por eso no los hace un desinstalador solo.
+
 ## Qué no hace ningún instalador
 
 - **No instala PostgreSQL.** El servidor de base de datos es infraestructura: se

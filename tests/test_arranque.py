@@ -378,3 +378,57 @@ class TestInterruptorDeIngreso:
 
         monkeypatch.setenv("TALLER_USUARIO_POR_DEFECTO", "ana")
         assert usuario_por_defecto() == "ana"
+
+
+class TestArchivoEnv:
+    """La aplicación instalada arranca desde otra carpeta: tiene que encontrar su .env."""
+
+    def test_la_variable_manda(self, monkeypatch, tmp_path: Path) -> None:
+        from taller.config.settings import archivo_env
+
+        elegido = tmp_path / "otro.env"
+        elegido.write_text("TALLER_DATABASE_URL=x\n", encoding="utf-8")
+        monkeypatch.setenv("TALLER_ENV_FILE", str(elegido))
+        assert archivo_env() == str(elegido)
+
+    def test_se_encuentra_desde_otra_carpeta(self, monkeypatch, tmp_path: Path) -> None:
+        from taller.config.settings import archivo_env
+
+        monkeypatch.delenv("TALLER_ENV_FILE", raising=False)
+        monkeypatch.chdir(tmp_path)
+        # La raíz del proyecto tiene .env: se usa aunque el cwd sea otro.
+        encontrado = archivo_env()
+        assert encontrado is not None
+        assert encontrado.endswith(".env")
+
+
+class TestPrepararLaBase:
+    """Al abrir: si existe, se conecta; si no, la deja lista o explica qué falta."""
+
+    def test_una_base_existente_queda_lista(self) -> None:
+        from taller.arranque import preparar_base
+        from taller.config.settings import get_settings
+
+        ok, mensaje = preparar_base(get_settings().database_url)
+        assert ok is True, mensaje
+        assert mensaje == ""
+
+    def test_si_no_puede_crear_la_base_dice_que_hacer(self) -> None:
+        from taller.arranque import preparar_base
+
+        # El rol de la aplicación no tiene CREATEDB, y no debe tenerlo.
+        url = (
+            "postgresql+psycopg://taller_app:rosa02DELL@localhost:5432/"
+            "prueba_no_existe_xyz"
+        )
+        ok, mensaje = preparar_base(url)
+        assert ok is False
+        assert "CREATE DATABASE" in mensaje
+        assert "prueba_no_existe_xyz" in mensaje
+
+    def test_una_url_invalida_no_revienta(self) -> None:
+        from taller.arranque import preparar_base
+
+        ok, mensaje = preparar_base("esto no es una url")
+        assert ok is False
+        assert mensaje

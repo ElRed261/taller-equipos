@@ -7,14 +7,41 @@ importable modules: the Alembic environment and the UI both read it from here.
 
 from __future__ import annotations
 
+import os
+import sys
+from pathlib import Path
+
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+def archivo_env() -> str | None:
+    """El primer ``.env`` que exista, o ``None``.
+
+    Se busca en este orden y gana el primero: el que impone ``TALLER_ENV_FILE``, el
+    de la carpeta actual (desarrollo), el que está junto al ejecutable (una
+    instalación que viaja con su configuración) y el de la raíz del proyecto. Sin
+    esta búsqueda, la aplicación instalada arranca desde otra carpeta, no encuentra
+    el archivo y se queda sin base.
+    """
+    impuesto = os.environ.get("TALLER_ENV_FILE")
+    if impuesto:
+        return impuesto
+    candidatos = [Path.cwd() / ".env"]
+    if getattr(sys, "frozen", False):
+        candidatos.append(Path(sys.executable).resolve().parent / ".env")
+    else:
+        candidatos.append(Path(__file__).resolve().parents[3] / ".env")
+    for candidato in candidatos:
+        if candidato.is_file():
+            return str(candidato)
+    return None
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="TALLER_",
-        env_file=".env",
+        env_file=archivo_env(),
         env_file_encoding="utf-8",
         extra="ignore",
     )
