@@ -20,6 +20,7 @@ from pathlib import Path
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
+    QCheckBox,
     QDialog,
     QFileDialog,
     QFrame,
@@ -87,12 +88,14 @@ class ConfiguracionInicialDialog(QDialog):
         self._logo_elegido: Path | None = None
         self._conexion_ok = False
         self._tablas_creadas = False
+        self._instalador = None
 
         self.setWindowTitle("Configuración inicial")
         self.setMinimumWidth(720)
         self._construir()
         if inicial is not None:
             self._prellenar(inicial)
+        self._decir_destino_copia()
 
     # ------------------------------------------------------------------ armado
 
@@ -146,6 +149,17 @@ class ConfiguracionInicialDialog(QDialog):
         self.boton_guardar.setObjectName("BotonPrimario")
         self.boton_guardar.setIcon(icono("guardar", COLORES["blanco"]))
         self.boton_guardar.setEnabled(False)
+        self.copiar_programa = QCheckBox(
+            "Copiar este programa a una carpeta propia (recomendado)"
+        )
+        self.copiar_programa.setToolTip(
+            "Deja el programa en una carpeta de tu usuario y crea el acceso directo "
+            "del menú. Si se movió de lugar, la copia que queda sigue funcionando."
+        )
+        self.detalle_copia = QLabel()
+        self.detalle_copia.setObjectName("AyudaCampo")
+        self.detalle_copia.setWordWrap(True)
+        self.detalle_copia.hide()
         self.boton_guardar.clicked.connect(self.guardar)
         cancelar = QPushButton("Cancelar")
         cancelar.clicked.connect(self.reject)
@@ -217,6 +231,8 @@ class ConfiguracionInicialDialog(QDialog):
         aviso_rol.setWordWrap(True)
         columna.addWidget(aviso_rol)
         columna.addWidget(self.error)
+        columna.addWidget(self.copiar_programa)
+        columna.addWidget(self.detalle_copia)
         columna.addWidget(self.exito)
         columna.addStretch(1)
         columna.addLayout(acciones)
@@ -329,8 +345,43 @@ class ConfiguracionInicialDialog(QDialog):
         except OSError as exc:
             self._avisar(f"No se pudo guardar la configuración: {exc}")
             return False
+        self._instalar_programa()
         self.accept()
         return True
+
+    def _decir_destino_copia(self) -> None:
+        from taller import instalador
+
+        ya = instalador.detectar()
+        if ya:
+            self.detalle_copia.setText(
+                "Ya instalado en " + ", ".join(str(i.ruta) for i in ya) + ": la copia se reemplaza."
+            )
+        else:
+            self.detalle_copia.setText(
+                f"Deja el programa en {instalador.destino_usuario()} y crea el acceso directo."
+            )
+        self.detalle_copia.show()
+
+    def _instalar_programa(self) -> None:
+        """Deja el programa en una carpeta propia, si la casilla lo pide.
+
+        La configuración ya está guardada: si la instalación falla, el programa
+        funciona igual. Una instalación que rompe la configuración es peor que
+        una no hecha.
+        """
+        if not self.copiar_programa.isChecked():
+            return
+        from taller import instalador
+
+        resultado = instalador.instalar(instalador.destino_usuario())
+        if resultado.ok:
+            self._celebrar_listo = resultado.detalles or [resultado.mensaje]
+        else:
+            self._celebrar_listo = [
+                "La instalación se guardó, pero no se pudo copiar el programa: "
+                "{resultado.mensaje}"
+            ]
 
     # ------------------------------------------------------------------ avisos
 

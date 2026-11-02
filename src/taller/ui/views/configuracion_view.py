@@ -520,8 +520,15 @@ class PanelSistema(QWidget):
         self.aviso.setWordWrap(True)
         self.aviso.hide()
 
+        self.boton_desinstalar = QPushButton("Quitar de esta computadora…")
+        self.boton_desinstalar.setToolTip(
+            "Abre una ventana para desinstalar el programa. La base de datos no se toca."
+        )
+        self.boton_desinstalar.clicked.connect(self.quitar_programa)
+
         acciones = QHBoxLayout()
         acciones.addWidget(self.boton_cambiar)
+        acciones.addWidget(self.boton_desinstalar)
         acciones.addStretch(1)
 
         caja = QVBoxLayout(self)
@@ -573,6 +580,15 @@ class PanelSistema(QWidget):
             )
         else:
             self.previa.setText("Logo genérico del programa")
+
+    def quitar_programa(self) -> bool:
+        """El wizard de desinstalación: sin rutas ni comandos."""
+        from taller import instalador
+        from taller.ui.views.instalador_view import DialogoInstalador
+
+        dialogo = DialogoInstalador(self, modo="desinstalar")
+        dialogo.exec()
+        return instalador.detectar() == []
 
     def _cambiar_ingreso(self, pedirlo: bool) -> None:
         """Guardar el interruptor y explicar qué implica en cada estado."""

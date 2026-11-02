@@ -146,3 +146,48 @@ class TestDesinstalacion:
         assert instalador.instalar().ok
         resultado = instalador.desinstalar()
         assert any("base de datos" in d.lower() for d in resultado.detalles)
+
+
+class TestWizardCompleto:
+    """El asistente de instalación incluye copiar el programa.
+
+    Una sola ventana hace las dos cosas: configurar la aplicación y dejarla
+    instalada. Sin la casilla conectada, el usuario tiene que comandos aparte.
+    """
+
+    def test_la_casilla_existe_y_dice_el_destino(self, qtbot: object) -> None:
+        from taller.ui.views.configuracion_inicial import ConfiguracionInicialDialog
+
+        dialogo = ConfiguracionInicialDialog()
+        qtbot.addWidget(dialogo)  # type: ignore[attr-defined]
+        assert dialogo.copiar_programa.isChecked() is False
+        assert str(dialogo.detalle_copia.text()).endswith(
+            "crea el acceso directo."
+        )
+
+    def test_guardar_con_la_casilla_instala_de_verdad(
+        self, qtbot: object, monkeypatch, tmp_path: Path, casa_temporal, programa_falso
+    ) -> None:
+        from PySide6.QtWidgets import QDialog
+
+        import taller.arranque as arranque
+        from taller.ui.views.configuracion_inicial import ConfiguracionInicialDialog
+
+        monkeypatch.setattr(
+            arranque, "ruta_configuracion", lambda: tmp_path / "config.json"
+        )
+        dialogo = ConfiguracionInicialDialog()
+        qtbot.addWidget(dialogo)  # type: ignore[attr-defined]
+        dialogo.copiar_programa.setChecked(True)
+        dialogo._conexion_ok = True
+        dialogo.nombre.setText("Prueba")
+
+        assert dialogo.guardar() is True
+        assert dialogo.result() == QDialog.DialogCode.Accepted
+        # Con la casilla marcada, el programa quedó copiado al destino del sandbox.
+        copiado = instalador.destino_usuario() / instalador.NOMBRE_BINARIO
+        assert copiado.is_file(), copiado
+        # Y el acceso directo apunta a la copia, no al original.
+        lanzador = casa_temporal / ".local" / "bin" / "taller-equipos"
+        assert lanzador.exists()
+        assert str(instalador.destino_usuario()) in lanzador.read_text(encoding="utf-8")
