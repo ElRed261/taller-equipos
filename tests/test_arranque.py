@@ -220,3 +220,50 @@ class TestAsistente:
         dialogo.probar()
         assert dialogo.guardar() is False
         assert "vacío" in dialogo.error.text()
+
+
+class TestConfiguracionExterna:
+    """El asistente no debe aparecer si la conexión ya está definida."""
+
+    def test_sin_nada_configurado_no_hay_configuracion_externa(
+        self, carpeta: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        from taller.arranque import hay_configuracion_externa
+
+        monkeypatch.delenv("TALLER_DATABASE_URL", raising=False)
+        monkeypatch.chdir(tmp_path)
+        # Sin esto, el .env del propio repositorio contaría como configuración.
+        monkeypatch.setenv("TALLER_ENV_FILE", str(tmp_path / "nada.env"))
+        assert hay_configuracion_externa() is False
+
+    def test_la_variable_de_entorno_cuenta_como_configuracion(
+        self, carpeta: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        from taller.arranque import hay_configuracion_externa
+
+        monkeypatch.setenv("TALLER_DATABASE_URL", "postgresql+psycopg://x@y/z")
+        assert hay_configuracion_externa() is True
+
+    def test_un_dot_env_con_la_url_cuenta_como_configuracion(
+        self, carpeta: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        from taller.arranque import hay_configuracion_externa
+
+        monkeypatch.delenv("TALLER_DATABASE_URL", raising=False)
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / ".env").write_text(
+            "TALLER_DATABASE_URL=postgresql+psycopg://u:p@h/d\n", encoding="utf-8"
+        )
+        monkeypatch.setenv("TALLER_ENV_FILE", str(tmp_path / ".env"))
+        assert hay_configuracion_externa() is True
+
+    def test_un_dot_env_sin_la_url_no_alcanza(
+        self, carpeta: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        from taller.arranque import hay_configuracion_externa
+
+        monkeypatch.delenv("TALLER_DATABASE_URL", raising=False)
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / ".env").write_text("OTRA_COSA=1\n", encoding="utf-8")
+        monkeypatch.setenv("TALLER_ENV_FILE", str(tmp_path / ".env"))
+        assert hay_configuracion_externa() is False

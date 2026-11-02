@@ -180,6 +180,33 @@ def cargar_configuracion(*, refrescar: bool = False) -> ConfiguracionArranque:
     return _cache
 
 
+def hay_configuracion_externa() -> bool:
+    """True when the database is already configured outside the wizard.
+
+    Un desarrollador con un ``.env`` no tiene que pasar por el asistente cada vez
+    que abre el programa: si la conexión ya está definida, se usa.
+    """
+    if os.environ.get("TALLER_DATABASE_URL"):
+        return True
+    # Un archivo explícito evita que el ``.env`` del repositorio cuente cuando no
+    # corresponde (los tests, o una instalación que vive en otra carpeta).
+    impuesto = os.environ.get("TALLER_ENV_FILE")
+    candidatos = (
+        (Path(impuesto).expanduser(),)
+        if impuesto
+        else (Path.cwd() / ".env", Path(__file__).resolve().parents[2] / ".env")
+    )
+    for candidato in candidatos:
+        if not candidato.is_file():
+            continue
+        try:
+            if "TALLER_DATABASE_URL" in candidato.read_text(encoding="utf-8"):
+                return True
+        except OSError:
+            continue
+    return False
+
+
 def configuracion_completa() -> bool:
     return cargar_configuracion().completa
 

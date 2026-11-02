@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
-from taller.arranque import configuracion_completa, reiniciar_cache
+from taller.arranque import configuracion_completa, hay_configuracion_externa, reiniciar_cache
 from taller.config.settings import get_settings
 from taller.database.connection import reset_engine
 from taller.servicios import ServicioTaller
@@ -90,7 +90,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # Primera vez: marca, conexión y creación de las tablas. Sin esto no hay nada
     # que mostrar, así que va antes que cualquier otra guarda.
-    if not configuracion_completa():
+    if not configuracion_completa() and not hay_configuracion_externa():
         asistente = ConfiguracionInicialDialog()
         if asistente.exec() != QDialog.DialogCode.Accepted:
             return 1
