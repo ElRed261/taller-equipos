@@ -15,6 +15,9 @@ Tres guardas antes de mostrar la ventana, porque es un sistema en red:
 
 Uso:
     uv run python -m taller.main
+    taller-equipos --instalar       # wizard para instalar en esta computadora
+    taller-equipos --desinstalar    # wizard para quitarlo
+    taller-equipos --version
 """
 
 from __future__ import annotations
@@ -135,6 +138,16 @@ def main(argv: list[str] | None = None) -> int:
 
     app = QApplication(argumentos)
     app.setStyleSheet(hoja_de_estilo())
+
+    # Instalar y desinstalar son parte del mismo programa: el wizard no pide rutas ni
+    # comandos, y funciona igual en Linux y en Windows.
+    if "--instalar" in argumentos or "--desinstalar" in argumentos:
+        from taller.ui.views.instalador_view import DialogoInstalador
+
+        modo = "desinstalar" if "--desinstalar" in argumentos else "instalar"
+        dialogo = DialogoInstalador(modo=modo)
+        dialogo.exec()
+        return 0
 
     # Primera vez: marca, conexión y creación de las tablas. Sin esto no hay nada
     # que mostrar, así que va antes que cualquier otra guarda.

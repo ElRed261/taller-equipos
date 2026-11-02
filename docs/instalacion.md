@@ -2,6 +2,22 @@
 
 Qué se entrega, cómo se instala en cada sistema y cómo se lleva la base al servidor.
 
+## El wizard (lo más fácil)
+
+El programa se instala y se desinstala **con una ventana**, sin comandos ni rutas:
+
+```bash
+taller-equipos --instalar        # o, si ya está instalado, desde el menú de aplicaciones
+taller-equipos --desinstalar
+```
+
+Muestra qué encontró en la máquina, dónde va a instalar (para tu usuario, sin pedir
+contraseña de administrador) y qué va a borrar. Instalar de nuevo reemplaza la versión
+anterior y **conserva la configuración**; desinstalar **no toca la base de datos**.
+
+Si algo necesita permisos de administrador, lo dice en la misma ventana con el comando
+exacto en vez de fallar con un error críptico.
+
 ## Qué es «el instalador»
 
 El programa se empaqueta con PyInstaller en **modo carpeta**: un directorio con el
