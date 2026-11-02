@@ -74,10 +74,23 @@ class TestLectura:
             assert fila.estado == esperado
 
     def test_filter_by_state(self, session: Session) -> None:
+        # Contra la base, no contra números fijos: en cuanto el taller despache un
+        # equipo de verdad, un 431 escrito a mano falla sin que nada esté roto.
         repo = MovimientoRepository(session)
-        assert len(repo.listar(estado="en_taller")) == 135
-        assert len(repo.listar(estado="despachado")) == 431
-        assert len(repo.listar(estado="sin_datos")) == 2
+        todos = repo.listar()
+        por_estado = {
+            estado: repo.listar(estado=estado)
+            for estado in ("en_taller", "despachado", "sin_datos")
+        }
+
+        for estado, filas in por_estado.items():
+            assert filas, f"el estado {estado} no devolvió ninguna fila"
+            assert all(f.estado == estado for f in filas), (
+                f"el filtro {estado} devolvió filas de otro estado"
+            )
+        # Los tres estados cubren todo, sin solaparse ni dejar filas afuera.
+        assert sum(len(f) for f in por_estado.values()) == len(todos)
+        assert len({f.id for f in todos}) == len(todos)
 
     def test_catalog_names_come_resolved_from_one_query(self, session: Session) -> None:
         fila = MovimientoRepository(session).listar(limite=1)[0]
