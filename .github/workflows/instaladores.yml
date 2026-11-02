@@ -1,0 +1,76 @@
+# Construye los instaladores de los dos sistemas.
+#
+#   Linux:   taller-equipos-linux.tar.gz
+#            (el paquete de PyInstaller + el instalador, listo para descomprimir)
+#   Windows: taller-equipos-<versión>-instalador.exe
+#
+# Se corre a mano cuando haga falta, o al empujar una etiqueta v*.
+#
+# PyInstaller no compila para otro sistema: el binario corre en el sistema donde se
+# ejecuta. Por eso hay dos trabajos, cada uno en su runner. Es la única forma de
+# tener un instalador de Windows sin una máquina Windows.
+
+name: Instaladores
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  linux:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+
+      - name: Instalar dependencias
+        run: uv sync --frozen
+
+      - name: Empaquetar con PyInstaller
+        run: scripts/empaquetar.sh
+
+      - name: Armar el instalador
+        run: |
+          mkdir -p salida
+          cp -a dist/taller-equipos salida/
+          cp -a packaging/linux salida/
+          cp packaging/icono.png salida/taller-equipos.png
+          tar -czf taller-equipos-linux.tar.gz -C salida .
+          ls -lh taller-equipos-linux.tar.gz
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: taller-equipos-linux
+          path: taller-equipos-linux.tar.gz
+          retention-days: 30
+
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+
+      - name: Instalar dependencias
+        run: uv sync --frozen
+
+      - name: Instalar Inno Setup
+        run: choco install innosetup --yes --no-progress
+
+      - name: Empaquetar y compilar el instalador
+        run: powershell -ExecutionPolicy Bypass -File packaging/windows/construir.ps1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: taller-equipos-windows
+          path: dist/*-instalador.exe
+          retention-days: 30

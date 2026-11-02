@@ -169,15 +169,30 @@ database and compares row counts.
 still missing. [`docs/recuperacion.md`](docs/recuperacion.md) is the procedure to
 follow the day something breaks, including point-in-time recovery.
 
-## Packaging
+## Installers and migration
 
 ```bash
-scripts/empaquetar.sh
+scripts/empaquetar.sh                              # PyInstaller package, ~250 MB
+packaging/linux/instalar.sh                        # Linux: launcher, menu entry, uninstaller
+powershell -File packaging\windows\construir.ps1   # Windows: Inno Setup .exe installer
+scripts/empaquetar_migracion.sh                    # move the database to a server
 ```
 
-Builds `dist/taller-equipos/` with PyInstaller — a directory, not a single file, so
-the window appears instantly instead of unpacking Qt into a temporary folder on every
-start. The binary needs no Python installed and answers `--version` for support.
+PyInstaller builds a directory rather than a single file, so the window appears at
+once instead of unpacking Qt into a temporary folder on every start. The binary needs
+no Python installed and answers `--version`, which is what support asks for first.
+
+Both installers are built by `.github/workflows/instaladores.yml`, each on its own
+runner: PyInstaller cannot cross-compile, so the Windows installer only exists if it
+is built on Windows.
+
+`scripts/empaquetar_migracion.sh` leaves a dated bundle with the dump, the roles, a
+manifest of counts and versions, checksums and a step-by-step guide - and it restores
+that bundle into a throwaway database before finishing, because a backup nobody
+restored is a guess.
+
+[`docs/instalacion.md`](docs/instalacion.md) has the details: what each installer
+does, what none of them does, and how to move the database to a server.
 
 ## License
 
