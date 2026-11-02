@@ -204,6 +204,20 @@ def _restos_de(prefijo: Path) -> list[Path]:
     ]
 
 
+def es_actualizacion(destino: Path) -> bool:
+    """True si lo que corre es distinto de lo instalado en ``destino``.
+
+    Sin servicios de descarga ni llamadas de red: la actualización se decide
+    comparando versiones. Un binario más nuevo, corriendo ``--instalar``,
+    reemplaza la copia vieja y conserva la configuración.
+    """
+    if not (destino / NOMBRE_BINARIO).is_file():
+        return False
+    from taller import __version__
+
+    instalada = _version_en(destino)
+    return bool(instalada) and instalada != __version__
+
 def instalar(destino: Path | None = None) -> Resultado:
     """Copia el programa que está corriendo a su lugar definitivo."""
     origen = raiz_del_programa()

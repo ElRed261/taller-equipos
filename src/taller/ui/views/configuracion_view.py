@@ -510,7 +510,17 @@ class PanelSistema(QWidget):
         self.nota_ingreso.setObjectName("AyudaCampo")
         self.nota_ingreso.setWordWrap(True)
 
-        self.boton_cambiar = QPushButton("Cambiar configuración…")
+        self.boton_cambiar = QPushButton("Identidad…")
+        self.boton_cambiar.setToolTip(
+            "Nombre, organización, descripción y logo con que se ve la ventana."
+        )
+        self.boton_cambiar.clicked.connect(self.cambiar_identidad)
+
+        self.boton_conexion = QPushButton("Conexión…")
+        self.boton_conexion.setToolTip(
+            "Servidor, usuario y base de datos, con la prueba de conexión."
+        )
+        self.boton_conexion.clicked.connect(self.cambiar_conexion)
         self.boton_cambiar.setObjectName("BotonPrimario")
         self.boton_cambiar.setIcon(icono("ajustes", COLORES["blanco"]))
         self.boton_cambiar.clicked.connect(self.abrir_configuracion)
@@ -528,6 +538,7 @@ class PanelSistema(QWidget):
 
         acciones = QHBoxLayout()
         acciones.addWidget(self.boton_cambiar)
+        acciones.addWidget(self.boton_conexion)
         acciones.addWidget(self.boton_desinstalar)
         acciones.addStretch(1)
 
@@ -580,6 +591,31 @@ class PanelSistema(QWidget):
             )
         else:
             self.previa.setText("Logo genérico del programa")
+
+    def cambiar_identidad(self) -> bool:
+        """Only the brand: identity lives here, not in the installer."""
+        from taller.ui.views.configuracion_inicial import ConfiguracionInicialDialog
+
+        dialogo = ConfiguracionInicialDialog(self, secciones=frozenset({"identidad"}))
+        if dialogo.exec() != QDialog.DialogCode.Accepted:
+            return False
+        self.recargar()
+        self.aviso.setText("Guardado. La identidad nueva se ve al reiniciar.")
+        self.aviso.show()
+        self.configuracion_cambiada.emit()
+        return True
+
+    def cambiar_conexion(self) -> bool:
+        """Only the connection: changeable without touching the brand."""
+        from taller.ui.views.configuracion_inicial import ConfiguracionInicialDialog
+
+        dialogo = ConfiguracionInicialDialog(self, secciones=frozenset({"conexion"}))
+        if dialogo.exec() != QDialog.DialogCode.Accepted:
+            return False
+        self.recargar()
+        self.aviso.setText("Guardado. La conexión ya está activa.")
+        self.aviso.show()
+        return True
 
     def quitar_programa(self) -> bool:
         """El wizard de desinstalación: sin rutas ni comandos."""

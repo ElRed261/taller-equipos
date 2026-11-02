@@ -38,6 +38,7 @@ from taller.arranque import (
     ConfiguracionArranque,
     aplicar_migraciones,
     campos_desde_url,
+    cargar_configuracion,
     copiar_logo,
     guardar_configuracion,
     url_desde_campos,
@@ -81,6 +82,7 @@ class ConfiguracionInicialDialog(QDialog):
         verificador: Verificador | None = None,
         migrador: Migrador | None = None,
         inicial: ConfiguracionArranque | None = None,
+        secciones: frozenset[str] = frozenset({"identidad", "conexion"}),
     ) -> None:
         super().__init__(parent)
         self._verificador = verificador or probar_conexion_real
@@ -88,7 +90,7 @@ class ConfiguracionInicialDialog(QDialog):
         self._logo_elegido: Path | None = None
         self._conexion_ok = False
         self._tablas_creadas = False
-        self._instalador = None
+        self._secciones = secciones
 
         self.setWindowTitle("Configuración inicial")
         self.setMinimumWidth(720)
@@ -100,10 +102,14 @@ class ConfiguracionInicialDialog(QDialog):
     # ------------------------------------------------------------------ armado
 
     def _construir(self) -> None:
-        titulo = QLabel("Puesta en marcha")
+        solo_marca = self._secciones == frozenset({"identidad"})
+        titulo = QLabel("Identidad de la aplicación" if solo_marca else "Puesta en marcha")
         titulo.setObjectName("TituloVista")
         subtitulo = QLabel(
-            "Estos datos se guardan en tu carpeta de usuario. Solo se piden una vez."
+            "El nombre, la organización y el logo con que se ve esta instalación. "
+            "Se guarda en tu carpeta de usuario."
+            if solo_marca
+            else "Estos datos se guardan en tu carpeta de usuario. Solo se piden una vez."
         )
         subtitulo.setObjectName("SubtituloVista")
 
@@ -149,9 +155,11 @@ class ConfiguracionInicialDialog(QDialog):
         self.boton_guardar.setObjectName("BotonPrimario")
         self.boton_guardar.setIcon(icono("guardar", COLORES["blanco"]))
         self.boton_guardar.setEnabled(False)
+        solo_conexion = self._secciones == frozenset({"conexion"})
         self.copiar_programa = QCheckBox(
             "Copiar este programa a una carpeta propia (recomendado)"
         )
+        self.copiar_programa.setVisible(solo_conexion)
         self.copiar_programa.setToolTip(
             "Deja el programa en una carpeta de tu usuario y crea el acceso directo "
             "del menú. Si se movió de lugar, la copia que queda sigue funcionando."
@@ -325,21 +333,30 @@ class ConfiguracionInicialDialog(QDialog):
         return True
 
     def guardar(self) -> bool:
-        if not self._conexion_ok:
+        pide_conexion = "conexion" in self._secciones
+        pide_identidad = "identidad" in self._secciones
+        if pide_conexion and not self._conexion_ok:
             self._avisar("Probá la conexión antes de guardar.")
             return False
-        if not self.nombre.text().strip():
+        if pide_identidad and not self.nombre.text().strip():
             self._avisar("El nombre visible no puede quedar vacío.")
             return False
+        previa = cargar_configuracion(refrescar=True)
         try:
             logo = copiar_logo(self._logo_elegido) if self._logo_elegido else None
             guardar_configuracion(
                 ConfiguracionArranque(
-                    database_url=self.url(),
-                    nombre=self.nombre.text().strip(),
-                    organizacion=self.organizacion.text().strip(),
-                    descripcion=self.descripcion.text().strip(),
-                    logo=logo,
+                    database_url=self.url() if pide_conexion else previa.database_url,
+                    nombre=self.nombre.text().strip() if pide_identidad else previa.nombre,
+                    organizacion=(
+                        self.organizacion.text().strip() if pide_identidad else previa.organizacion
+                    ),
+                    descripcion=(
+                        self.descripcion.text().strip() if pide_identidad else previa.descripcion
+                    ),
+                    logo=logo if pide_identidad else previa.logo,
+                    login_obligatorio=previa.login_obligatorio,
+                    usuario_por_defecto=previa.usuario_por_defecto,
                 )
             )
         except OSError as exc:

@@ -131,17 +131,32 @@ class DialogoInstalador(QDialog):
         self.aviso_existente = QLabel()
         self.aviso_existente.setObjectName("AyudaCampo")
         self.aviso_existente.setWordWrap(True)
-        if ya:
+
+        from taller import __version__
+        from taller import instalador as modulo_instalador
+
+        destino = instalador.destino_usuario()
+        es_actualizacion = modulo_instalador.es_actualizacion(destino)
+        if es_actualizacion:
+            instalada = ya[0].version if ya else "?"
+            self.aviso_existente.setText(
+                f"Actualización: la copia instalada es la {instalada} y este programa "
+                f"es la {__version__}. La nueva reemplaza a la vieja y TU "
+                "configuración (nombre, logo, conexión, usuarios) no se toca."
+            )
+        elif ya:
             rutas = ", ".join(str(i.ruta) for i in ya)
             self.aviso_existente.setText(
-                f"Ya hay una instalación en {rutas}. Instalar de nuevo la reemplaza y "
-                "conserva la configuración."
+                f"Ya hay una instalación en {rutas}; se reemplaza por la nueva, y la configuración queda."
             )
         else:
-            self.aviso_existente.setText(f"Se va a copiar lo que está en {actual}.")
+            self.aviso_existente.setText(
+                f"Se van a copiar ≈ 250 MB de {actual} a {instalador.destino_usuario()}. "
+                "Quedan el lanzador en el menú de aplicaciones y la configuración de la app."
+            )
         cuerpo.addWidget(self.aviso_existente)
 
-        self.boton = QPushButton("Instalar")
+        self.boton = QPushButton("Actualizar" if es_actualizacion else "Instalar")
         self.boton.setObjectName("BotonPrimario")
         self.boton.setIcon(icono("guardar", COLORES["blanco"]))
         self.boton.clicked.connect(self.instalar)

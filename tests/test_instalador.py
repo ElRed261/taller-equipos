@@ -196,3 +196,35 @@ class TestWizardCompleto:
         lanzador = casa_temporal / ".local" / "bin" / "taller-equipos"
         assert lanzador.exists()
         assert str(instalador.destino_usuario()) in lanzador.read_text(encoding="utf-8")
+
+
+class TestActualizacion:
+    """Actualizar = binario nuevo sobre la copia vieja, sin tocar la configuración."""
+
+    def test_la_misma_version_no_es_actualizacion(
+        self, programa_falso: Path, casa_temporal: Path
+    ) -> None:
+        assert instalador.instalar(instalador.destino_usuario()).ok
+        # La copia recién instalada lleva la versión del propio programa.
+        assert instalador.es_actualizacion(instalador.destino_usuario()) is False
+
+    def test_una_version_instalada_distinta_si_es_actualizacion(
+        self, programa_falso: Path, casa_temporal: Path
+    ) -> None:
+        hosts = instalador.destino_usuario()
+        hosts.parent.mkdir(parents=True, exist_ok=True)
+        hosts.mkdir()
+        (hosts / instalador.NOMBRE_BINARIO).write_text("x", encoding="utf-8")
+        (hosts / "version.json").write_text('{"version": "0.0.1"}', encoding="utf-8")
+        assert instalador.es_actualizacion(hosts) is True
+
+    def test_instalar_sobre_una_copia_conserva_la_configuracion(
+        self, programa_falso: Path, casa_temporal: Path
+    ) -> None:
+        assert instalador.instalar(instalador.destino_usuario()).ok
+        configuracion = instalador.carpeta_configuracion()
+        configuracion.mkdir(parents=True)
+        (configuracion / "config.json").write_text("{}", encoding="utf-8")
+
+        assert instalador.instalar(instalador.destino_usuario()).ok
+        assert (configuracion / "config.json").is_file()
