@@ -13,9 +13,12 @@ historial, y por eso muestra cuántos movimientos se van a mover antes de tocarl
 from __future__ import annotations
 
 from PySide6.QtCore import Qt, QTimer, Signal
+from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QCheckBox,
+    QDialog,
+    QFrame,
     QHBoxLayout,
     QHeaderView,
     QInputDialog,
@@ -29,6 +32,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from taller.arranque import campos_desde_url, cargar_configuracion
 from taller.schemas.movimiento import CatalogoConUso, MovimientoLeido
 from taller.servicios import ServicioTaller
 from taller.ui.iconos import icono
@@ -432,10 +436,142 @@ class PanelAdministracion(QWidget):
         return True
 
 
+class PanelSistema(QWidget):
+    """Identidad y conexión: lo que se eligió al instalar, editable después.
+
+    El instalador pregunta una vez; esto permite cambiarlo sin tocar archivos ni
+    reinstalar. Nunca muestra la contraseña: el resumen dice servidor, base y
+    usuario, que es lo que hace falta para reconocer la conexión.
+    """
+
+    configuracion_cambiada = Signal()
+    mensaje = Signal(str)
+
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self._valores: dict[str, QLabel] = {}
+
+        titulo = QLabel("Sistema")
+        titulo.setObjectName("TituloVista")
+        detalle = QLabel(
+            "La identidad que se ve en la ventana y la conexión a la base de datos. "
+            "Se pregunta al instalar y se puede cambiar desde acá."
+        )
+        detalle.setObjectName("SubtituloVista")
+        detalle.setWordWrap(True)
+
+        self.previa = QLabel()
+        self.previa.setFixedHeight(64)
+        self.previa.setAlignment(
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter
+        )
+
+        tarjeta = QFrame()
+        tarjeta.setObjectName("Tarjeta")
+        columna_tarjeta = QVBoxLayout(tarjeta)
+        columna_tarjeta.setContentsMargins(16, 14, 16, 16)
+        columna_tarjeta.setSpacing(8)
+        for clave, etiqueta in (
+            ("nombre", "Nombre visible"),
+            ("organizacion", "Organización"),
+            ("descripcion", "Descripción"),
+            ("servidor", "Servidor"),
+            ("base", "Base de datos"),
+            ("usuario", "Usuario de base de datos"),
+        ):
+            fila = QHBoxLayout()
+            fila.setSpacing(10)
+            nombre = QLabel(etiqueta)
+            nombre.setObjectName("ClaveDetalle")
+            nombre.setFixedWidth(190)
+            valor = QLabel("—")
+            valor.setObjectName("ValorDetalle")
+            valor.setWordWrap(True)
+            fila.addWidget(nombre)
+            fila.addWidget(valor, 1)
+            columna_tarjeta.addLayout(fila)
+            self._valores[clave] = valor
+        columna_tarjeta.addSpacing(4)
+        columna_tarjeta.addWidget(self.previa)
+
+        self.boton_cambiar = QPushButton("Cambiar configuración…")
+        self.boton_cambiar.setObjectName("BotonPrimario")
+        self.boton_cambiar.setIcon(icono("ajustes", COLORES["blanco"]))
+        self.boton_cambiar.clicked.connect(self.abrir_configuracion)
+
+        self.aviso = QLabel()
+        self.aviso.setObjectName("AvisoRevision")
+        self.aviso.setWordWrap(True)
+        self.aviso.hide()
+
+        acciones = QHBoxLayout()
+        acciones.addWidget(self.boton_cambiar)
+        acciones.addStretch(1)
+
+        caja = QVBoxLayout(self)
+        caja.setContentsMargins(18, 16, 18, 16)
+        caja.setSpacing(10)
+        caja.addWidget(titulo)
+        caja.addWidget(detalle)
+        caja.addSpacing(4)
+        caja.addWidget(tarjeta)
+        caja.addWidget(self.aviso)
+        caja.addStretch(1)
+        caja.addLayout(acciones)
+
+        self.recargar()
+
+    def recargar(self) -> None:
+        configuracion = cargar_configuracion(refrescar=True)
+        self._valores["nombre"].setText(configuracion.nombre or "sin configurar")
+        self._valores["organizacion"].setText(configuracion.organizacion or "—")
+        self._valores["descripcion"].setText(configuracion.descripcion or "—")
+
+        campos = (
+            campos_desde_url(configuracion.database_url)
+            if configuracion.database_url
+            else {}
+        )
+        if campos:
+            self._valores["servidor"].setText(
+                f"{campos['host']}:{campos['puerto']}"
+            )
+            self._valores["base"].setText(str(campos.get("base") or "—"))
+            self._valores["usuario"].setText(str(campos.get("usuario") or "—"))
+        else:
+            for clave in ("servidor", "base", "usuario"):
+                self._valores[clave].setText("sin configurar")
+
+        if configuracion.logo is not None and configuracion.logo.is_file():
+            pixmap = QPixmap(str(configuracion.logo))
+            self.previa.setPixmap(
+                pixmap.scaledToHeight(56) if not pixmap.isNull() else QPixmap()
+            )
+        else:
+            self.previa.setText("Logo genérico del programa")
+
+    def abrir_configuracion(self) -> bool:
+        from taller.ui.views.configuracion_inicial import ConfiguracionInicialDialog
+
+        actual = cargar_configuracion(refrescar=True)
+        dialogo = ConfiguracionInicialDialog(self, inicial=actual if actual.nombre else None)
+        if dialogo.exec() != QDialog.DialogCode.Accepted:
+            return False
+        self.recargar()
+        self.aviso.setText(
+            "Guardado. El nombre y el logo nuevos se ven al reiniciar el programa; "
+            "la conexión ya está activa."
+        )
+        self.aviso.show()
+        self.configuracion_cambiada.emit()
+        return True
+
+
 class ConfiguracionView(QWidget):
     """The three catalogs, one tab each."""
 
     catalogo_cambiado = Signal()
+    configuracion_cambiada = Signal()
     mensaje = Signal(str)
 
     def __init__(self, servicio: ServicioTaller, parent: QWidget | None = None) -> None:
@@ -455,6 +591,10 @@ class ConfiguracionView(QWidget):
         self.administracion.mensaje.connect(self.mensaje.emit)
         self.pestanas.addTab(self.administracion, "Administración")
 
+        self.sistema = PanelSistema()
+        self.sistema.configuracion_cambiada.connect(self.configuracion_cambiada.emit)
+        self.pestanas.addTab(self.sistema, "Sistema")
+
         caja = QVBoxLayout(self)
         caja.setContentsMargins(20, 18, 20, 18)
         caja.setSpacing(10)
@@ -464,6 +604,7 @@ class ConfiguracionView(QWidget):
         for panel in self.paneles.values():
             panel.recargar()
         self.administracion.recargar()
+        self.sistema.recargar()
 
     def panel(self, dimension: str) -> PanelCatalogo:
         return self.paneles[dimension]

@@ -110,6 +110,27 @@ def url_desde_campos(
     )
 
 
+def campos_desde_url(url: str) -> dict[str, object]:
+    """Split a saved URL back into the fields the form shows.
+
+    Sirve para reabrir la configuración con los datos actuales en lugar de una
+    pantalla en blanco que obliga a recordar la contraseña.
+    """
+    from sqlalchemy.engine import make_url
+
+    try:
+        analizada = make_url(url)
+    except Exception:  # noqa: BLE001 - una URL inválida solo deja el formulario vacío
+        return {}
+    return {
+        "host": analizada.host or "localhost",
+        "puerto": analizada.port or 5432,
+        "usuario": analizada.username or "",
+        "contrasena": analizada.password or "",
+        "base": analizada.database or "",
+    }
+
+
 @dataclass(frozen=True)
 class ConfiguracionArranque:
     """What the wizard writes and the application reads on every start."""
@@ -230,6 +251,9 @@ def guardar_configuracion(configuracion: ConfiguracionArranque) -> Path:
         encoding="utf-8",
     )
     temporal.replace(ruta)
+    # El archivo guarda la contraseña de la base: solo el dueño debe poder leerlo.
+    if os.name != "nt":
+        os.chmod(ruta, 0o600)
     _cache = configuracion
     return ruta
 

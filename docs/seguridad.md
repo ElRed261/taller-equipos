@@ -1,0 +1,154 @@
+# Proteger la base de datos
+
+Qué protege hoy al sistema, qué falta, y en qué orden hacerlo. Está escrito para
+esta instalación concreta: PostgreSQL 18 en un servidor de la red local, un cliente
+de escritorio y datos institucionales que no se pueden perder ni reescribir sin
+dejar rastro.
+
+## Lo que ya está
+
+| Mecanismo | Dónde |
+| --- | --- |
+| Integridad de fechas y claves foráneas `RESTRICT` | `CHECK` y FKs del esquema |
+| Estado derivado, no almacenado | vista `v_movimiento_estado` |
+| Auditoría por campo, con valor anterior y nuevo | `auditoria_edicion` |
+| Constancia de cada registro borrado | `movimiento_eliminado` |
+| Rol de aplicación y rol de solo lectura separados | `taller` y `taller_ro` |
+| Contraseñas fuera de git | `.env`, `branding.json` y `marca-local/` ignorados |
+| Configuración del instalador solo para el dueño | `chmod 600` en `config.json` |
+| Ediciones atribuidas a un usuario | `auditoria_edicion.usuario_etiqueta` |
+
+## Prioridad 0 — antes de ponerlo en producción
+
+### 1. La aplicación no debe conectarse como superusuario
+
+El asistente ofrece `postgres` por comodidad, y eso es un superusuario: puede
+borrar la base entera, leer cualquier tabla y desactivar restricciones. Un error de
+la aplicación con ese rol no tiene freno.
+
+Creá un rol para la aplicación y usá ese:
+
+```sql
+CREATE ROLE taller_app LOGIN PASSWORD 'una-clave-larga-y-unica';
+CREATE DATABASE taller_dev OWNER taller_app;
+-- Lectura para herramientas (el MCP, por ejemplo)
+CREATE ROLE taller_ro LOGIN PASSWORD 'otra-clave';
+GRANT CONNECT ON DATABASE taller_dev TO taller_ro;
+GRANT USAGE ON SCHEMA public TO taller_ro;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO taller_ro;
+```
+
+El asistente pide el usuario de base de datos: ahí va `taller_app`, nunca `postgres`.
+
+### 2. Reglas de red, no `host all all`
+
+`pg_hba.conf` debe nombrar base y rol, y aceptar solo las direcciones del taller:
+
+```text
+# /etc/postgresql/…/pg_hba.conf
+host    taller_dev    taller_app    192.168.1.0/24    scram-sha-256
+host    taller_dev    taller_ro     127.0.0.1/32      trust
+```
+
+Y en `postgresql.conf`, escuchar solo la interfaz interna:
+
+```text
+listen_addresses = '192.168.1.10'
+```
+
+Nunca `0.0.0.0` en una máquina con salida a internet.
+
+### 3. Respaldos automáticos, y una restauración probada
+
+Un respaldo que nunca se restauró no es un respaldo. Dos piezas:
+
+```bash
+# /etc/cron.d/taller-backup
+30 2 * * *  postgres  pg_dump -Fc taller_dev | gzip > /var/backups/taller/$(date +\%F).dump.gz
+```
+
+```bash
+# retención: 30 días
+find /var/backups/taller -name '*.dump.gz' -mtime +30 -delete
+```
+
+Y una vez por mes, en una base desechable:
+
+```bash
+createdb prueba_restauracion
+pg_restore -d prueba_restauracion /var/backups/taller/2026-10-30.dump.gz
+psql -d prueba_restauracion -c 'select count(*) from movimiento'
+dropdb prueba_restauracion
+```
+
+Si ese `count` no coincide con producción, el respaldo no sirve y hay que saberlo
+antes del incidente, no después.
+
+## Prioridad 1 — la semana siguiente
+
+### 4. La auditoría no sirve si cualquiera elige su nombre
+
+Hoy el programa pregunta "¿quién sos?" y acepta lo que escribas. La columna
+`usuario_etiqueta` dice quién **dice** la aplicación que actuó, no quién actuó.
+Para que la auditoría valga, falta una de estas dos:
+
+- **Contraseña por usuario** en la tabla `usuario` (hash argon2 o bcrypt) y login al
+  arrancar; o
+- **Autenticación del sistema**: que la aplicación tome el usuario de Windows o del
+  dominio, y no permita escribirlo.
+
+Es la brecha más grande que queda, y es de comportamiento, no de infraestructura.
+
+### 5. Auditar los catálogos
+
+`auditoria_edicion` cubre movimientos. Renombrar, desactivar o fusionar un área, un
+tipo de equipo o un técnico **no queda registrado en ninguna parte**. Durante el
+desarrollo ya aparecieron cuatro técnicos desactivados sin rastro. Una tabla
+`auditoria_catalogo` con la misma forma resuelve el problema.
+
+### 6. Cifrar los respaldos
+
+Los dumps contienen nombres de personas y de departamentos. Si salen del servidor
+en un pendrive o a un servicio en la nube:
+
+```bash
+pg_dump -Fc taller_dev | gpg --encrypt --recipient admin@ejemplo | gzip > respaldo.gpg
+```
+
+Y guardá la clave privada fuera del servidor, o el cifrado no protege de nada.
+
+### 7. Punto en el tiempo (PITR)
+
+Un `pg_dump` diario pierde todo lo del día. Si perder un día de trabajo no es
+aceptable:
+
+```text
+wal_level = replica
+archive_mode = on
+archive_command = 'test ! -f /var/lib/postgresql/wal/%f && cp %p /var/lib/postgresql/wal/%f'
+```
+
+Con los WAL archivados se restaura al minuto exacto anterior al incidente.
+
+## Prioridad 2 — higiene
+
+- **TLS** (`sslmode=require`) si la red del taller no es de confianza. En una LAN
+  cerrada y conmutada es opcional; documentá la decisión.
+- **Firewall** del servidor: solo 5432 desde las IP del taller, nada más.
+- **Monitoreo**: `log_connections = on`, alerta cuando el disco pasa el 80 %.
+- **Contraseñas en el llavero del sistema** en lugar de `config.json`. Hoy el
+  archivo está en `0600`, que protege de otros usuarios de la máquina pero no de
+  quien tenga acceso a tu sesión.
+- **Un procedimiento escrito de recuperación**: quién restaura, desde qué respaldo,
+  cuánto tarda y a quién se avisa.
+
+## Lo que no recomiendo
+
+- **Cifrar la base entera a nivel de disco como única defensa**: protege el equipo
+  robado, no el acceso indebido desde la red.
+- **Un usuario compartido por todo el taller con la misma contraseña de base**: es
+  lo que hace que la auditoría no sirva.
+- **Dar `SUPERUSER` al rol de la aplicación** "para que no falle nada": convierte
+  cualquier error en una pérdida total.
+- **Respaldos solo en el mismo servidor**: un disco que falla se lleva la base y los
+  respaldos.

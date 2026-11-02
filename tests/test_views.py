@@ -553,10 +553,11 @@ class TestConfiguracion:
                 | QItemSelectionModel.SelectionFlag.Rows,
             )
 
-    def test_cuatro_pestanas_con_sus_paneles(self, qtbot: object) -> None:
+    def test_cinco_pestanas_con_sus_paneles(self, qtbot: object) -> None:
         vista = self._vista(qtbot)
-        assert vista.pestanas.count() == 4
+        assert vista.pestanas.count() == 5
         assert vista.pestanas.tabText(3) == "Administración"
+        assert vista.pestanas.tabText(4) == "Sistema"
         assert set(vista.paneles) == {"tipo_equipo", "area", "tecnico"}
 
     def test_lista_con_el_uso_de_cada_fila(self, qtbot: object) -> None:
@@ -920,3 +921,84 @@ class TestAdministracion:
 
         assert all(f.id != 1 for f in servicio.filas)
         assert panel.tabla.model().rowCount() == 2
+
+
+class TestPanelSistema:
+    """La configuración del instalador tiene que seguir siendo alcanzable."""
+
+    def _panel(self, qtbot: object):
+        from taller.ui.views.configuracion_view import PanelSistema
+
+        panel = PanelSistema()
+        qtbot.addWidget(panel)  # type: ignore[attr-defined]
+        return panel
+
+    def test_sin_configuracion_lo_dice(self, qtbot: object, monkeypatch) -> None:
+        import taller.ui.views.configuracion_view as modulo
+
+        monkeypatch.setattr(
+            modulo,
+            "cargar_configuracion",
+            lambda **_k: __import__(
+                "taller.arranque", fromlist=["ConfiguracionArranque"]
+            ).ConfiguracionArranque(),
+        )
+        panel = self._panel(qtbot)
+        assert panel._valores["nombre"].text() == "sin configurar"
+        assert panel._valores["servidor"].text() == "sin configurar"
+
+    def test_muestra_la_configuracion_guardada_sin_contrasena(
+        self, qtbot: object, monkeypatch
+    ) -> None:
+        import taller.ui.views.configuracion_view as modulo
+        from taller.arranque import ConfiguracionArranque
+
+        guardada = ConfiguracionArranque(
+            database_url="postgresql+psycopg://ana:secreta@servidor:5433/taller",
+            nombre="Mi Taller",
+            organizacion="Mi Org",
+        )
+        monkeypatch.setattr(modulo, "cargar_configuracion", lambda **_k: guardada)
+        panel = self._panel(qtbot)
+        assert panel._valores["nombre"].text() == "Mi Taller"
+        assert panel._valores["servidor"].text() == "servidor:5433"
+        assert panel._valores["base"].text() == "taller"
+        assert panel._valores["usuario"].text() == "ana"
+        # la contraseña nunca se muestra
+        assert all("secreta" not in v.text() for v in panel._valores.values())
+
+    def test_abrir_la_configuracion_y_guardar_avisa_y_emite(
+        self, qtbot: object, monkeypatch
+    ) -> None:
+        import taller.ui.views.configuracion_inicial as modulo_dialogo
+        from PySide6.QtWidgets import QDialog
+
+        class DialogoFalso:
+            def __init__(self, *_a, **_k) -> None:
+                pass
+
+            def exec(self) -> int:
+                return QDialog.DialogCode.Accepted
+
+        monkeypatch.setattr(modulo_dialogo, "ConfiguracionInicialDialog", DialogoFalso)
+        panel = self._panel(qtbot)
+
+        with qtbot.waitSignal(panel.configuracion_cambiada, timeout=1000):  # type: ignore[attr-defined]
+            assert panel.abrir_configuracion() is True
+
+        assert not panel.aviso.isHidden()
+
+    def test_cancelar_no_emite_nada(self, qtbot: object, monkeypatch) -> None:
+        import taller.ui.views.configuracion_inicial as modulo_dialogo
+        from PySide6.QtWidgets import QDialog
+
+        class DialogoFalso:
+            def __init__(self, *_a, **_k) -> None:
+                pass
+
+            def exec(self) -> int:
+                return QDialog.DialogCode.Rejected
+
+        monkeypatch.setattr(modulo_dialogo, "ConfiguracionInicialDialog", DialogoFalso)
+        panel = self._panel(qtbot)
+        assert panel.abrir_configuracion() is False

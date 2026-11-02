@@ -36,6 +36,7 @@ from PySide6.QtWidgets import (
 from taller.arranque import (
     ConfiguracionArranque,
     aplicar_migraciones,
+    campos_desde_url,
     copiar_logo,
     guardar_configuracion,
     url_desde_campos,
@@ -78,6 +79,7 @@ class ConfiguracionInicialDialog(QDialog):
         *,
         verificador: Verificador | None = None,
         migrador: Migrador | None = None,
+        inicial: ConfiguracionArranque | None = None,
     ) -> None:
         super().__init__(parent)
         self._verificador = verificador or probar_conexion_real
@@ -89,6 +91,8 @@ class ConfiguracionInicialDialog(QDialog):
         self.setWindowTitle("Configuración inicial")
         self.setMinimumWidth(720)
         self._construir()
+        if inicial is not None:
+            self._prellenar(inicial)
 
     # ------------------------------------------------------------------ armado
 
@@ -119,7 +123,7 @@ class ConfiguracionInicialDialog(QDialog):
         self.puerto = QSpinBox()
         self.puerto.setRange(1, 65535)
         self.puerto.setValue(5432)
-        self.usuario = QLineEdit("postgres")
+        self.usuario = QLineEdit("taller_app")
         self.contrasena = QLineEdit()
         self.contrasena.setEchoMode(QLineEdit.EchoMode.Password)
         self.base = QLineEdit("taller")
@@ -205,6 +209,13 @@ class ConfiguracionInicialDialog(QDialog):
         columna.addWidget(self._divisor())
         columna.addWidget(_etiqueta("2 · Conexión a la base de datos"))
         columna.addLayout(base_datos)
+        aviso_rol = QLabel(
+            "Usá un rol de aplicación con permiso solo sobre esta base, "
+            "nunca el superusuario «postgres»."
+        )
+        aviso_rol.setObjectName("AyudaCampo")
+        aviso_rol.setWordWrap(True)
+        columna.addWidget(aviso_rol)
         columna.addWidget(self.error)
         columna.addWidget(self.exito)
         columna.addStretch(1)
@@ -215,6 +226,26 @@ class ConfiguracionInicialDialog(QDialog):
         caja.addWidget(contenido)
 
         self.boton_logo.clicked.connect(self.elegir_logo)
+
+    def _prellenar(self, inicial: ConfiguracionArranque) -> None:
+        """Reabrir la configuración con lo que ya está guardado."""
+        if inicial.nombre:
+            self.nombre.setText(inicial.nombre)
+        self.organizacion.setText(inicial.organizacion)
+        self.descripcion.setText(inicial.descripcion)
+        if inicial.logo is not None and inicial.logo.is_file():
+            self._logo_elegido = inicial.logo
+            previa = QPixmap(str(inicial.logo))
+            if not previa.isNull():
+                self.previa.setPixmap(previa.scaledToHeight(ALTO_PREVIA))
+
+        campos = campos_desde_url(inicial.database_url) if inicial.database_url else {}
+        if campos:
+            self.host.setText(str(campos.get("host", "")))
+            self.puerto.setValue(int(campos.get("puerto", 5432)))  # type: ignore[arg-type]
+            self.usuario.setText(str(campos.get("usuario", "")))
+            self.contrasena.setText(str(campos.get("contrasena", "")))
+            self.base.setText(str(campos.get("base", "")))
 
     @staticmethod
     def _divisor() -> QFrame:

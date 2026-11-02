@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from taller.database.connection import reset_engine
 from taller.schemas.movimiento import MovimientoLeido
 from taller.servicios import ServicioTaller
 from taller.ui.iconos import icono
@@ -172,6 +173,7 @@ class VentanaPrincipal(QMainWindow):
         # Un catálogo nuevo o renombrado tiene que aparecer en el formulario y en
         # el grid sin reiniciar la aplicación.
         self.configuracion.catalogo_cambiado.connect(self._al_cambiar_catalogo)
+        self.configuracion.configuracion_cambiada.connect(self._al_cambiar_configuracion)
         for seccion, tecla in (
             (SECCION_REGISTRAR, "Ctrl+1"),
             (SECCION_MOVIMIENTOS, "Ctrl+2"),
@@ -216,6 +218,14 @@ class VentanaPrincipal(QMainWindow):
     def _avisar(self, mensaje: str) -> None:
         self.statusBar().showMessage(mensaje, 4000)
         self._actualizar_total()
+
+    def _al_cambiar_configuracion(self) -> None:
+        """Reconnect with the URL just saved and refresh what depends on it."""
+        reset_engine()
+        self.formulario.refrescar_catalogos()
+        self.grid.recargar()
+        self._actualizar_total()
+        self._avisar("Conexión actualizada")
 
     def _al_cambiar_catalogo(self) -> None:
         self.formulario.refrescar_catalogos()

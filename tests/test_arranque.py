@@ -267,3 +267,42 @@ class TestConfiguracionExterna:
         (tmp_path / ".env").write_text("OTRA_COSA=1\n", encoding="utf-8")
         monkeypatch.setenv("TALLER_ENV_FILE", str(tmp_path / ".env"))
         assert hay_configuracion_externa() is False
+
+
+class TestCamposDesdeUrl:
+    def test_separa_la_url_en_los_campos_del_formulario(self) -> None:
+        from taller.arranque import campos_desde_url
+
+        campos = campos_desde_url("postgresql+psycopg://ana:clave@servidor:5433/taller_dev")
+        assert campos == {
+            "host": "servidor",
+            "puerto": 5433,
+            "usuario": "ana",
+            "contrasena": "clave",
+            "base": "taller_dev",
+        }
+
+    def test_recupera_una_contrasena_con_simbolos(self) -> None:
+        from taller.arranque import campos_desde_url
+
+        url = url_desde_campos("h", 5432, "u", "a@b:c/d", "t")
+        assert campos_desde_url(url)["contrasena"] == "a@b:c/d"
+
+    def test_una_url_invalida_devuelve_vacio(self) -> None:
+        from taller.arranque import campos_desde_url
+
+        assert campos_desde_url("no es una url") == {}
+
+
+class TestPermisosDelArchivo:
+    def test_el_archivo_queda_solo_para_el_duenio(self, carpeta: Path) -> None:
+        import os
+        import stat
+
+        guardar_configuracion(
+            ConfiguracionArranque(
+                database_url="postgresql+psycopg://u:p@localhost/t", nombre="X"
+            )
+        )
+        modo = stat.S_IMODE(os.stat(ruta_configuracion()).st_mode)
+        assert modo == 0o600, f"el archivo con la contraseña quedó en {oct(modo)}"
