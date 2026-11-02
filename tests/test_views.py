@@ -970,8 +970,9 @@ class TestPanelSistema:
     def test_abrir_la_configuracion_y_guardar_avisa_y_emite(
         self, qtbot: object, monkeypatch
     ) -> None:
-        import taller.ui.views.configuracion_inicial as modulo_dialogo
         from PySide6.QtWidgets import QDialog
+
+        import taller.ui.views.configuracion_inicial as modulo_dialogo
 
         class DialogoFalso:
             def __init__(self, *_a, **_k) -> None:
@@ -989,8 +990,9 @@ class TestPanelSistema:
         assert not panel.aviso.isHidden()
 
     def test_cancelar_no_emite_nada(self, qtbot: object, monkeypatch) -> None:
-        import taller.ui.views.configuracion_inicial as modulo_dialogo
         from PySide6.QtWidgets import QDialog
+
+        import taller.ui.views.configuracion_inicial as modulo_dialogo
 
         class DialogoFalso:
             def __init__(self, *_a, **_k) -> None:
