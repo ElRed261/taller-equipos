@@ -22,7 +22,8 @@ from PySide6.QtWidgets import QApplication, QInputDialog, QLineEdit, QMessageBox
 from taller.config.settings import get_settings
 from taller.servicios import ServicioTaller
 from taller.ui.main_window import VentanaPrincipal
-from taller.ui.tema import RUTA_LOGO, hoja_de_estilo
+from taller.ui.marca import cargar_marca
+from taller.ui.tema import hoja_de_estilo
 
 
 def resolver_usuario(settings_usuario: str) -> str | None:
@@ -74,9 +75,10 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     app = QApplication(argumentos)
-    app.setApplicationName("Taller de equipos")
-    app.setOrganizationName("Taller de equipos")
-    app.setWindowIcon(QIcon(str(RUTA_LOGO)))
+    marca = cargar_marca()
+    app.setApplicationName(marca.nombre)
+    app.setOrganizationName(marca.organizacion)
+    app.setWindowIcon(QIcon(str(marca.logo)))
     app.setStyleSheet(hoja_de_estilo())
 
     usuario = resolver_usuario(get_settings().usuario)

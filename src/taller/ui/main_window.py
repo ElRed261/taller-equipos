@@ -29,7 +29,8 @@ from PySide6.QtWidgets import (
 from taller.schemas.movimiento import MovimientoLeido
 from taller.servicios import ServicioTaller
 from taller.ui.iconos import icono
-from taller.ui.tema import COLORES, RUTA_LOGO, cargar_logo
+from taller.ui.marca import cargar_marca
+from taller.ui.tema import COLORES, cargar_logo
 from taller.ui.views.configuracion_view import ConfiguracionView
 from taller.ui.views.form_registro_view import FormRegistroView
 from taller.ui.views.grid_movimientos_view import GridMovimientosView
@@ -49,10 +50,11 @@ class VentanaPrincipal(QMainWindow):
     def __init__(self, servicio: ServicioTaller, parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self._servicio = servicio
-        self.setWindowTitle("Taller de equipos")
+        self._marca = cargar_marca()
+        self.setWindowTitle(self._marca.titulo_ventana)
         # El icono se fija también acá: una ventana abierta desde un script o
         # un test no pasa por main() y quedaba sin icono.
-        self.setWindowIcon(QIcon(str(RUTA_LOGO)))
+        self.setWindowIcon(QIcon(str(cargar_marca().logo)))
         self.resize(1280, 800)
         self.setMinimumSize(980, 640)
 
@@ -101,13 +103,13 @@ class VentanaPrincipal(QMainWindow):
         logo = QLabel()
         logo.setPixmap(cargar_logo(38))
         logo.setFixedWidth(42)
-        logo.setToolTip("Taller de equipos")
+        logo.setToolTip(self._marca.nombre)
 
-        sistema = QLabel("Taller de equipos")
+        sistema = QLabel(self._marca.nombre)
         sistema.setObjectName("BarraSistema")
         separador = QLabel("·")
         separador.setStyleSheet("color:#C7CFDA;background:transparent;")
-        registro = QLabel("Registro y control de equipos de soporte técnico")
+        registro = QLabel(self._marca.descripcion)
         registro.setStyleSheet("color:#6B7684;font-size:12px;background:transparent;")
 
         self._conexion = QLabel("● conectado")

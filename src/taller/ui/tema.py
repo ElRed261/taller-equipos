@@ -101,10 +101,12 @@ RUTA_ICONOS: Final = Path(__file__).parent / "assets" / "iconos"
 def cargar_logo(alto: int = 34) -> QPixmap:
     """The application mark, scaled to the top bar.
 
-    It is a neutral symbol, not a wordmark: at this size letters are unreadable,
-    so the name is written next to it as text.
+    Which image is used comes from ``branding.json`` (see ``marca.py``): the
+    repository ships a neutral symbol, and whoever deploys it points at their own.
     """
-    pixmap = QPixmap(str(RUTA_LOGO))
+    from taller.ui.marca import cargar_marca
+
+    pixmap = QPixmap(str(cargar_marca().logo))
     if pixmap.isNull():
         return pixmap
     return pixmap.scaledToHeight(alto)

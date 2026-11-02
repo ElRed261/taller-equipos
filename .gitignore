@@ -40,3 +40,7 @@ respaldos/
 # Artefactos de empaquetado (se regeneran con scripts/empaquetar.sh)
 packaging/icono.png
 packaging/icono.ico
+
+# Identidad local: el logo y el nombre de quien despliega la aplicación
+branding.json
+marca-local/
