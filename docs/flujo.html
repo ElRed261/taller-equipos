@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taller de equipos · Flujo completo</title>
+<style>
+  :root {
+    --navy: #001E5E;
+    --navy-2: #0A2A73;
+    --rojo: #A50310;
+    --verde: #157F4A;
+    --gris: #6B7684;
+    --gris-claro: #F4F6F9;
+    --borde: #E1E6EE;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #17233A;
+    background: var(--gris-claro);
+    line-height: 1.55;
+  }
+  .cabecera {
+    background: var(--navy);
+    color: #fff;
+    text-align: center;
+    padding: 44px 20px 36px;
+  }
+  .cabecera h1 { font-size: 1.9rem; font-weight: 700; letter-spacing: -.01em; }
+  .cabecera p  { margin-top: 8px; opacity: .85; font-size: 1.02rem; }
+  .contenido { max-width: 880px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .seccion-titulo {
+    display: flex; align-items: baseline; gap: 12px;
+    margin: 46px 0 6px;
+  }
+  .seccion-titulo .numero {
+    background: var(--navy); color: #fff;
+    min-width: 42px; height: 42px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 1.05rem;
+  }
+  .seccion-titulo h2 { font-size: 1.35rem; color: var(--navy); }
+  .seccion-sub { color: var(--gris); margin-bottom: 18px; margin-left: 54px; }
+
+  .paso {
+    background: #fff; border: 1px solid var(--borde);
+    border-radius: 10px; padding: 18px 22px;
+    margin-bottom: 12px; margin-left: 54px;
+  }
+  .paso b.titulo-paso { display: block; margin-bottom: 4px; color: var(--navy); }
+  .paso .codigo {
+    background: #0F1B33; color: #9CD4AE;
+    font-family: "JetBrains Mono", Consolas, monospace;
+    font-size: .92rem; padding: 10px 14px; border-radius: 6px;
+    margin: 8px 0 2px; overflow-x: auto; white-space: pre;
+  }
+  .paso .comentario { color: var(--gris); font-size: .92rem; }
+  .flecha {
+    margin: 2px 0 2px 70px; color: var(--gris);
+    font-size: 1.4rem; line-height: 1;
+  }
+  .nota {
+    background: #FFF6E5; border: 1px solid #EFDDAE;
+    border-radius: 8px; padding: 12px 16px; margin: 10px 0 10px 54px;
+    font-size: .95rem;
+  }
+  .nota b { color: #8A6600; }
+  .ok { border-left: 4px solid var(--verde); }
+  .tarjeta-final {
+    margin-top: 52px; background: var(--navy); color: #fff;
+    border-radius: 12px; padding: 26px 30px;
+  }
+  .tarjeta-final h3 { margin-bottom: 10px; }
+  .tarjeta-final li { margin: 6px 0 6px 20px; }
+  .tarjeta-final a { color: #9CD4AE; }
+  code.inline {
+    background: #EEF1F6; border-radius: 4px; padding: 1px 6px;
+    font-family: "JetBrains Mono", Consolas, monospace; font-size: .9em;
+  }
+  .cabecera-final code.inline { background: rgba(255,255,255,.14); color: #9CD4AE; }
+  table.comparativa { border-collapse: collapse; margin-left: 54px; width: calc(100% - 54px); }
+  table.comparativa th, td { border: 1px solid var(--borde); padding: 8px 12px; text-align: left; font-size: .95rem; }
+  table.comparativa th { background: #fff; color: var(--navy); }
+  @media print { .contenido { max-width: none; } }
+</style>
+</head>
+<body>
+
+<header class="cabecera">
+  <h1>Taller de equipos</h1>
+  <p>El flujo completo: instalación desde cero → configuración → uso → desinstalación</p>
+</header>
+
+<div class="contenido">
+
+  <div class="seccion-titulo"><span class="numero">0</span><h2>Antes de empezar</h2></div>
+  <p class="seccion-sub">Dos cosas revisadas a mano, una vez:</p>
+
+  <div class="paso ok">
+    <b class="titulo-paso">0.1 · Que PostgreSQL esté instalado (motor de la base)</b>
+    <div class="comentario">Ya lo tenés instalado y NO se tocó. Lo usamos así, sin cambiar nada.</div>
+  </div>
+  <div class="paso ok">
+    <b class="titulo-paso">0.2 · Que el proyecto esté ahí</b>
+    <div class="codigo">/home/stward/Proyectos/taller-equipos</div>
+    <div class="comentario">Es el único lugar que entra en juego desde acá. Todo lo demás se boró.</div>
+  </div>
+
+  <div class="nota"><b>Importante:</b> tu copia con los 568 registros está a salvo fuera de la
+  máquina, en <code class="inline">~/respaldos-taller/migracion-20261102-0944/</code>.
+  Si querés recuperar esos datos más adelante, el paso 4.4 lo explica.</div>
+
+  <!-- ============ SECCIÓN 1 ============ -->
+  <div class="seccion-titulo"><span class="numero">1</span><h2>Crear la base por primera vez</h2></div>
+  <p class="seccion-sub">Una sola vez. Cinco comandos, copiados tal cual.</p>
+
+  <div class="paso">
+    <b class="titulo-paso">1.1 · Encender el motor (si está detenido)</b>
+    <div class="codigo">cd ~/Proyectos/taller-equipos
+scripts/bd.sh start</div>
+    <div class="comentario">Espera hasta que el motor acepte conexiones. Este comando es la
+    única forma de arrancar PostgreSQL en esta máquina: no es un servicio del sistema.</div>
+  </div>
+
+  <div class="paso">
+    <b class="titulo-paso">1.2 · Crear el dueño de la base (rol de aplicación)</b>
+    <div class="codigo">psql -X -d postgres -c "CREATE ROLE taller_app LOGIN PASSWORD 'poné-tu-clave';"</div>
+    <div class="comentario">Es el usuario con el que <b>la aplicación</b> va a hablar con la base.
+    Nunca uses el superusuario <code class="inline">postgres</code> en la app.</div>
+  </div>
+
+  <div class="paso">
+    <b class="titulo-paso">1.3 · Crear la base</b>
+    <div class="codigo">psql -X -d postgres -c "CREATE DATABASE taller_dev OWNER taller_app;"</div>
+  </div>
+
+  <div class="flecha">↓
+  <div class="paso">
+    <b class="titulo-paso">1.4 · Probar la conexión</b>
+    <div class="codigo">psql -X -d "postgresql://taller_app:poné-tu-clave@localhost:5432/taller_dev" -c "select 1;"</div>
+    <div class="comentario">Si dice <code class="inline">1</code>, la base está lista.</div>
+  </div>
+
+  <!-- ============ SECCIÓN 2 ============ -->
+  <div class="seccion-titulo"><span class="numero">2</span><h2>Armar el instalador y ejecutarlo</h2></div>
+  <p class="seccion-sub">Del proyecto a una copia instalada, con el asistente.</p>
+
+  <div class="paso">
+    <b class="titulo-paso">2.1 · Armar el paquete (una vez por versión)</b>
+    <div class="codigo">cd ~/Proyectos/taller-equipos
+scripts/empaquetar.sh</div>
+    <div class="comentario">Deja <code class="inline">dist/taller-equipos/</code> (≈ 250 MB).
+    Tarda un minuto y deja el ejecutable listo sin Python instalado.</div>
+  </div>
+  <div class="flecha">↓</div>
+
+  <div class="paso">
+    <b class="titulo-paso">2.2 · Abrir el wizard de instalación</b>
+    <div class="codigo">dist/taller-equipos/taller-equipos --instalar</div>
+    <div class="comentario">Se abre una ventana con dos opciones: <b>Solo para mí</b> (sin clave)
+    o <b>Para todos los usuarios</b>. Casi siempre elige la primera.</div>
+  </div>
+  <div class="flecha">↓</div>
+
+  <div class="paso">
+    <b class="titulo-paso">2.3 · Clic en «Instalar»</b>
+    <div class="comentario">Copia el programa a <code class="inline">~/.local/lib/taller-equipos</code>,
+    crea el lanzador <code class="inline">~/.local/bin/taller-equipos</code> y deja la entrada en
+    el menú de aplicaciones. Sos libre de cerrar la ventana cuando termine.</div>
+  </div>
+
+  <div class="nota"><b>Otro camino equivalente:</b> hacé doble clic en el menú →
+  <b>«Taller de equipos · Instalar»</b>. Es el mismo wizard, sin terminal.</div>
+
+  <!-- ============ SECCIÓN 3 ============ -->
+  <div class="seccion-titulo"><span class="numero">3</span><h2>Configurar (única vez)</h2></div>
+  <p class="seccion-sub">Marca de la institución, conexión, base — automatico.</p>
+
+  <div class="paso">
+    <b class="titulo-paso">3.1 · Abrir el programa</b>
+    <div class="codigo">~/.local/bin/taller-equipos</div>
+    <div class="comentario">Como todavía no está configurado, se abre solo:
+    <b>«Puesta en marcha»</b>.</div>
+  </div>
+  <div class="flecha">↓</div>
+
+  <div class="paso">
+    <b class="titulo-paso">3.2 · Identidad (1 · Identidad)</b>
+    <div class="comentario">Nombre visible de la app, organización y logo. Esto queda
+    guardado solo en tu usuario y no se toca al reinstalar.</div>
+  </div>
+  <div class="flecha">↓</div>
+
+  <div class="paso">
+    <b class="titulo-paso">3.3 · Conexión (2 · Conexión a la base de datos)</b>
+    <div class="comentario">Servidor: <code class="inline">localhost</code> ·
+    Usuario: <code class="inline">taller_app</code> · la contraseña que vos elegiste ·
+    Base: <code class="inline">taller_dev</code>. Después: <b>Probar conexión</b>.</div>
+  </div>
+  <div class="flecha">↓</div>
+
+  <div class="paso">
+    <b class="titulo-paso">3.4 · Guardar y continuar</b>
+    <div class="comentario">Con la casilla <b>«Copiar este programa a una carpeta propia»</b>
+    marcada, el propio asistente deja todo instalado y configurado de una sola vez.
+    Las tablas se crean solas dentro de la base (13 tablas + la vista de estados).</div>
+  </div>
+
+  <div class="nota"><b>Nota:</b> si preferís toda la configuración de la base ajena al asistente
+  gráfico, se puede escribir <code class="inline">.env</code> a mano en la raíz del proyecto.
+  Pero el asistente lo hace todo y evita errores.</div>
+
+  <!-- ============ SECCIÓN 4 ============ -->
+  <div class="seccion-titulo"><span class="numero">4</span><h2>Uso diario</h2></div>
+  <p class="seccion-sub">Lo único que hacés todos los días.</p>
+
+  <table class="comparativa">
+    <tr><th>Situación</th><th>Qué hacés</th></tr>
+    <tr><td>Usar el programa</td>Abrís «Taller de equipos» en el menú. Ya está todo.</td></tr>
+    <tr><td>Entrada de equipos</td>Rail izquierdo → <b>Registrar entrada</b>. 10 campos. Enter guarda.</td></tr>
+    <tr><td>Salidas y revisiones</td>Rail → <b>Movimientos</b>: doble clic, botones de salida y revisión.</td></tr>
+    <tr><td>Catálogos y usuarios</td>Rail → <b>Configuración</b>: pestañas Tipos / Áreas / Soportes / Usuarios / Sistema / Historial.</td></tr>
+    <tr><td>Exportar CSV</td>En <b>Movimientos</b> → botón <b>Exportar CSV</b> (sale con lo filtrado).</td></tr>
+    <tr><td>La base no abre</td><code class="inline">cd ~/Proyectos/taller-equipos && scripts/bd.sh start</code></td></tr>
+    <tr><td>Pedirle la contraseña a alguien</td>Configuración → <b>Usuarios</b> → Nuevo usuario.</td></tr>
+  </table>
+
+  <div class="seccion-titulo"><span class="numero">4.4</span><h2>Recuperar tus 568 registros (opcional)</h2></div>
+  <div class="paso">
+    <div class="codigo">pg_restore --no-owner --no-privileges \\
+  -d "postgresql://taller_app:poné-tu-clave@localhost:5432/taller_dev" \\
+  ~/respaldos-taller/migracion-20261102-0944/taller_dev.dump</div>
+    <div class="comentario">Trae todo: movimientos, áreas, técnicos, el historial completo.
+    Guía del paquete: <code class="inline">LEEME-MIGRACION.md</code> dentro del respaldo.</div>
+  </div>
+
+  <!-- ============ SECCIÓN 5 ============ -->
+  <div class="seccion-titulo"><span class="numero">5</span><h2>Desinstalar</h2></div>
+
+  <div class="paso">
+    <b class="titulo-paso">5.1 · Con el wizard (recomendado)</b>
+    <div class="codigo">~/.local/bin/taller-equipos --desinstalar</div>
+    <div class="comentario">También está en el menú: <b>«Taller de equipos · Quitar»</b>.
+    Dice exactamente qué borra y qué no. La base de datos <b>nunca</b> se toca.</div>
+  </div>
+
+  <div class="paso">
+    <b class="titulo-paso">5.2 · Borrar la base (separado, es tu decisión)</b>
+    <div class="codigo">psql -X -d postgres -c "DROP DATABASE taller_dev;"
+psql -X -d postgres -c "DROP ROLE taller_app;"</div>
+    <div class="comentario">Solo si de verdad querés empezar de cero de nuevo.
+    Está fuera del desinstalador por eso mismo.</div>
+  </div>
+
+  <div class="tarjeta-final">
+    <h3>Lo que se probó de verdad</h3>
+    <p style='opacity:.8;margin-bottom:8px;'>Generado el 02/11/2026 · commit 756684d</p>
+    <li>Instalador Linux: instalación, <code class="inline">--version</code>, desinstalación sin restos</li>
+    <li>Wizard de instalación y de desinstalación: los dos abren y operan</li>
+    <li>Creación completa de la base al abrir el programa (13 tablas, 1 vista, migraciones)</li>
+    <li>Restauración del paquete de migración: 568/119/11/561 coinciden</li>
+    <li>.respaldos cifrados, TLS, auditoría de seguridad: 397 pruebas verdes</li>
+    <p style="margin-top:10px; opacity:.8;">Más detalle técnico: <code class="inline">docs/recuperacion.md</code> ·
+    <code class="inline">docs/seguridad.md</code> · <code class="inline">docs/instalacion.md</code></p>
+  </div>
+
+</div>
+</body>
+</html>
