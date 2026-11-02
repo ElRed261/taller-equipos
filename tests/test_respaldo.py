@@ -25,12 +25,17 @@ pytestmark = pytest.mark.skipif(
 
 
 def _correr(destino: Path, **entorno: str) -> subprocess.CompletedProcess[str]:
+    limpiar_clave = entorno.pop("TALLER_RESPALDO_CLAVE", None)
+    limpiar_recipiente = entorno.pop("TALLER_RESPALDO_GPG_RECIPIENTE", None)
     ambiente = {
         **os.environ,
         "TALLER_RESPALDOS": str(destino),
         "TALLER_RETENCION_DIAS": entorno.pop("retencion", "30"),
-        **entorno,
     }
+    # "Sin cifrado" tiene que poder pedirse aunque el entorno tenga la variable.
+    ambiente["TALLER_RESPALDO_CLAVE"] = limpiar_clave or ""
+    ambiente["TALLER_RESPALDO_GPG_RECIPIENTE"] = limpiar_recipiente or ""
+    ambiente.update(entorno)
     return subprocess.run(  # noqa: S603
         [str(SCRIPT)],
         capture_output=True,
@@ -100,3 +105,136 @@ def test_la_retencion_borra_solo_lo_que_pasa_del_limite(tmp_path: Path) -> None:
 
     assert not viejo.exists(), "no borró el respaldo de hace años"
     assert len(list(tmp_path.glob("*.dump"))) == 1, "borró el respaldo de hoy"
+
+
+@pytest.fixture()
+def clave(tmp_path: Path) -> Path:
+    """Archivo con la frase simétrica, con los permisos que exige el script."""
+    archivo = tmp_path / "clave"
+    archivo.write_text("una-frase-larga-y-unica\n", encoding="utf-8")
+    archivo.chmod(0o600)
+    return archivo
+
+
+class TestCifrado:
+    """El volcado tiene nombres de personas: sale del servidor cifrado o no sale."""
+
+    def test_con_clave_el_archivo_queda_cifrado(
+        self, tmp_path: Path, clave: Path
+    ) -> None:
+        destino = tmp_path / "respaldos"
+        resultado = _correr(destino, TALLER_RESPALDO_CLAVE=str(clave))
+
+        assert resultado.returncode == 0, resultado.stderr
+        cifrados = list((destino).glob("*.dump.gpg"))
+        assert len(cifrados) == 1, "no dejó un archivo cifrado"
+        # Ni un volcado en claro al lado.
+        assert list(destino.glob("*.dump")) == []
+
+        cabecera = cifrados[0].read_bytes()[:2]
+        assert cabecera == b"\x8c\x0d", "el archivo no parece cifrado con gpg"
+
+        # Sin la clave no se puede restaurar.
+        sin_clave = subprocess.run(  # noqa: S603
+            ["pg_restore", "--list", str(cifrados[0])],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert sin_clave.returncode != 0
+
+    def test_la_clave_con_permisos_abiertos_se_rechaza(
+        self, tmp_path: Path, clave: Path
+    ) -> None:
+        abierta = tmp_path / "clave-abierta"
+        abierta.write_text(clave.read_text(encoding="utf-8"), encoding="utf-8")
+        abierta.chmod(0o644)
+
+        destino = tmp_path / "respaldos"
+        resultado = _correr(destino, TALLER_RESPALDO_CLAVE=str(abierta))
+
+        assert resultado.returncode != 0
+        assert "permisos" in resultado.stdout.lower()
+        assert list(destino.glob("*.dump*")) == []
+
+    def test_avisa_cuando_no_se_cifra(self, tmp_path: Path) -> None:
+        destino = tmp_path / "respaldos"
+        resultado = _correr(
+            destino, TALLER_RESPALDO_CLAVE="", TALLER_RESPALDO_GPG_RECIPIENTE=""
+        )
+
+        assert resultado.returncode == 0
+        assert "NO se cifra" in resultado.stdout
+
+    def test_el_registro_dice_si_esta_cifrado(
+        self, tmp_path: Path, clave: Path
+    ) -> None:
+        destino = tmp_path / "respaldos"
+        assert (
+            _correr(destino, TALLER_RESPALDO_CLAVE=str(clave)).returncode == 0
+        )
+        registro = (destino / "registro.log").read_text(encoding="utf-8")
+        assert "cifrado=simetrico" in registro
+
+
+def _archive_mode_encendido() -> bool:
+    resultado = subprocess.run(  # noqa: S603
+        ["psql", "-X", "-q", "-A", "-t", "-d", "postgres", "-c", "show archive_mode"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return resultado.stdout.strip() == "on"
+
+
+@pytest.mark.skipif(
+    not _archive_mode_encendido(),
+    reason="sin archive_mode no se puede aspirar a PITR",
+)
+class TestRespaldoBase:
+    """El respaldo base es el punto de partida del PITR: tiene que verificarse."""
+
+    def test_deja_un_base_verificado_y_cifrado(
+        self, tmp_path: Path, clave: Path
+    ) -> None:
+        destino = tmp_path / "respaldos"
+        resultado = subprocess.run(  # noqa: S603
+            [str(RAIZ / "scripts" / "respaldar_base.sh")],
+            capture_output=True,
+            text=True,
+            env={
+                **os.environ,
+                "TALLER_RESPALDOS": str(destino),
+                "TALLER_RESPALDO_CLAVE": str(clave),
+            },
+            cwd=RAIZ,
+            timeout=300,
+            check=False,
+        )
+
+        assert resultado.returncode == 0, resultado.stdout + resultado.stderr
+        assert "verificado con pg_verifybackup" in resultado.stdout
+        bases = list(destino.glob("base-*.tar.gz.gpg"))
+        assert len(bases) == 1
+        assert "OK base" in (destino / "registro.log").read_text(encoding="utf-8")
+
+    def test_sin_clave_avisa_que_viaja_entera_sin_cifrar(self, tmp_path: Path) -> None:
+        destino = tmp_path / "respaldos"
+        resultado = subprocess.run(  # noqa: S603
+            [str(RAIZ / "scripts" / "respaldar_base.sh")],
+            capture_output=True,
+            text=True,
+            env={
+                **os.environ,
+                "TALLER_RESPALDOS": str(destino),
+                "TALLER_RESPALDO_CLAVE": "",
+                "TALLER_RESPALDO_GPG_RECIPIENTE": "",
+            },
+            cwd=RAIZ,
+            timeout=300,
+            check=False,
+        )
+
+        assert resultado.returncode == 0
+        assert "NO se cifra" in resultado.stdout
+        assert len(list(destino.glob("base-*.tar.gz"))) == 1

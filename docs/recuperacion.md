@@ -7,7 +7,8 @@ un incidente, andá directo a **Restaurar**, abajo.
 
 | Pieza | Dónde |
 | --- | --- |
-| Script de respaldo | `scripts/respaldar.sh` |
+| Script de respaldo lógico | `scripts/respaldar.sh` |
+| Script de respaldo base (PITR) | `scripts/respaldar_base.sh` |
 | Volcados | `TALLER_RESPALDOS` (por defecto `~/respaldos-taller`) |
 | Registro de cada corrida | `<destino>/registro.log` |
 | Resumen del momento | `<destino>/taller-<fecha>.txt` (conteos de movimientos y catálogos) |
@@ -35,6 +36,59 @@ Variables:
 | `TALLER_RESPALDOS` | `~/respaldos-taller` | carpeta destino |
 | `TALLER_RETENCION_DIAS` | `30` | antigüedad a partir de la cual se borra |
 | `TALLER_DATABASE_URL` | lee `.env` | a qué base conectarse |
+
+## Cifrado
+
+Los volcados tienen nombres de personas y de departamentos: si salen del servidor,
+van cifrados. Dos formas, elegí una:
+
+**Destinatario (recomendado).** El servidor solo tiene la clave **pública**: si
+alguien entra a la máquina no puede leer sus propios respaldos.
+
+```bash
+# donde vive la clave privada, no en el servidor
+gpg --full-generate-key
+gpg --export --armor admin@ejemplo > respaldo-publica.asc
+
+# en el servidor
+gpg --import respaldo-publica.asc
+export TALLER_RESPALDO_GPG_RECIPIENTE=admin@ejemplo
+```
+
+**Clave simétrica.** Más simple, pero quien lea el archivo de la clave abre todos
+los respaldos, así que ese archivo no puede vivir en el mismo servidor.
+
+```bash
+printf '%s\n' 'una frase larga y única' > /etc/taller/clave-respaldo
+chmod 600 /etc/taller/clave-respaldo
+export TALLER_RESPALDO_CLAVE=/etc/taller/clave-respaldo
+```
+
+El script **se niega a correr** si ese archivo tiene permisos abiertos (644), y
+avisa en la salida y en el registro cuando no hay cifrado configurado. Con clave
+simétrica además comprueba que el archivo cifrado se descifra y sigue siendo un
+volcado válido: un respaldo cifrado que no se puede abrir es peor que no tenerlo.
+
+Restaurar desde un archivo cifrado:
+
+```bash
+gpg --decrypt respaldo.dump.gpg > /tmp/respaldo.dump
+pg_restore --no-owner --no-privileges -d taller_dev /tmp/respaldo.dump
+rm -f /tmp/respaldo.dump
+```
+
+## Fuera del servidor
+
+Un disco que se lleva la base se lleva también la carpeta de respaldos si están en
+la misma máquina. El destino tiene que salir:
+
+```bash
+# destino externo con rsync, o el cliente de tu servicio de copias
+rsync -az --delete -e ssh ~/respaldos-taller/ copias@otro-equipo:/respaldos/taller/
+```
+
+Y la clave privada de cifrado **nunca** en el servidor: si el servidor se pierde y
+la clave estaba ahí, los respaldos se pierden con él.
 
 ## Automático
 
@@ -162,16 +216,116 @@ limit 10;
 
 Se reinserta a mano con los valores de ese JSON.
 
-## Lo que falta para estar cubierto del todo
+## PITR: recuperar a un minuto exacto
 
-- **Pérdida del día en curso**: el respaldo diario pierde todo lo posterior al
-  último. Para eso hace falta archivar los WAL (`archive_mode = on`), que permite
-  restaurar al minuto exacto. Está como T5 en
-  `odd/tasks/seguridad-base-de-datos.md`.
-- **Cifrado**: los volcados tienen nombres de personas. Si salen del servidor,
-  cifrarlos (T5).
-- **Copia fuera del servidor**: un disco que se lleva la base se lleva también la
-  carpeta de respaldos si están en la misma máquina. Copiar el destino a otro
-  equipo o a un servicio externo.
-- **La clave de cifrado, si no está en el servidor**: si se cifra y la clave vive
-  en el mismo servidor, no protege de nada.
+El respaldo lógico pierde todo lo posterior a él: si el respaldo es de las 2:30 y
+alguien borra datos a las 15:00, se pierden casi trece horas. Para no perderlas
+hacen falta **dos cosas juntas**, y una sin la otra no sirve:
+
+1. **WAL archivados** de forma continua (`archive_mode = on`), y
+2. **un respaldo base** físico desde el cual empezar a aplicarlos.
+
+Los WAL sin respaldo base no se pueden aplicar; el respaldo base sin WAL solo
+devuelve el estado de ese día.
+
+### Configuración del servidor
+
+```text
+# postgresql.conf (archive_mode necesita reinicio, no alcanza con reload)
+wal_level = replica
+archive_mode = on
+archive_command = 'test ! -f /var/lib/postgresql/wal-archive/%f && cp %p /var/lib/postgresql/wal-archive/%f'
+archive_timeout = '5min'
+```
+
+`test ! -f` hace el comando idempotente: si el archivo ya está, no falla. Un
+`archive_command` que falla no detiene la base, pero **el disco se llena de WAL**;
+vigilá `pg_stat_archiver.failed_count`:
+
+```sql
+select archived_count, failed_count, last_failed_wal, last_archived_time
+from pg_stat_archiver;
+```
+
+### Respaldo base
+
+```bash
+scripts/respaldar_base.sh          # usa pg_basebackup --format=plain y lo verifica
+```
+
+Va con `pg_verifybackup`, que compara cada archivo con el manifiesto que escribió el
+servidor: un respaldo base sin verificar no sirve como punto de partida. Se toma una
+vez por semana, y **siempre después de cambios grandes** (una migración, una
+importación).
+
+### Recuperar a un instante
+
+Este procedimiento se ejecutó y se comprobó: recuperó 568 movimientos con 119 áreas
+y dejó afuera, correctamente, una fila insertada justo después del instante elegido.
+
+1. Elegir el instante. Con el registro de la aplicación a mano, o el log del
+   servidor. En el ejemplo: `2026-11-02 09:06:02`.
+
+2. Descomprimir el base (y descifrarlo si hace falta) en una carpeta vacía:
+
+   ```bash
+   gpg --decrypt base-20261102-090540.tar.gz.gpg | tar -xzf - -C /tmp
+   mv /tmp/.base-20261102-090540.parcial /tmp/pitr
+   ```
+
+3. Escribir el destino y el comando de restauración de WAL:
+
+   ```bash
+   cat >> /tmp/pitr/postgresql.auto.conf <<'EOF'
+   restore_command = 'cp /var/lib/postgresql/wal-archive/%f %p'
+   recovery_target_time = '2026-11-02 09:06:02'
+   recovery_target_action = 'promote'
+   EOF
+   touch /tmp/pitr/recovery.signal
+   ```
+
+4. Levantarlo en otro puerto, sin tocar el de producción:
+
+   ```bash
+   pg_ctl -D /tmp/pitr -o "-p 5433 -k /tmp -c listen_addresses=''" -l /tmp/pitr.log -w start
+   ```
+
+5. Mirar el registro: tiene que decir a qué altura se detuvo.
+
+   ```bash
+   grep -E "recovery stopping|redo done|ready to accept" /tmp/pitr.log
+   ```
+
+   Si dice `recovery ended before configured recovery target was reached`, el
+   instante pedido es más nuevo que el último WAL archivado: hay que archivar más
+   o elegir un instante anterior.
+
+6. Verificar los datos **antes** de reemplazar nada:
+
+   ```bash
+   psql -h /tmp -p 5433 -d taller_dev -c "select count(*) from movimiento"
+   psql -h /tmp -p 5433 -d taller_dev -c "select count(*) from area"
+   ```
+
+7. Recién entonces reemplazar el directorio de datos de producción, con la base
+   detenida y guardando el anterior:
+
+   ```bash
+   scripts/bd.sh stop
+   mv /var/lib/postgresql/18 /var/lib/postgresql/18.roto-$(date +%Y%m%d)
+   mv /tmp/pitr /var/lib/postgresql/18
+   rm -f /var/lib/postgresql/18/recovery.signal
+   scripts/bd.sh start
+   ```
+
+8. Comprobar que `archive_mode` sigue en `on` y que `pg_stat_archiver` no acumula
+   fallos.
+
+## Lo que sigue faltando
+
+- **Programar todo esto en el servidor definitivo**: los cron están escritos acá,
+  no instalados. Es lo único que separa estas piezas de estar realmente cubierto.
+- **Copia fuera del servidor**: documentada, no automatizada.
+- **Probar la restauración una vez por mes**: `scripts/respaldar.sh --verificar` en
+  cron. La verificación ya se ejecutó y coincidió, pero tiene que repetirse o deja
+  de ser cierta.
