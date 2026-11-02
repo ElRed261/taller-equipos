@@ -130,7 +130,13 @@ class GridMovimientosView(QWidget):
         self.tabla = QTableView()
         self.tabla.setModel(self._proxy)
         self.tabla.setSortingEnabled(True)
-        self.tabla.sortByColumn(int(Columna.FECHA_ENTRADA), Qt.SortOrder.DescendingOrder)
+        # A propósito no se ordena al construir: el repositorio ya entrega el orden
+        # de trabajo, con lo que necesita revisión al final. `sortByColumn(-1)` deja
+        # la tabla en ese orden aunque la ordenación esté habilitada; si no, Qt
+        # ordena sola por la primera columna y tira ese orden a la basura. Al tocar
+        # un encabezado se ordena por esa columna, que es lo que se pidió al hacer
+        # clic.
+        self.tabla.sortByColumn(-1, Qt.SortOrder.AscendingOrder)
         self.tabla.setAlternatingRowColors(True)
         self.tabla.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.tabla.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)

@@ -33,14 +33,32 @@ TOTAL_IMPORTADO = 568
 #: Quien firma los cambios en las pruebas de catálogo.
 OPERADOR = "prueba-operador"
 
+
+def _necesita_atencion(fila) -> bool:  # noqa: ANN001
+    return bool(
+        fila.requiere_revision
+        or fila.fecha_entrada is None
+        or fila.area is None
+        or fila.codigo_inventario is None
+    )
+
 class TestLectura:
     def test_lists_every_imported_movement(self, session: Session) -> None:
         assert len(MovimientoRepository(session).listar()) == TOTAL_IMPORTADO
 
     def test_newest_intake_first_and_empty_dates_last(self, session: Session) -> None:
+        """Dentro de cada grupo, lo más nuevo arriba; lo que necesita atención, al final."""
         filas = MovimientoRepository(session).listar()
-        fechas = [f.fecha_entrada for f in filas if f.fecha_entrada is not None]
-        assert fechas == sorted(fechas, reverse=True)
+
+        en_orden = [f for f in filas if _necesita_atencion(f)]
+        assert filas[: len(filas) - len(en_orden)] == [
+            f for f in filas if not _necesita_atencion(f)
+        ], "las filas que necesitan atención no están todas al final"
+
+        # Dentro de cada grupo la fecha sigue mandando.
+        for grupo in (filas[: len(filas) - len(en_orden)], en_orden):
+            fechas = [f.fecha_entrada for f in grupo if f.fecha_entrada is not None]
+            assert fechas == sorted(fechas, reverse=True)
         assert filas[-1].fecha_entrada is None
 
     def test_the_derived_state_comes_from_the_view(self, session: Session) -> None:
@@ -565,3 +583,97 @@ class TestAuditoriaDeCatalogo:
     def test_sin_usuario_no_se_puede_cambiar_un_catalogo(self, session) -> None:  # noqa: ANN001
         with pytest.raises(ValueError, match="usuario"):
             CatalogoRepository(session).crear(Area, "Prueba Sin Autor", usuario="   ")
+
+
+class TestOrdenDelGrid:
+    """Lo que necesita atención va al final, sin importar la fecha."""
+
+    def _con_filas(self, session, filas):  # noqa: ANN001, ANN202
+        from taller.database.models import Movimiento
+
+        marcadas = []
+        for datos in filas:
+            mov = Movimiento(**datos)
+            session.add(mov)
+            session.flush()
+            marcadas.append(mov.id)
+        return marcadas
+
+    def test_una_fila_marcada_con_fecha_reciente_va_despues_de_una_sana_vieja(
+        self, session
+    ) -> None:  # noqa: ANN001
+        import datetime as dt
+
+        from taller.database.models import Area
+
+        area = session.query(Area).first()
+        vieja_sana, marcada = self._con_filas(
+            session,
+            [
+                dict(fecha_entrada=dt.date(2020, 1, 1), fecha_salida=None, area_id=area.id,
+                     codigo_inventario="09999"),
+                dict(
+                    fecha_entrada=dt.date(2026, 1, 1),
+                    requiere_revision=True,
+                    # El CHECK solo permite marcar filas importadas: una fila de la
+                    # aplicación no puede nacer pidiendo revisión.
+                    origen="csv_v1",
+                    legacy_linea=999001,
+                ),
+            ],
+        )
+
+        filas = MovimientoRepository(session).listar()
+        orden = [f.id for f in filas]
+        # La marcada es más nueva pero tiene que quedar después de la sana.
+        assert orden.index(vieja_sana) < orden.index(marcada)
+        # Y después de toda fila sana, no solo de esta. Al final del todo quedan las
+        # que no tienen fecha, que la base real ya trae desde la importación.
+        sanas = [i for i in orden if i not in {f.id for f in filas if _necesita_atencion(f)}]
+        assert orden.index(marcada) > max(orden.index(i) for i in sanas)
+
+    def test_sin_codigo_de_inventario_tambien_va_al_final(self, session) -> None:  # noqa: ANN001
+        import datetime as dt
+
+        from taller.database.models import Area
+
+        area = session.query(Area).first()
+        vieja_sana, sin_codigo = self._con_filas(
+            session,
+            [
+                dict(fecha_entrada=dt.date(2019, 5, 5), fecha_salida=None, area_id=area.id,
+                     codigo_inventario="08888"),
+                dict(fecha_entrada=dt.date(2026, 3, 3), fecha_salida=None, area_id=area.id,
+                     codigo_inventario=None),
+            ],
+        )
+
+        orden = [f.id for f in MovimientoRepository(session).listar()]
+        assert orden.index(vieja_sana) < orden.index(sin_codigo)
+
+    def test_dentro_de_las_sanas_sigue_mandando_la_fecha(self, session) -> None:  # noqa: ANN001
+        import datetime as dt
+
+        from taller.database.models import Area
+
+        area = session.query(Area).first()
+        nueva, vieja = self._con_filas(
+            session,
+            [
+                dict(fecha_entrada=dt.date(2026, 8, 8), fecha_salida=None, area_id=area.id,
+                     codigo_inventario="07777"),
+                dict(fecha_entrada=dt.date(2021, 8, 8), fecha_salida=None, area_id=area.id,
+                     codigo_inventario="06666"),
+            ],
+        )
+
+        orden = [f.id for f in MovimientoRepository(session).listar()]
+        assert orden.index(nueva) < orden.index(vieja)
+
+    def test_en_la_base_real_las_sin_fecha_quedan_al_final(self, session) -> None:  # noqa: ANN001
+        filas = MovimientoRepository(session).listar()
+        assert filas, "no hay filas"
+        ultimas = filas[-3:]
+        assert all(f.fecha_entrada is None for f in ultimas), [
+            (f.id, f.fecha_entrada) for f in ultimas
+        ]

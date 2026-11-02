@@ -1031,3 +1031,33 @@ class TestPanelSistema:
         monkeypatch.setattr(modulo_dialogo, "ConfiguracionInicialDialog", DialogoFalso)
         panel = self._panel(qtbot)
         assert panel.abrir_configuracion() is False
+
+
+class TestElGridRespetaElOrden:
+    """El orden de trabajo lo decide el repositorio, no la tabla.
+
+    Qt ordena sola por la primera columna en cuanto la ordenación está habilitada.
+    Eso pisaba el orden del repositorio —lo que necesita revisión, al final— sin
+    que nada fallara a la vista.
+    """
+
+    def test_la_tabla_no_reordena_al_abrir(self, qtbot: object) -> None:
+        ventana = VentanaPrincipal(ServicioFalso())
+        qtbot.addWidget(ventana)  # type: ignore[attr-defined]
+        proxy = ventana.grid.tabla.model()
+        mapeadas = [
+            proxy.mapToSource(proxy.index(i, 0)).row() for i in range(proxy.rowCount())
+        ]
+        assert mapeadas == list(range(len(mapeadas))), (
+            "la tabla reordenó por su cuenta y se perdió el orden del repositorio"
+        )
+
+    def test_la_ultima_fila_es_la_que_necesita_atencion(self, qtbot: object) -> None:
+        ventana = VentanaPrincipal(ServicioFalso())
+        qtbot.addWidget(ventana)  # type: ignore[attr-defined]
+        fuente = ventana.grid._modelo
+        # El doble entrega la fila marcada al final, como el repositorio real.
+        assert fuente._filas[-1].requiere_revision is True
+        proxy = ventana.grid.tabla.model()
+        ultima = proxy.mapToSource(proxy.index(proxy.rowCount() - 1, 0)).row()
+        assert fuente._filas[ultima].requiere_revision is True

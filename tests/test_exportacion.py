@@ -142,3 +142,45 @@ class TestArchivo:
 def test_cada_estado_se_exporta_sin_error(estado: str) -> None:
     texto = filas_a_csv([fila(estado=estado)])
     assert len(_leer(texto)) == 2, "encabezado más una fila"
+
+
+class TestElOrdenDeLaPantalla:
+    """El archivo sale en el mismo orden que la tabla: si no, el último renglón
+    del CSV no coincide con lo que la persona vio al final."""
+
+    def test_lo_que_necesita_atencion_queda_al_final_tambien_en_el_csv(self) -> None:
+        from taller.database.connection import session_scope
+        from taller.database.repositories import MovimientoRepository
+
+        with session_scope() as sesion:
+            filas = MovimientoRepository(sesion).listar()
+
+        assert len(filas) > 10
+        texto = filas_a_csv(filas)
+        # Se lee con csv porque las notas pueden traer punto y coma entre comillas.
+        registros = list(csv.reader(io.StringIO(texto), delimiter=DELIMITADOR))
+        assert registros[0] == list(ENCABEZADOS)
+        assert len(registros) == len(filas) + 1, "el archivo no tiene una fila por registro"
+
+        # La última fila del archivo es la última de la pantalla.
+        columna_inventario = list(ENCABEZADOS).index("Inventario")
+        assert registros[-1][columna_inventario] == (filas[-1].codigo_inventario or "")
+
+    def test_ninguna_fila_sana_despues_de_una_que_necesita_atencion(self) -> None:
+        from taller.database.connection import session_scope
+        from taller.database.repositories import MovimientoRepository
+
+        with session_scope() as sesion:
+            filas = MovimientoRepository(sesion).listar()
+
+        def atencion(fila) -> bool:  # noqa: ANN001
+            return bool(
+                fila.requiere_revision
+                or fila.fecha_entrada is None
+                or fila.area is None
+                or fila.codigo_inventario is None
+            )
+
+        marcas = [atencion(f) for f in filas]
+        # Todo lo de atención, junto al final: sin interruptores en el medio.
+        assert marcas == sorted(marcas), "hay filas mezcladas entre las dos zonas"

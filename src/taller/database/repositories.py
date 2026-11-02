@@ -18,7 +18,7 @@ from collections import defaultdict
 from collections.abc import Sequence
 from typing import Any, TypeVar
 
-from sqlalchemy import delete, func, nulls_last, select, update
+from sqlalchemy import delete, func, nulls_last, or_, select, update
 from sqlalchemy.orm import Session
 
 from taller.database.models import (
@@ -63,6 +63,21 @@ CAMPOS_AUDITABLES: tuple[str, ...] = (
 )
 
 
+#: Una fila «necesita atención» cuando está marcada para revisión o le falta algo
+#: con lo que se pueda trabajar: la fecha (no se sabe si está adentro o afuera), el
+#: área (no se sabe dónde está) o el código de inventario (no se puede encontrar).
+#:
+#: El tipo de equipo no cuenta: viene vacío en 403 de los 568 registros importados
+#: del sistema viejo, y mandar el 71% de la lista al final la dejaría sin orden útil.
+def necesita_atencion() -> Any:
+    return or_(
+        MovimientoEstado.requiere_revision.is_(True),
+        MovimientoEstado.fecha_entrada.is_(None),
+        MovimientoEstado.area_id.is_(None),
+        MovimientoEstado.codigo_inventario.is_(None),
+    )
+
+
 class MovimientoNoEncontrado(LookupError):
     """The requested movement does not exist (or was never imported)."""
 
@@ -98,12 +113,20 @@ class MovimientoRepository:
         solo_pendientes_revision: bool = False,
         limite: int | None = None,
     ) -> list[MovimientoLeido]:
-        """Rows for the grid, newest intake first, with no empty dates on top."""
+        """Rows for the grid: lo que hay que atender, al final.
+
+        Primero lo que está en orden, con lo más nuevo arriba. Al final quedan las
+        filas marcadas para revisión y las que tienen datos faltantes: son las que
+        hay que resolver, y tenerlas separadas evita que se pierdan entre 568.
+        """
         consulta = (
             select(MovimientoEstado, Area.nombre, TipoEquipo.nombre)
             .outerjoin(Area, Area.id == MovimientoEstado.area_id)
             .outerjoin(TipoEquipo, TipoEquipo.id == MovimientoEstado.tipo_equipo_id)
             .order_by(
+                # Falso (en orden) primero, verdadero (necesita atención) al final:
+                # el mismo orden que el índice, para que el plan lo pueda usar.
+                necesita_atencion().asc(),
                 nulls_last(MovimientoEstado.fecha_entrada.desc()),
                 MovimientoEstado.id.desc(),
             )
