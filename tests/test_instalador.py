@@ -149,6 +149,11 @@ class TestDesinstalacion:
 
 
 class TestWizardCompleto:
+    def teardown_method(self, _metodo: object) -> None:
+        """El asistente usa el caché global: sin esto, el resto de la suite lo hereda."""
+        from taller.arranque import reiniciar_cache
+
+        reiniciar_cache()
     """El asistente de instalación incluye copiar el programa.
 
     Una sola ventana hace las dos cosas: configurar la aplicación y dejarla
