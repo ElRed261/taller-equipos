@@ -43,8 +43,8 @@ persona.
 
 | ID | S# | Entrega | Ruta | Commit |
 | --- | --- | --- | --- | --- |
-| T1 | S1 | Rol `taller_app` con permisos mínimos, `pg_hba` por base y rol, `listen_addresses` en la interfaz interna; el asistente y el README dejan de sugerir `postgres` | inline | — |
-| T2 | S2,S6 | `scripts/respaldar.sh` (volcado, retención, registro) + unidad de cron/systemd + `docs/recuperacion.md` con el procedimiento y una prueba de restauración ejecutada | inline | — |
+| T1 | S1 | Rol `taller_app` con permisos mínimos, `pg_hba` por base y rol, `listen_addresses` en la interfaz interna; el asistente y el README dejan de sugerir `postgres` | inline | `630815b` |
+| T2 | S2,S6 | `scripts/respaldar.sh` (volcado, retención, registro) + unidad de cron/systemd + `docs/recuperacion.md` con el procedimiento y una prueba de restauración ejecutada | inline | `—` |
 | T3 | S3 | Tabla `usuario` con `password_hash` (argon2), pantalla de alta de contraseña, login al arrancar, `usuario_id` en la auditoría, migración y pruebas | worker | — |
 | T4 | S4 | Tabla `auditoria_catalogo`, escritura en los cinco caminos del `CatalogoRepository`, vista en Configuración y pruebas | worker | — |
 | T5 | S5 | Cifrado de los volcados antes de salir del servidor y destino externo documentado | inline | — |
@@ -122,6 +122,29 @@ registro de autor ni de momento, porque `auditoria_edicion` solo cubre movimient
 cualquier texto; `auditoria_edicion.usuario_etiqueta` guarda esa declaración. La
 columna dice quién *dice* la aplicación que actuó, no quién actuó.
 
-**L5** — El repositorio dejó de versionar la especificación interna al hacerse
+**L5** — T1 aplicado el 2026-11-02. Medido antes de tocar: el rol `taller` ya era
+`NOSUPERUSER NOCREATEDB NOCREATEROLE`, `taller_ro` solo tenía `SELECT`, y
+`password_encryption` ya era `scram-sha-256`. El hueco real estaba en `pg_hba.conf`:
+`local all all trust` dejaba que cualquier proceso local entrara como cualquier rol,
+incluido el superusuario `stward`, sin contraseña. Pasó a `peer`; verificado que
+`psql` como `stward` sigue entrando, que `taller` por socket ahora se rechaza, que la
+aplicación sigue conectando por TCP con scram y que las 288 pruebas seguían verdes.
+Se agregó `scripts/verificar_seguridad_bd.py` (17 pruebas) que audita privilegios del
+rol, cifrado de contraseñas, reglas de red, interfaces, TLS y escritura del rol de
+solo lectura, con código de salida. Decisión: el nombre del rol no importa
+(`taller` acá, `taller_app` en una instalación nueva); lo que importa son los
+atributos, y eso es lo que verifica el auditor.
+
+**L6** — T2 aplicado el 2026-11-02. `scripts/respaldar.sh` vuelca en formato
+`custom` con `--no-owner --no-privileges`, escribe a un temporal, verifica con
+`pg_restore --list` y solo entonces renombra; borra el temporal si algo falla y sale
+distinto de cero. Restauración probada de verdad el mismo día: 568 movimientos y 559
+registros de auditoría coincidieron. Dos defectos encontrados al probarlo y
+corregidos: `pg_restore` recibía a la vez una cadena de conexión y un archivo y
+restauraba en el lugar equivocado, y dos corridas dentro del mismo segundo se pisaban
+(el nombre ahora lleva sufijo). `docs/recuperacion.md` tiene el procedimiento con los
+pasos de corte, respaldo previo del estado malo y verificación de conteos.
+
+**L7** — El repositorio dejó de versionar la especificación interna al hacerse
 público (2026-10-30); este documento es el primero desde entonces y no contiene
 datos institucionales ni nombres de personas.

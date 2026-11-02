@@ -17,6 +17,9 @@ dejar rastro.
 | Contraseñas fuera de git | `.env`, `branding.json` y `marca-local/` ignorados |
 | Configuración del instalador solo para el dueño | `chmod 600` en `config.json` |
 | Ediciones atribuidas a un usuario | `auditoria_edicion.usuario_etiqueta` |
+| Acceso local sin contraseña cerrado | `pg_hba.conf`: `local` en `peer`, no en `trust` |
+| Auditoría de estas reglas, con código de salida | `scripts/verificar_seguridad_bd.py` |
+| Respaldo verificado y restauración probada | `scripts/respaldar.sh`, `docs/recuperacion.md` |
 
 ## Prioridad 0 — antes de ponerlo en producción
 
@@ -60,6 +63,12 @@ Nunca `0.0.0.0` en una máquina con salida a internet.
 
 ### 3. Respaldos automáticos, y una restauración probada
 
+**Hecho**: `scripts/respaldar.sh` vuelca, verifica el archivo con `pg_restore
+--list`, escribe la línea de registro y borra lo que pasa de la retención.
+`scripts/respaldar.sh --verificar` restaura en una base descartable y compara los
+conteos; ya se ejecutó una vez y coincidió (568 movimientos, 559 registros de
+auditoría). Falta programarlo en el servidor: ver `docs/recuperacion.md`.
+
 Un respaldo que nunca se restauró no es un respaldo. Dos piezas:
 
 ```bash
@@ -83,6 +92,24 @@ dropdb prueba_restauracion
 
 Si ese `count` no coincide con producción, el respaldo no sirve y hay que saberlo
 antes del incidente, no después.
+
+## Cómo verificar que sigue así
+
+```bash
+uv run python scripts/verificar_seguridad_bd.py
+```
+
+Dice `OK`, `AVISO` o `FALLA` por cada control, con el comando que lo arregla, y
+sale con código distinto de cero si hay algo que arreglar. Como el rol de la
+aplicación no puede leer `pg_hba_file_rules` (y está bien que no pueda), esa parte
+se revisa aparte:
+
+```bash
+uv run python scripts/verificar_seguridad_bd.py --admin-url "postgresql+psycopg://.../taller_dev"
+```
+
+Conviene correrlo después de cada cambio de infraestructura y antes de entregar el
+sistema a alguien más.
 
 ## Prioridad 1 — la semana siguiente
 

@@ -1,0 +1,102 @@
+"""El respaldo tiene que servir antes de necesitarlo.
+
+Estas pruebas ejecutan `scripts/respaldar.sh` de verdad contra la base de
+desarrollo. Lo que fijan es lo que duele el día del incidente: que el archivo se
+pueda restaurar, que no quede un respaldo a medias con nombre de bueno, y que la
+retención borre lo viejo.
+"""
+
+from __future__ import annotations
+
+import os
+import shutil
+import subprocess
+from pathlib import Path
+
+import pytest
+
+RAIZ = Path(__file__).resolve().parents[1]
+SCRIPT = RAIZ / "scripts" / "respaldar.sh"
+
+pytestmark = pytest.mark.skipif(
+    shutil.which("pg_dump") is None or not SCRIPT.is_file(),
+    reason="sin pg_dump o sin el script no hay nada que probar",
+)
+
+
+def _correr(destino: Path, **entorno: str) -> subprocess.CompletedProcess[str]:
+    ambiente = {
+        **os.environ,
+        "TALLER_RESPALDOS": str(destino),
+        "TALLER_RETENCION_DIAS": entorno.pop("retencion", "30"),
+        **entorno,
+    }
+    return subprocess.run(  # noqa: S603
+        [str(SCRIPT)],
+        capture_output=True,
+        text=True,
+        env=ambiente,
+        cwd=RAIZ,
+        timeout=120,
+        check=False,
+    )
+
+
+def test_un_respaldo_sirve_para_restaurar(tmp_path: Path) -> None:
+    resultado = _correr(tmp_path)
+
+    assert resultado.returncode == 0, resultado.stderr
+    volcados = list(tmp_path.glob("*.dump"))
+    assert len(volcados) == 1
+
+    # Lo que de verdad decide: que pg_restore pueda leerlo.
+    listado = subprocess.run(  # noqa: S603
+        ["pg_restore", "--list", str(volcados[0])],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert listado.returncode == 0, listado.stderr
+    assert "TABLE DATA" in listado.stdout
+    assert "movimiento" in listado.stdout
+
+
+def test_deja_el_registro_y_los_conteos_del_momento(tmp_path: Path) -> None:
+    assert _correr(tmp_path).returncode == 0
+
+    registro = (tmp_path / "registro.log").read_text(encoding="utf-8")
+    assert "OK" in registro
+    assert "movimiento=" in registro
+
+    resumen = next(tmp_path.glob("*.txt")).read_text(encoding="utf-8")
+    # El .txt es contra qué se compara una restauración.
+    assert "movimiento=" in resumen
+    assert "area=" in resumen
+
+
+def test_dos_corridas_no_se_pisan(tmp_path: Path) -> None:
+    assert _correr(tmp_path).returncode == 0
+    assert _correr(tmp_path).returncode == 0
+    assert len(list(tmp_path.glob("*.dump"))) == 2
+
+
+def test_un_volcado_que_falla_no_deja_un_respaldo_enganoso(tmp_path: Path) -> None:
+    resultado = _correr(
+        tmp_path,
+        TALLER_DATABASE_URL="postgresql+psycopg://nadie:nada@127.0.0.1:5432/no_existe",
+    )
+
+    assert resultado.returncode != 0
+    # Ni archivo a medias, ni con nombre definitivo.
+    assert list(tmp_path.glob("*.dump")) == []
+
+
+def test_la_retencion_borra_solo_lo_que_pasa_del_limite(tmp_path: Path) -> None:
+    viejo = tmp_path / "taller-20200101-000000.dump"
+    viejo.write_bytes(b"viejo")
+    os.utime(viejo, (0, 0))  # epoch: bien viejo
+
+    assert _correr(tmp_path, retencion="30").returncode == 0
+
+    assert not viejo.exists(), "no borró el respaldo de hace años"
+    assert len(list(tmp_path.glob("*.dump"))) == 1, "borró el respaldo de hoy"
