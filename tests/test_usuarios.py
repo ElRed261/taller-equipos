@@ -352,3 +352,76 @@ class TestPestanaDeUsuarios:
             | QItemSelectionModel.SelectionFlag.Rows,
         )
         assert vista.usuarios.boton_estado.isEnabled() is False
+
+
+class TestHistorialDeCatalogo:
+    """El historial es la razón de ser de la tabla: hay que poder leerlo."""
+
+    def test_el_modelo_muestra_las_seis_columnas(self, qtbot: object) -> None:
+        import datetime as dt
+
+        from taller.ui.models.historial_table_model import COLUMNAS, HistorialTableModel
+
+        modelo = HistorialTableModel(
+            [
+                {
+                    "catalogo": "tecnico",
+                    "registro_id": 4,
+                    "accion": "desactivar",
+                    "campo": "activo",
+                    "valor_anterior": "True",
+                    "valor_nuevo": "False",
+                    "usuario": "ana",
+                    "ocurrido_en": dt.datetime(2026, 11, 2, 9, 30, tzinfo=dt.UTC),
+                }
+            ]
+        )
+        assert modelo.columnCount() == len(COLUMNAS) == 6
+        assert modelo.data(modelo.index(0, 1)) == "Técnico"
+        assert modelo.data(modelo.index(0, 2)) == "Desactivó"
+        assert modelo.data(modelo.index(0, 4)) == "False"
+        assert modelo.data(modelo.index(0, 5)) == "ana"
+
+    def test_una_fusion_se_lee_con_su_campo(self, qtbot: object) -> None:
+        from taller.ui.models.historial_table_model import HistorialTableModel
+
+        modelo = HistorialTableModel(
+            [
+                {
+                    "catalogo": "area",
+                    "registro_id": 9,
+                    "accion": "fusionar",
+                    "campo": "fusionado_en",
+                    "valor_anterior": "9 · Vieja",
+                    "valor_nuevo": "3 · Nueva",
+                    "usuario": "ana",
+                    "ocurrido_en": None,
+                }
+            ]
+        )
+        assert "Fusionó" in modelo.data(modelo.index(0, 2))
+        assert modelo.data(modelo.index(0, 0)) == ""
+
+    def test_la_pestana_existe_y_muestra_lo_cargado(self, qtbot: object) -> None:
+        from tests.test_views import ServicioFalso
+
+        from taller.ui.views.configuracion_view import ConfiguracionView
+
+        servicio = ServicioFalso()
+        servicio.historial = [
+            {
+                "catalogo": "area",
+                "registro_id": 1,
+                "accion": "crear",
+                "campo": "nombre",
+                "valor_anterior": None,
+                "valor_nuevo": "Prensa",
+                "usuario": "ana",
+                "ocurrido_en": None,
+            }
+        ]
+        vista = ConfiguracionView(servicio)
+        qtbot.addWidget(vista)
+
+        assert vista.historial._modelo.rowCount() == 1
+        assert vista.historial.vacio.isHidden() is True

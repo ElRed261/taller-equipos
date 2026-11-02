@@ -38,6 +38,7 @@ from taller.servicios import ServicioTaller
 from taller.ui.iconos import icono
 from taller.ui.models.catalogo_table_model import CatalogoTableModel, ColumnaCatalogo
 from taller.ui.models.filtro_movimientos import FiltroMovimientos
+from taller.ui.models.historial_table_model import HistorialTableModel
 from taller.ui.models.movimientos_table_model import Columna, MovimientosTableModel
 from taller.ui.models.usuarios_table_model import UsuariosTableModel
 from taller.ui.tema import COLORES
@@ -568,6 +569,67 @@ class PanelSistema(QWidget):
         return True
 
 
+class PanelHistorial(QWidget):
+    """Quién cambió qué en los catálogos.
+
+    Antes de esta pantalla, desactivar un técnico no dejaba rastro en ninguna
+    parte: aparecían inactivos y no había forma de saber quién ni cuándo.
+    """
+
+    def __init__(self, servicio: ServicioTaller, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self._servicio = servicio
+        self._modelo = HistorialTableModel()
+
+        titulo = QLabel("Historial de catálogos")
+        titulo.setObjectName("TituloVista")
+        detalle = QLabel(
+            "Cada alta, renombrado, activación, desactivación o fusión de un área, "
+            "un tipo de equipo o un técnico, con quién lo hizo."
+        )
+        detalle.setObjectName("SubtituloVista")
+        detalle.setWordWrap(True)
+
+        self.tabla = QTableView()
+        self.tabla.setModel(self._modelo)
+        self.tabla.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.tabla.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.tabla.verticalHeader().setVisible(False)
+        self.tabla.verticalHeader().setDefaultSectionSize(26)
+        cabecera = self.tabla.horizontalHeader()
+        cabecera.setStretchLastSection(True)
+        cabecera.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        for columna in (1, 2, 3, 4, 5):
+            cabecera.setSectionResizeMode(columna, QHeaderView.ResizeMode.Stretch)
+
+        self.boton_refrescar = QPushButton("Actualizar")
+        self.boton_refrescar.setIcon(icono("buscar", COLORES["gris-700"]))
+        self.boton_refrescar.clicked.connect(self.recargar)
+
+        self.vacio = QLabel("Todavía no hay cambios de catálogo registrados.")
+        self.vacio.setObjectName("SubtituloVista")
+
+        acciones = QHBoxLayout()
+        acciones.addWidget(self.vacio)
+        acciones.addStretch(1)
+        acciones.addWidget(self.boton_refrescar)
+
+        caja = QVBoxLayout(self)
+        caja.setContentsMargins(18, 16, 18, 16)
+        caja.setSpacing(10)
+        caja.addWidget(titulo)
+        caja.addWidget(detalle)
+        caja.addWidget(self.tabla, 1)
+        caja.addLayout(acciones)
+
+        self.recargar()
+
+    def recargar(self) -> None:
+        filas = self._servicio.historial_catalogo()
+        self._modelo.reemplazar(filas)
+        self.vacio.setVisible(not filas)
+
+
 class PanelUsuarios(QWidget):
     """Cuentas de la aplicación: quién puede entrar y quién administra.
 
@@ -786,6 +848,9 @@ class ConfiguracionView(QWidget):
         self.sistema.configuracion_cambiada.connect(self.configuracion_cambiada.emit)
         self.pestanas.addTab(self.sistema, "Sistema")
 
+        self.historial = PanelHistorial(servicio)
+        self.pestanas.addTab(self.historial, "Historial")
+
         # El panel ni se construye si quien entró no administra: no es un botón
         # escondido, es una capacidad que no está en la pantalla.
         self.usuarios = PanelUsuarios(servicio) if servicio.es_admin else None
@@ -806,6 +871,7 @@ class ConfiguracionView(QWidget):
         self.sistema.recargar()
         if self.usuarios is not None:
             self.usuarios.recargar()
+        self.historial.recargar()
 
     def panel(self, dimension: str) -> PanelCatalogo:
         return self.paneles[dimension]

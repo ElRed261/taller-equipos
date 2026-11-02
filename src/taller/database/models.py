@@ -221,6 +221,41 @@ class AuditoriaEdicion(Base):
     __table_args__ = (Index("ix_auditoria_movimiento", "movimiento_id", text("ocurrido_en DESC")),)
 
 
+class AuditoriaCatalogo(Base):
+    """Who changed which catalog row, and from what to what.
+
+    ``auditoria_edicion`` covers movements. Renaming, deactivating or merging an
+    area, an equipment type or a technician used to leave no trace at all: during
+    development four technicians appeared deactivated with no record of who did it
+    or when, and there was nothing to look at.
+    """
+
+    __tablename__ = "auditoria_catalogo"
+
+    id: Mapped[int] = mapped_column(BigInteger, Identity(), primary_key=True)
+    catalogo: Mapped[str] = mapped_column(String(24), nullable=False)
+    registro_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    accion: Mapped[str] = mapped_column(String(16), nullable=False)
+    campo: Mapped[str] = mapped_column(String(64), nullable=False)
+    valor_anterior: Mapped[str | None] = mapped_column(Text, default=None)
+    valor_nuevo: Mapped[str | None] = mapped_column(Text, default=None)
+    usuario_id: Mapped[int | None] = mapped_column(
+        ForeignKey("usuario.id", ondelete="RESTRICT"), default=None
+    )
+    usuario_etiqueta: Mapped[str] = mapped_column(String(80), nullable=False)
+    ocurrido_en: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    __table_args__ = (
+        Index("ix_auditoria_catalogo_registro", "catalogo", "registro_id"),
+        CheckConstraint(
+            "accion in ('crear','renombrar','activar','desactivar','fusionar')",
+            name="auditoria_catalogo_accion",
+        ),
+    )
+
+
 class MapeoLegacy(Base):
     """Versioned alias map used by the ETL, one row per dirty source value."""
 

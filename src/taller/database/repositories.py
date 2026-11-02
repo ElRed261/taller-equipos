@@ -24,6 +24,7 @@ from sqlalchemy.orm import Session
 from taller.database.models import (
     ORIGEN_APP,
     Area,
+    AuditoriaCatalogo,
     AuditoriaEdicion,
     Movimiento,
     MovimientoEliminado,
@@ -469,7 +470,39 @@ class CatalogoRepository:
             for fila, total in self._s.execute(consulta).all()
         ]
 
-    def crear(self, modelo: type[ModeloCatalogo], nombre: str) -> CatalogoLeido:
+    def _anotar(
+        self,
+        modelo: type[ModeloCatalogo],
+        registro_id: int,
+        accion: str,
+        campo: str,
+        anterior: object,
+        nuevo: object,
+        *,
+        usuario: str,
+    ) -> None:
+        """Write one catalog-audit row. Same shape as the movement audit trail."""
+        limpio = usuario.strip()
+        if not limpio:
+            raise ValueError("hace falta un usuario para atribuir el cambio")
+        autor = self._s.scalar(select(Usuario).where(Usuario.nombre == limpio))
+        self._s.add(
+            AuditoriaCatalogo(
+                catalogo=_DIMENSIONES[modelo],
+                registro_id=registro_id,
+                accion=accion,
+                campo=campo,
+                valor_anterior=_texto(anterior),
+                valor_nuevo=_texto(nuevo),
+                usuario_id=autor.id if autor is not None else None,
+                usuario_etiqueta=limpio,
+            )
+        )
+        self._s.flush()
+
+    def crear(
+        self, modelo: type[ModeloCatalogo], nombre: str, *, usuario: str
+    ) -> CatalogoLeido:
         limpio = nombre.strip()
         if not limpio:
             raise ValueError("el nombre no puede estar vacío")
@@ -478,10 +511,11 @@ class CatalogoRepository:
         fila = modelo(nombre=limpio)
         self._s.add(fila)
         self._s.flush()
+        self._anotar(modelo, fila.id, "crear", "nombre", None, limpio, usuario=usuario)
         return CatalogoLeido.model_validate(fila, from_attributes=True)
 
     def renombrar(
-        self, modelo: type[ModeloCatalogo], catalogo_id: int, nombre: str
+        self, modelo: type[ModeloCatalogo], catalogo_id: int, nombre: str, *, usuario: str
     ) -> CatalogoLeido:
         fila = self._obtener(modelo, catalogo_id)
         limpio = nombre.strip()
@@ -492,22 +526,40 @@ class CatalogoRepository:
         )
         if choque is not None:
             raise NombreDuplicado(f"ya existe «{limpio}»")
+        anterior = fila.nombre
         fila.nombre = limpio
         self._s.flush()
+        if anterior != limpio:
+            self._anotar(
+                modelo, catalogo_id, "renombrar", "nombre", anterior, limpio, usuario=usuario
+            )
         return CatalogoLeido.model_validate(fila, from_attributes=True)
 
-    def desactivar(self, modelo: type[ModeloCatalogo], catalogo_id: int) -> None:
+    def desactivar(
+        self, modelo: type[ModeloCatalogo], catalogo_id: int, *, usuario: str
+    ) -> None:
         """Logical delete: history keeps pointing at a row that still exists."""
-        self._obtener(modelo, catalogo_id).activo = False
+        fila = self._obtener(modelo, catalogo_id)
+        fila.activo = False
         self._s.flush()
+        self._anotar(modelo, catalogo_id, "desactivar", "activo", True, False, usuario=usuario)
 
-    def activar(self, modelo: type[ModeloCatalogo], catalogo_id: int) -> None:
+    def activar(
+        self, modelo: type[ModeloCatalogo], catalogo_id: int, *, usuario: str
+    ) -> None:
         """Undo a logical delete. Without this, deactivating is one-way."""
-        self._obtener(modelo, catalogo_id).activo = True
+        fila = self._obtener(modelo, catalogo_id)
+        fila.activo = True
         self._s.flush()
+        self._anotar(modelo, catalogo_id, "activar", "activo", False, True, usuario=usuario)
 
     def fusionar(
-        self, modelo: type[ModeloCatalogo], origen_id: int, destino_id: int
+        self,
+        modelo: type[ModeloCatalogo],
+        origen_id: int,
+        destino_id: int,
+        *,
+        usuario: str,
     ) -> int:
         """Repoint every reference from ``origen`` to ``destino`` and deactivate it.
 
@@ -517,7 +569,7 @@ class CatalogoRepository:
         if origen_id == destino_id:
             raise ValueError("no se puede fusionar un registro consigo mismo")
         origen = self._obtener(modelo, origen_id)
-        self._obtener(modelo, destino_id)
+        destino = self._obtener(modelo, destino_id)
 
         if modelo is Tecnico:
             movidos = self._fusionar_tecnico(origen_id, destino_id)
@@ -530,6 +582,20 @@ class CatalogoRepository:
 
         origen.activo = False
         self._s.flush()
+        # Una fusión mueve historia: queda anotado a dónde fue, cuántas filas se
+        # movieron y con qué nombre se llamaba antes cada uno.
+        self._anotar(
+            modelo,
+            origen_id,
+            "fusionar",
+            "fusionado_en",
+            f"{origen_id} · {origen.nombre}",
+            f"{destino_id} · {destino.nombre}",
+            usuario=usuario,
+        )
+        self._anotar(
+            modelo, origen_id, "fusionar", "referencias_movidas", None, movidos, usuario=usuario
+        )
         return movidos
 
     def _fusionar_columna(self, columna: Any, origen_id: int, destino_id: int) -> int:
@@ -575,6 +641,27 @@ class CatalogoRepository:
             movidos += 1
         return movidos
 
+    def historial(self, *, limite: int = 200) -> list[dict[str, Any]]:
+        """El rastro de cambios de catálogo, lo más nuevo primero."""
+        filas = self._s.scalars(
+            select(AuditoriaCatalogo)
+            .order_by(AuditoriaCatalogo.ocurrido_en.desc(), AuditoriaCatalogo.id.desc())
+            .limit(limite)
+        ).all()
+        return [
+            {
+                "catalogo": fila.catalogo,
+                "registro_id": fila.registro_id,
+                "accion": fila.accion,
+                "campo": fila.campo,
+                "valor_anterior": fila.valor_anterior,
+                "valor_nuevo": fila.valor_nuevo,
+                "usuario": fila.usuario_etiqueta,
+                "ocurrido_en": fila.ocurrido_en,
+            }
+            for fila in filas
+        ]
+
     def _obtener(self, modelo: type[ModeloCatalogo], catalogo_id: int) -> ModeloCatalogo:
         fila = self._s.get(modelo, catalogo_id)
         if fila is None:
@@ -591,6 +678,10 @@ __all__ = [
     "MovimientoRepository",
     "NombreDuplicado",
 ]
+
+
+#: Names the catalogs get in the audit rows, so a row is readable on its own.
+_DIMENSIONES: dict[type, str] = {Area: "area", Tecnico: "tecnico", TipoEquipo: "tipo_equipo"}
 
 
 class UsuarioNoEncontrado(LookupError):

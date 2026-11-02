@@ -20,6 +20,10 @@ dejar rastro.
 | Acceso local sin contraseña cerrado | `pg_hba.conf`: `local` en `peer`, no en `trust` |
 | Auditoría de estas reglas, con código de salida | `scripts/verificar_seguridad_bd.py` |
 | Respaldo verificado y restauración probada | `scripts/respaldar.sh`, `docs/recuperacion.md` |
+| Respaldo cifrado y respaldo base para PITR | `scripts/respaldar.sh`, `scripts/respaldar_base.sh` |
+| Contraseñas con argon2id y login obligatorio | tabla `usuario`, `src/taller/seguridad.py` |
+| Rastro de todo cambio de catálogo | tabla `auditoria_catalogo`, pestaña Historial |
+| TLS en la conexión con la base | `ssl = on`, `sslmode=require` |
 
 ## Prioridad 0 — antes de ponerlo en producción
 
@@ -115,23 +119,31 @@ sistema a alguien más.
 
 ### 4. La auditoría no sirve si cualquiera elige su nombre
 
-Hoy el programa pregunta "¿quién sos?" y acepta lo que escribas. La columna
-`usuario_etiqueta` dice quién **dice** la aplicación que actuó, no quién actuó.
-Para que la auditoría valga, falta una de estas dos:
+**Hecho.** El programa ya no pregunta "¿quién sos?": pide usuario y contraseña, y la
+compara contra la tabla `usuario` con argon2id. Al arrancar sin ninguna cuenta
+administradora se crea la primera, y esa cuenta da de alta a las demás desde
+Configuración → Usuarios.
 
-- **Contraseña por usuario** en la tabla `usuario` (hash argon2 o bcrypt) y login al
-  arrancar; o
-- **Autenticación del sistema**: que la aplicación tome el usuario de Windows o del
-  dominio, y no permita escribirlo.
+Tres decisiones que hacen esto defendible:
 
-Es la brecha más grande que queda, y es de comportamiento, no de infraestructura.
+- **Un solo mensaje de error** para usuario inexistente y contraseña equivocada: dos
+  mensajes distintos convierten el login en un buscador de usuarios.
+- **Sin atajos**: se quitó `TALLER_USUARIO`, que elegía la identidad por variable de
+  entorno. Un atajo así anula la auditoría entera.
+- **Regla de contraseña solo por largo** (12 caracteres). Las reglas de mayúsculas y
+  símbolos empujan a la gente a contraseñas cortas y predecibles.
+
+Lo que queda: **no hay bloqueo por intentos fallidos**. Si te importa la fuerza
+bruta desde la red, agregalo; con la base en una LAN cerrada no es lo primero.
 
 ### 5. Auditar los catálogos
 
-`auditoria_edicion` cubre movimientos. Renombrar, desactivar o fusionar un área, un
-tipo de equipo o un técnico **no queda registrado en ninguna parte**. Durante el
-desarrollo ya aparecieron cuatro técnicos desactivados sin rastro. Una tabla
-`auditoria_catalogo` con la misma forma resuelve el problema.
+**Hecho.** La tabla `auditoria_catalogo` registra cada alta, renombrado, activación,
+desactivación y fusión, con el valor anterior, el nuevo, quién y cuándo. Se lee en
+Configuración → Historial.
+
+Una fusión deja dos filas: a dónde se movió y cuántas referencias se movieron. Sin
+eso, fusionar dos áreas es indistinguible de borrar una.
 
 ### 6. Cifrar los respaldos
 
@@ -145,6 +157,11 @@ pg_dump -Fc taller_dev | gpg --encrypt --recipient admin@ejemplo | gzip > respal
 Y guardá la clave privada fuera del servidor, o el cifrado no protege de nada.
 
 ### 7. Punto en el tiempo (PITR)
+
+**Hecho** en el clúster de desarrollo: `archive_mode = on`, `wal_level = replica`,
+`archive_timeout = 5min`, y `scripts/respaldar_base.sh` para el respaldo base. La
+recuperación se ensayó de verdad y se detuvo en el instante pedido. Procedimiento en
+`docs/recuperacion.md`. Falta programarlo en el servidor definitivo.
 
 Un `pg_dump` diario pierde todo lo del día. Si perder un día de trabajo no es
 aceptable:

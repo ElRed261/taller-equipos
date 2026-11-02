@@ -147,26 +147,34 @@ class ServicioTaller:
 
     def renombrar_catalogo(self, dimension: str, catalogo_id: int, nombre: str) -> CatalogoLeido:
         with session_scope() as sesion:
-            return CatalogoRepository(sesion).renombrar(CATALOGOS[dimension], catalogo_id, nombre)
+            return CatalogoRepository(sesion).renombrar(
+                CATALOGOS[dimension], catalogo_id, nombre, usuario=self.usuario
+            )
 
     def desactivar_catalogo(self, dimension: str, catalogo_id: int) -> None:
         with session_scope() as sesion:
-            CatalogoRepository(sesion).desactivar(CATALOGOS[dimension], catalogo_id)
+            CatalogoRepository(sesion).desactivar(
+                CATALOGOS[dimension], catalogo_id, usuario=self.usuario
+            )
 
     def activar_catalogo(self, dimension: str, catalogo_id: int) -> None:
         with session_scope() as sesion:
-            CatalogoRepository(sesion).activar(CATALOGOS[dimension], catalogo_id)
+            CatalogoRepository(sesion).activar(
+                CATALOGOS[dimension], catalogo_id, usuario=self.usuario
+            )
 
     def fusionar_catalogo(self, dimension: str, origen_id: int, destino_id: int) -> int:
         """Repoint every reference and deactivate the absorbed row."""
         with session_scope() as sesion:
             return CatalogoRepository(sesion).fusionar(
-                CATALOGOS[dimension], origen_id, destino_id
+                CATALOGOS[dimension], origen_id, destino_id, usuario=self.usuario
             )
 
     def crear_catalogo(self, dimension: str, nombre: str) -> CatalogoLeido:
         with session_scope() as sesion:
-            return CatalogoRepository(sesion).crear(CATALOGOS[dimension], nombre)
+            return CatalogoRepository(sesion).crear(
+                CATALOGOS[dimension], nombre, usuario=self.usuario
+            )
 
     def _catalogo(self, dimension: str, *, solo_activos: bool) -> list[CatalogoLeido]:
         with session_scope() as sesion:

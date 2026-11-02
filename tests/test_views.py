@@ -72,6 +72,7 @@ class ServicioFalso:
     ) -> None:
         self.usuario = usuario
         self.es_admin = es_admin
+        self.historial: list[dict] = []
         self.filas = filas if filas is not None else [
             fila(id=1, estado="en_taller", fecha_salida=None),
             fila(
@@ -108,6 +109,9 @@ class ServicioFalso:
         self.catalogos_creados: list[tuple[str, str]] = []
 
     # lecturas
+    def historial_catalogo(self, *, limite: int = 200) -> list[dict]:
+        return self.historial[:limite]
+
     def listar_movimientos(self, **filtros: object) -> list[MovimientoLeido]:
         estado = filtros.get("estado")
         solo_revision = bool(filtros.get("solo_pendientes_revision"))
@@ -558,12 +562,15 @@ class TestConfiguracion:
                 | QItemSelectionModel.SelectionFlag.Rows,
             )
 
-    def test_cinco_pestanas_con_sus_paneles(self, qtbot: object) -> None:
+    def test_seis_pestanas_con_sus_paneles(self, qtbot: object) -> None:
         vista = self._vista(qtbot)
-        assert vista.pestanas.count() == 5
+        assert vista.pestanas.count() == 6
         assert vista.pestanas.tabText(3) == "Administración"
         assert vista.pestanas.tabText(4) == "Sistema"
+        assert vista.pestanas.tabText(5) == "Historial"
         assert set(vista.paneles) == {"tipo_equipo", "area", "tecnico"}
+        # Un operador no ve la pestaña de usuarios: no está, no está escondida.
+        assert vista.usuarios is None
 
     def test_lista_con_el_uso_de_cada_fila(self, qtbot: object) -> None:
         servicio = ServicioFalso(

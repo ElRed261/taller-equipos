@@ -45,8 +45,8 @@ persona.
 | --- | --- | --- | --- | --- |
 | T1 | S1 | Rol `taller_app` con permisos mínimos, `pg_hba` por base y rol, `listen_addresses` en la interfaz interna; el asistente y el README dejan de sugerir `postgres` | inline | `630815b` |
 | T2 | S2,S6 | `scripts/respaldar.sh` (volcado, retención, registro) + unidad de cron/systemd + `docs/recuperacion.md` con el procedimiento y una prueba de restauración ejecutada | inline | `—` |
-| T3 | S3 | Tabla `usuario` con `password_hash` (argon2), pantalla de alta de contraseña, login al arrancar, `usuario_id` en la auditoría, migración y pruebas | worker | — |
-| T4 | S4 | Tabla `auditoria_catalogo`, escritura en los cinco caminos del `CatalogoRepository`, vista en Configuración y pruebas | worker | — |
+| T3 | S3 | Tabla `usuario` con `password_hash` (argon2), pantalla de ingreso, login al arrancar, `usuario_id` en la auditoría, migración y pruebas | inline | `75a9c34` |
+| T4 | S4 | Tabla `auditoria_catalogo`, escritura en los cinco caminos del `CatalogoRepository`, vista en Configuración y pruebas | inline | `—` |
 | T5 | S5 | Cifrado de los volcados antes de salir del servidor y destino externo documentado | inline | — |
 | T6 | S1 | TLS (`sslmode`) y firewall del servidor, con la decisión documentada | inline | — |
 
@@ -145,6 +145,31 @@ restauraba en el lugar equivocado, y dos corridas dentro del mismo segundo se pi
 (el nombre ahora lleva sufijo). `docs/recuperacion.md` tiene el procedimiento con los
 pasos de corte, respaldo previo del estado malo y verificación de conteos.
 
-**L7** — El repositorio dejó de versionar la especificación interna al hacerse
+**L8** — T5, T6 y PITR en la misma sesión (commit `b7b6456`). El respaldo liso se
+volvió cifrado: con destinatario asimétrico (el servidor solo tiene la pública) o con
+clave simétrica, cuyo archivo el script rechaza si está en 644. Con clave simétrica
+además descifra su propio archivo y lo vuelve a listar, porque un respaldo cifrado
+que nadie puede abrir es peor que no tenerlo. `scripts/respaldar_base.sh` agrega el
+respaldo base físico con `pg_verifybackup`, que es el punto de partida del PITR.
+Se activó `archive_mode` y se ensayó la recuperación: el clúster de pruebas se paró
+«before commit of transaction 2762», con 568 movimientos y 119 áreas, dejando afuera
+una fila insertada después del instante elegido. TLS quedó encendido con certificado
+autofirmado y SAN, y la conexión de la aplicación exige `sslmode=require`.
+
+**L9** — T3 aplicado (commit `75a9c34`, 351 pruebas). argon2id sobre la tabla
+`usuario` que ya existía (no se duplicó: se le agregaron columnas), login obligatorio
+y pestaña Usuarios solo para administradores. Decisión: se eliminó `TALLER_USUARIO`,
+que elegía la identidad por variable de entorno; un atajo así anula la auditoría.
+Decisión: un solo mensaje para usuario inexistente y clave equivocada. Decisión: la
+regla de contraseña es solo el largo, sin composición. Deuda consciente: no hay
+bloqueo por intentos fallidos.
+
+**L10** — T4 aplicado. `auditoria_catalogo` con CHECK de acción, escritura en los
+cinco caminos del `CatalogoRepository` (crear, renombrar, activar, desactivar,
+fusionar) y pestaña Historial. Costo asumido: los cuatro métodos de catálogo ahora
+exigen `usuario`, así que las pruebas existentes de repositorio hubo que actualizarlas
+—un cambio de firma que el compilador y las pruebas señalaron en el acto—.
+
+**L11** — El repositorio dejó de versionar la especificación interna al hacerse
 público (2026-10-30); este documento es el primero desde entonces y no contiene
 datos institucionales ni nombres de personas.

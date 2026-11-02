@@ -29,6 +29,10 @@ from taller.schemas.movimiento import (
 TOTAL_IMPORTADO = 568
 
 
+
+#: Quien firma los cambios en las pruebas de catálogo.
+OPERADOR = "prueba-operador"
+
 class TestLectura:
     def test_lists_every_imported_movement(self, session: Session) -> None:
         assert len(MovimientoRepository(session).listar()) == TOTAL_IMPORTADO
@@ -267,20 +271,23 @@ class TestRevision:
 class TestCatalogos:
     def test_creating_and_renaming(self, session: Session) -> None:
         repo = CatalogoRepository(session)
-        creada = repo.crear(Area, "  Taller Nuevo  ")
+        creada = repo.crear(Area, "  Taller Nuevo  ", usuario=OPERADOR)
         assert creada.nombre == "Taller Nuevo"
-        assert repo.renombrar(Area, creada.id, "Taller Renombrado").nombre == "Taller Renombrado"
+        renombrada = repo.renombrar(
+            Area, creada.id, "Taller Renombrado", usuario=OPERADOR
+        )
+        assert renombrada.nombre == "Taller Renombrado"
 
     def test_duplicate_names_are_rejected(self, session: Session) -> None:
         repo = CatalogoRepository(session)
         with pytest.raises(NombreDuplicado):
-            repo.crear(Area, "Contabilidad")
+            repo.crear(Area, "Contabilidad", usuario=OPERADOR)
 
     def test_renaming_onto_an_existing_name_is_rejected(self, session: Session) -> None:
         repo = CatalogoRepository(session)
         areas = repo.listar(Area)
         with pytest.raises(NombreDuplicado):
-            repo.renombrar(Area, areas[0].id, areas[1].nombre)
+            repo.renombrar(Area, areas[0].id, areas[1].nombre, usuario=OPERADOR)
 
     def test_deactivation_keeps_history_intact(self, session: Session) -> None:
         repo = CatalogoRepository(session)
@@ -288,7 +295,7 @@ class TestCatalogos:
         antes = session.scalar(
             select(func.count()).select_from(Movimiento).where(Movimiento.area_id == area.id)
         )
-        repo.desactivar(Area, area.id)
+        repo.desactivar(Area, area.id, usuario=OPERADOR)
         despues = session.scalar(
             select(func.count()).select_from(Movimiento).where(Movimiento.area_id == area.id)
         )
@@ -297,7 +304,7 @@ class TestCatalogos:
 
     def test_missing_catalog_row_raises(self, session: Session) -> None:
         with pytest.raises(CatalogoNoEncontrado):
-            CatalogoRepository(session).desactivar(Area, 10**9)
+            CatalogoRepository(session).desactivar(Area, 10**9, usuario=OPERADOR)
 
     def test_merging_areas_repoints_movements_and_deactivates_the_source(
         self, session: Session
@@ -310,7 +317,7 @@ class TestCatalogos:
         )
         assert movidos
 
-        assert repo.fusionar(Area, origen.id, destino.id) == movidos
+        assert repo.fusionar(Area, origen.id, destino.id, usuario=OPERADOR) == movidos
 
         restantes = session.scalar(
             select(func.count()).select_from(Movimiento).where(Movimiento.area_id == origen.id)
@@ -324,7 +331,7 @@ class TestCatalogos:
         tecnicos = repo.listar(Tecnico)
         origen, destino = tecnicos[0], tecnicos[1]
 
-        repo.fusionar(Tecnico, origen.id, destino.id)
+        repo.fusionar(Tecnico, origen.id, destino.id, usuario=OPERADOR)
 
         quedan = session.scalar(
             select(func.count())
@@ -349,7 +356,7 @@ class TestCatalogos:
         repo = CatalogoRepository(session)
         area = repo.listar(Area)[0]
         with pytest.raises(ValueError, match="consigo mismo"):
-            repo.fusionar(Area, area.id, area.id)
+            repo.fusionar(Area, area.id, area.id, usuario=OPERADOR)
 
 
 class TestCatalogosCompartidos:
@@ -495,3 +502,66 @@ class TestMismoDia:
             )
         )
         assert invertidas == 0
+
+
+class TestAuditoriaDeCatalogo:
+    """Renombrar un área también es un cambio que alguien hizo."""
+
+    def test_crear_deja_el_rastro(self, session) -> None:  # noqa: ANN001
+        repo = CatalogoRepository(session)
+        creada = repo.crear(Area, "Prueba Auditoria", usuario="prueba-quien")
+
+        filas = [f for f in repo.historial() if f["registro_id"] == creada.id]
+        assert filas, "no quedó ninguna fila de auditoría"
+        assert filas[0]["accion"] == "crear"
+        assert filas[0]["valor_nuevo"] == "Prueba Auditoria"
+        assert filas[0]["usuario"] == "prueba-quien"
+        assert filas[0]["catalogo"] == "area"
+
+    def test_renombrar_guarda_el_nombre_anterior_y_el_nuevo(self, session) -> None:  # noqa: ANN001
+        repo = CatalogoRepository(session)
+        creada = repo.crear(Area, "Prueba Antes", usuario="prueba-quien")
+        repo.renombrar(Area, creada.id, "Prueba Despues", usuario="prueba-quien")
+
+        filas = [
+            f
+            for f in repo.historial()
+            if f["registro_id"] == creada.id and f["accion"] == "renombrar"
+        ]
+        assert len(filas) == 1
+        assert filas[0]["valor_anterior"] == "Prueba Antes"
+        assert filas[0]["valor_nuevo"] == "Prueba Despues"
+
+    def test_desactivar_y_activar_quedan_con_su_autor(self, session) -> None:  # noqa: ANN001
+        repo = CatalogoRepository(session)
+        creada = repo.crear(Area, "Prueba Estado", usuario="prueba-quien")
+        repo.desactivar(Area, creada.id, usuario="prueba-uno")
+        repo.activar(Area, creada.id, usuario="prueba-dos")
+
+        acciones = [
+            (f["accion"], f["usuario"])
+            for f in repo.historial()
+            if f["registro_id"] == creada.id
+        ]
+        assert ("desactivar", "prueba-uno") in acciones
+        assert ("activar", "prueba-dos") in acciones
+
+    def test_fusionar_guarda_a_donde_fue(self, session) -> None:  # noqa: ANN001
+        repo = CatalogoRepository(session)
+        origen = repo.crear(Area, "Prueba Origen", usuario="prueba-quien")
+        destino = repo.crear(Area, "Prueba Destino", usuario="prueba-quien")
+        repo.fusionar(Area, origen.id, destino.id, usuario="prueba-quien")
+
+        filas = [
+            f
+            for f in repo.historial()
+            if f["registro_id"] == origen.id and f["accion"] == "fusionar"
+        ]
+        campos = {f["campo"] for f in filas}
+        assert campos == {"fusionado_en", "referencias_movidas"}
+        destino_anotado = next(f for f in filas if f["campo"] == "fusionado_en")
+        assert "Prueba Destino" in str(destino_anotado["valor_nuevo"])
+
+    def test_sin_usuario_no_se_puede_cambiar_un_catalogo(self, session) -> None:  # noqa: ANN001
+        with pytest.raises(ValueError, match="usuario"):
+            CatalogoRepository(session).crear(Area, "Prueba Sin Autor", usuario="   ")
