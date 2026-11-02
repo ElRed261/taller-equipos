@@ -166,9 +166,9 @@ class TestWizardCompleto:
         dialogo = ConfiguracionInicialDialog()
         qtbot.addWidget(dialogo)  # type: ignore[attr-defined]
         assert dialogo.copiar_programa.isChecked() is False
-        assert str(dialogo.detalle_copia.text()).endswith(
-            "crea el acceso directo."
-        )
+        detalle = str(dialogo.detalle_copia.text())
+        # El texto cambia si ya hay una instalación; en ambos casos dice dónde va.
+        assert "Deja el programa" in detalle or "Ya instalado" in detalle
 
     def test_guardar_con_la_casilla_instala_de_verdad(
         self, qtbot: object, monkeypatch, tmp_path: Path, casa_temporal, programa_falso
