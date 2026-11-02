@@ -8,7 +8,8 @@ Resolution order, first match wins:
 
 1. ``TALLER_BRANDING`` environment variable pointing at a JSON file.
 2. ``branding.json`` at the project root.
-3. The generic defaults: neutral mark, generic name.
+3. What the first-run wizard saved in the user's configuration folder.
+4. The generic defaults: neutral mark, generic name.
 
 Everything the application shows about itself comes from here, so a fork does not
 have to hunt strings through the widgets.
@@ -57,6 +58,21 @@ def _ruta_configuracion(ruta: Path | None = None) -> Path | None:
     return candidata if candidata.is_file() else None
 
 
+def _marca_del_asistente() -> Marca:
+    """Identity saved by the first-run wizard, if there is one."""
+    from taller.arranque import cargar_configuracion
+
+    guardada = cargar_configuracion()
+    if not guardada.nombre:
+        return Marca()
+    return Marca(
+        nombre=guardada.nombre,
+        organizacion=guardada.organizacion or guardada.nombre,
+        descripcion=guardada.descripcion or DESCRIPCION_GENERICA,
+        logo=guardada.logo or LOGO_GENERICO,
+    )
+
+
 def cargar_marca(ruta: Path | None = None) -> Marca:
     """Read the brand configuration, or return the generic defaults.
 
@@ -66,7 +82,7 @@ def cargar_marca(ruta: Path | None = None) -> Marca:
     """
     archivo = _ruta_configuracion(ruta)
     if archivo is None or not Path(archivo).is_file():
-        return Marca()
+        return _marca_del_asistente()
 
     try:
         crudo: dict[str, Any] = json.loads(Path(archivo).read_text(encoding="utf-8"))

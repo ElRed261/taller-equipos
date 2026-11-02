@@ -18,7 +18,11 @@ a = Analysis(
     pathex=[str(RAIZ / "src")],
     binaries=[],
     # El logo y los iconos viajan dentro del paquete: la aplicación no descarga nada.
-    datas=[(str(PAQUETE / "ui" / "assets"), "taller/ui/assets")],
+    datas=[
+        (str(PAQUETE / "ui" / "assets"), "taller/ui/assets"),
+        # El asistente crea las tablas al instalar: las migraciones viajan adentro.
+        (str(RAIZ / "migrations"), "migrations"),
+    ],
     hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],

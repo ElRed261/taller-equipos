@@ -1,11 +1,13 @@
 """Punto de entrada de la aplicación.
 
-Dos guardas antes de mostrar la ventana, porque es un sistema en red:
+Tres guardas antes de mostrar la ventana, porque es un sistema en red:
 
-1. **Sin usuario no se entra.** La auditoría atribuye cada edición a un nombre; un
+1. **Sin configuración no se entra.** La primera vez se piden la marca, la
+   conexión y se crean las tablas desde el asistente.
+2. **Sin usuario no se entra.** La auditoría atribuye cada edición a un nombre; un
    sistema que no sabe quién escribe no puede auditar nada. El nombre se pide o
    viene de ``TALLER_USUARIO``, nunca de ``getpass``.
-2. **Sin base no se entra con un traceback.** Si el servidor está caído aparece un
+3. **Sin base no se entra con un traceback.** Si el servidor está caído aparece un
    diálogo con el motivo y la opción de reintentar.
 
 Uso:
@@ -17,13 +19,22 @@ from __future__ import annotations
 import sys
 
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication, QInputDialog, QLineEdit, QMessageBox
+from PySide6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QInputDialog,
+    QLineEdit,
+    QMessageBox,
+)
 
+from taller.arranque import configuracion_completa, reiniciar_cache
 from taller.config.settings import get_settings
+from taller.database.connection import reset_engine
 from taller.servicios import ServicioTaller
 from taller.ui.main_window import VentanaPrincipal
 from taller.ui.marca import cargar_marca
 from taller.ui.tema import hoja_de_estilo
+from taller.ui.views.configuracion_inicial import ConfiguracionInicialDialog
 
 
 def resolver_usuario(settings_usuario: str) -> str | None:
@@ -75,11 +86,21 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     app = QApplication(argumentos)
+    app.setStyleSheet(hoja_de_estilo())
+
+    # Primera vez: marca, conexión y creación de las tablas. Sin esto no hay nada
+    # que mostrar, así que va antes que cualquier otra guarda.
+    if not configuracion_completa():
+        asistente = ConfiguracionInicialDialog()
+        if asistente.exec() != QDialog.DialogCode.Accepted:
+            return 1
+        reiniciar_cache()
+        reset_engine()
+
     marca = cargar_marca()
     app.setApplicationName(marca.nombre)
     app.setOrganizationName(marca.organizacion)
     app.setWindowIcon(QIcon(str(marca.logo)))
-    app.setStyleSheet(hoja_de_estilo())
 
     usuario = resolver_usuario(get_settings().usuario)
     if usuario is None:

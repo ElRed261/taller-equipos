@@ -21,7 +21,8 @@ if config.config_file_name is not None:
 
 # The URL lives in the settings object, never in alembic.ini, so a copied
 # configuration file cannot leak credentials into the repository.
-config.set_main_option("sqlalchemy.url", get_settings().database_url)
+if not config.get_main_option("sqlalchemy.url", None):
+    config.set_main_option("sqlalchemy.url", get_settings().database_url)
 
 target_metadata = Base.metadata
 

@@ -64,6 +64,18 @@ never have produced.
   confirmation, and keeping a snapshot of what was deleted.
 - Field-level audit trail: who changed what, with the previous and new value.
 
+## Install
+
+The application sets itself up the first time it runs: it asks for the
+organisation's name and logo and for the database connection, and creates the
+tables from the setup window. Nothing has to be edited by hand.
+
+Then it remembers everything in your user configuration folder, so the second run
+opens straight into the app.
+
+For development, the environment variables and a `.env` file keep working and take
+precedence over what the setup window saved.
+
 ## Quick start
 
 Requires PostgreSQL 18 and [uv](https://docs.astral.sh/uv/).
@@ -74,6 +86,9 @@ cp .env.example .env          # point TALLER_DATABASE_URL at your database
 uv run alembic upgrade head
 ./.venv/bin/python -m taller.main
 ```
+
+Setting `TALLER_CONFIG_DIR` points the application at another configuration folder,
+which is what the tests use.
 
 The interface is in Spanish, which is the language of its users. The code,
 comments and documentation are in English.

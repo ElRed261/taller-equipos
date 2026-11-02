@@ -33,6 +33,19 @@ Three rules hold the layering together:
   the first lazy access.
 - **One `Session` per operation.** A widget never sees one.
 
+## First run
+
+A packaged application cannot ask the user to edit a `.env` file, so the first run
+opens a setup window: organisation name and logo, then the database connection and
+a button that creates the schema with Alembic. The result is written to the user
+configuration folder (``TALLER_CONFIG_DIR`` overrides it) together with a copy of
+the chosen logo, so the brand survives if the original file is moved.
+
+Resolution order for both the database URL and the brand is the same: environment
+variable, `.env` or `branding.json` in the project, then the setup window's file,
+then the generic defaults. A corrupt or partial configuration is treated as "not
+configured yet" instead of crashing the application.
+
 ## The database
 
 Catalogs (`tipo_equipo`, `area`, `tecnico`) hold the only allowed values, with
