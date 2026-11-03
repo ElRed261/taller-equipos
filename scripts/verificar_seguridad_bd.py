@@ -66,22 +66,21 @@ def auditar(hechos: Hechos) -> list[Hallazgo]:
     """Conclude from the facts. Sin base de datos, para poder probarlo."""
     hallazgos: list[Hallazgo] = []
 
-    privilegios = [
+    peligrosos = [
         nombre
         for nombre, activo in (
             ("SUPERUSER", hechos.rolsuper),
-            ("CREATEDB", hechos.rolcreatedb),
             ("CREATEROLE", hechos.rolcreaterole),
         )
         if activo
     ]
-    if privilegios:
+    if peligrosos:
         hallazgos.append(
             Hallazgo(
                 FALLA,
-                f"El rol de la aplicación ({hechos.rol}) tiene {', '.join(privilegios)}",
+                f"El rol de la aplicación ({hechos.rol}) tiene {', '.join(peligrosos)}",
                 "Un error de la aplicación con estos privilegios no tiene freno.",
-                f"ALTER ROLE {hechos.rol} NOSUPERUSER NOCREATEDB NOCREATEROLE;",
+                f"ALTER ROLE {hechos.rol} NOSUPERUSER NOCREATEROLE;",
             )
         )
     else:
@@ -89,9 +88,20 @@ def auditar(hechos: Hechos) -> list[Hallazgo]:
             Hallazgo(
                 OK,
                 f"El rol de la aplicación ({hechos.rol}) no es superusuario",
-                "Sin SUPERUSER, CREATEDB ni CREATEROLE.",
+                "Sin SUPERUSER ni CREATEROLE.",
             )
         )
+        if hechos.rolcreatedb:
+            hallazgos.append(
+                Hallazgo(
+                    AVISO,
+                    f"El rol ({hechos.rol}) puede crear bases de datos",
+                    "Está a propósito: permite que el programa cree la base si "
+                    "falta. No es un lío, pero un rol sin CREATEDB es más seguro.",
+                    "Si preferís el control estricto: ALTER ROLE ... NOCREATEDB y "
+                    "crear la base una vez a mano.",
+                )
+            )
 
     if hechos.cifrado_contrasenas == "scram-sha-256":
         hallazgos.append(

@@ -11,8 +11,6 @@ import importlib.util
 import sys
 from pathlib import Path
 
-import pytest
-
 RAIZ = Path(__file__).resolve().parents[1]
 
 
@@ -52,10 +50,17 @@ class TestPrivilegios:
         fallas = _fallas(auditor.auditar(_hechos(rolsuper=True)))
         assert any("SUPERUSER" in titulo for titulo in fallas)
 
-    @pytest.mark.parametrize("privilegio", ["rolcreatedb", "rolcreaterole"])
-    def test_crear_bases_o_roles_tambien_es_falla(self, privilegio: str) -> None:
-        fallas = _fallas(auditor.auditar(_hechos(**{privilegio: True})))
+    def test_crear_roles_sigue_siendo_falla(self) -> None:
+        fallas = _fallas(auditor.auditar(_hechos(rolcreaterole=True)))
         assert len(fallas) == 1
+
+    def test_crear_bases_es_aviso_y_no_falla(self) -> None:
+        """Poder crear la base es lo que permite la auto-creación del programa."""
+        hallazgos = auditor.auditar(_hechos(rolcreatedb=True))
+        assert _fallas(hallazgos) == []
+        assert any(
+            h.nivel == auditor.AVISO and "crear bases" in h.titulo for h in hallazgos
+        ), [h.titulo for h in hallazgos]
 
     def test_un_rol_acotado_no_genera_fallas(self) -> None:
         assert _fallas(auditor.auditar(_hechos())) == []

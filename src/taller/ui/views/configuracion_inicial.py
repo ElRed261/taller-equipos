@@ -33,6 +33,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from sqlalchemy.engine import make_url
 
 from taller.arranque import (
     ConfiguracionArranque,
@@ -52,8 +53,36 @@ Migrador = Callable[[str], None]
 ALTO_PREVIA = 96
 
 
+def _crear_base_con_las_mismas_credenciales(url: str, nombre: str) -> str | None:
+    """Crea la base que falta con la misma autenticación de ``url``.
+
+    Devuelve ``None`` si la creó; el texto del primer error si no. Requiere que el
+    rol tenga CREATEDB: crear bases es una decisión de instalación, no de la
+    aplicación en marcha.
+    """
+    from sqlalchemy import create_engine, text
+
+    importada = make_url(url)
+    mantenimiento = importada.set(database="postgres").render_as_string(hide_password=False)
+    usuario = importada.username
+    motor = create_engine(mantenimiento, isolation_level="AUTOCOMMIT")
+    try:
+        with motor.connect() as conexion:
+            conexion.execute(text(f'create database "{nombre}" owner "{usuario}"'))
+    except Exception as error:  # noqa: BLE001
+        return str(error).splitlines()[0][:220]
+    finally:
+        motor.dispose()
+    return None
+
+
 def probar_conexion_real(url: str) -> tuple[bool, str]:
-    """Try the URL with a real connection and return a message worth reading."""
+    """Try the URL with a real connection and return a message worth reading.
+
+    Si la base de la URL no existe, la crea una vez con las mismas credenciales
+    (el rol necesita CREATEDB) y lo dice: así el nombre de la base no puede
+    dejar la instalación a medio camino.
+    """
     from sqlalchemy import create_engine, text
 
     try:
@@ -62,7 +91,22 @@ def probar_conexion_real(url: str) -> tuple[bool, str]:
             conexion.execute(text("select 1"))
         motor.dispose()
     except Exception as exc:  # noqa: BLE001 - el mensaje se muestra tal cual
-        return False, str(exc).splitlines()[0][:220]
+        texto = str(exc)
+        if "does not exist" in texto and "database" in texto:
+            nombre = make_url(url).database
+            if nombre:
+                detalle = _crear_base_con_las_mismas_credenciales(url, nombre)
+                if detalle is None:
+                    return True, (
+                        f"Conexión correcta. La base «{nombre}» no existía y se creó "
+                        "ahora, vacía; las tablas se crean en el paso siguiente."
+                    )
+                return False, (
+                    f"La base «{nombre}» no existe y el rol no puede crearla.\n\n"
+                    "Un administrador tiene que ejecutar una vez:\n\n"
+                    f'    CREATE DATABASE "{nombre}";\n\n{detalle}'
+                )
+        return False, texto.splitlines()[0][:220]
     return True, "Conexión correcta."
 
 
@@ -135,7 +179,7 @@ class ConfiguracionInicialDialog(QDialog):
         self.usuario = QLineEdit("taller_app")
         self.contrasena = QLineEdit()
         self.contrasena.setEchoMode(QLineEdit.EchoMode.Password)
-        self.base = QLineEdit("taller")
+        self.base = QLineEdit("taller_dev")
 
         self.error = QLabel()
         self.error.setObjectName("ErrorValidacion")

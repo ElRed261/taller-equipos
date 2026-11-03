@@ -18,7 +18,19 @@ from taller.ui.marca import (
 
 
 class TestSinConfiguracion:
-    def test_devuelve_los_valores_genericos(self, tmp_path: Path) -> None:
+    def test_devuelve_los_valores_genericos(
+        self, tmp_path: Path, monkeypatch
+    ) -> None:
+        """La marca genérica no depende de lo que el wizard dejó guardado acá.
+
+        El fallo real: si la máquina tiene una instalación con identidad guardada
+        (p. ej. INDOMET), el test anterior al arreglo heredaba esa identidad.
+        El caché del wizard apunta a una carpeta vacía, no a la del usuario.
+        """
+        import taller.arranque as arranque
+
+        monkeypatch.setenv("TALLER_CONFIG_DIR", str(tmp_path / "sin-config"))
+        arranque.reiniciar_cache()
         marca = cargar_marca(tmp_path / "no-existe.json")
         assert marca.nombre == NOMBRE_GENERICO
         assert marca.descripcion == DESCRIPCION_GENERICA

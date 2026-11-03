@@ -141,13 +141,14 @@ class DialogoInstalador(QDialog):
             instalada = ya[0].version if ya else "?"
             self.aviso_existente.setText(
                 f"Actualización: la copia instalada es la {instalada} y este programa "
-                f"es la {__version__}. La nueva reemplaza a la vieja y TU "
+                f"es la {__version__}. La nueva reemplaza a la vieja y tu "
                 "configuración (nombre, logo, conexión, usuarios) no se toca."
             )
         elif ya:
             rutas = ", ".join(str(i.ruta) for i in ya)
             self.aviso_existente.setText(
-                f"Ya hay una instalación en {rutas}; se reemplaza por la nueva, y la configuración queda."
+                f"Ya hay una instalación en {rutas}; se reemplaza y la "
+                "configuración queda."
             )
         else:
             self.aviso_existente.setText(

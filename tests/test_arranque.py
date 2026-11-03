@@ -432,3 +432,61 @@ class TestPrepararLaBase:
         ok, mensaje = preparar_base("esto no es una url")
         assert ok is False
         assert mensaje
+
+
+class TestProbarConexionCreaLaBase:
+    """El nombre de la base no puede dejar la instalación a medio camino."""
+
+    def test_lsbase_inexistente_se_crea_y_lo_dice(self, monkeypatch, tmp_path: Path) -> None:
+        """Con un rol con CREATEDB, probar conexión crea la base que falta."""
+        import uuid
+
+        from sqlalchemy import create_engine, text
+
+        from taller.ui.views.configuracion_inicial import probar_conexion_real
+
+        nombre = f"prueba_autocrea_{uuid.uuid4().hex[:8]}"
+        url = f"postgresql+psycopg://taller:taller_dev_pw@localhost:5432/{nombre}"
+        try:
+            ok, detalle = probar_conexion_real(url)
+            assert ok is True, detalle
+            assert "se creó ahora, vacía" in detalle
+            motor = create_engine(url)
+            with motor.connect() as conexion:
+                tablas = conexion.execute(text(
+                    "select count(*) from information_schema.tables "
+                    "where table_schema='public'"
+                )).scalar()
+            motor.dispose()
+            assert tablas == 0, "una base recién creada no debería traer tablas"
+        finally:
+            limpiar = create_engine(
+                'postgresql+psycopg://taller:taller_dev_pw@localhost:5432/postgres',
+                isolation_level="AUTOCOMMIT",
+            )
+            with limpiar.connect() as conexion:
+                # DROP DATABASE no va dentro de transacciones
+                crud = conexion.connection.driver_connection
+                crud.autocommit = True
+                crud.cursor().execute(f'drop database "{nombre}"')
+            limpiar.dispose()
+
+    def test_sin_createdb_lo_dice_con_el_comando_exacto(self) -> None:
+        from taller.ui.views.configuracion_inicial import probar_conexion_real
+
+        url = (
+            "postgresql+psycopg://taller_app:rosa02DELL@localhost:5432/"
+            "prueba_sin_permiso_xyz"
+        )
+        ok, detalle = probar_conexion_real(url)
+        assert ok is False
+        assert "CREATE DATABASE" in detalle
+        assert "prueba_sin_permiso_xyz" in detalle
+
+    def test_el_default_del_wizard_es_taller_dev(self, qtbot: object) -> None:
+        from taller.ui.views.configuracion_inicial import ConfiguracionInicialDialog
+
+        dialogo = ConfiguracionInicialDialog()
+        qtbot.addWidget(dialogo)  # type: ignore[attr-defined]
+        # Este default mintió una vez: fue "taller" y fue el error del log.
+        assert dialogo.base.text() == "taller_dev"
