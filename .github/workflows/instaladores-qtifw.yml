@@ -1,0 +1,128 @@
+name: Instaladores QtIFW
+
+# Construye los instaladores nativos de cada sistema operativo con dos piezas:
+#
+#   - pyside6-deploy (Nuitka): compila Python a C y deja un ejecutable nativo
+#     por plataforma (no hay cross-compilation: cada job corre en su SO).
+#   - QtIFW: el wizard gráfico nativo, idéntico en Windows, Linux y macOS,
+#     con MaintenanceTool para las actualizaciones en línea.
+#
+# Se corre a mano o al empujar una etiqueta v*.
+#
+# Costo conocido: Nuitka compila C (decenas de minutos por plataforma). Es
+# deliberado: el objetivo es el instalador nativo + actualizaciones automáticas,
+# no velocidad de CI.
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  linux:
+    name: Linux (Nuitka + QtIFW)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar compilador y patchelf
+        run: sudo apt-get update && sudo apt-get install -y gcc g++ patchelf
+
+      - name: Instalar uv
+        run: python3 -m pip install --user uv
+
+      - name: Venv de construcción (con pip: pyside6-deploy lo exige)
+        run: |
+          uv venv --seed .venv-deploy
+          uv pip install --python .venv-deploy/bin/python -e . pyside6 nuitka
+
+      - name: Descargar QtIFW
+        run: |
+          curl -fsSL -o qtifw.run \
+            "https://download.qt.io/official_releases/qt-installer-framework/4.11.1/QtInstallerFramework-linux-x64-4.11.1.run"
+          chmod +x qtifw.run
+          ./qtifw.run --verbose --script <(cat <<EOF
+          [General]
+          ; Silencioso, en la home del runner
+          TargetDir=$HOME/qtifwInstall
+          StartMenuSelection=taller
+          RunProgram=
+          EOF
+          ) || true
+         QTIFW_BIN=$(find "$HOME/qtifwInstall" -name binarycreator | head -1)
+          echo "QTIFW_BIN=$QTIFW_BIN" >> "$GITHUB_ENV"
+          test -x "$QTIFW_BIN"
+
+      - name: Compilar e instalar
+        run: packaging/qtifw/construir.sh
+
+      - name: Verificar el binario compilado
+        run: dist/taller-equipos.dist/taller-equipos.bin --version
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: taller-equipos-linux-qtifw
+          path: dist/taller-equipos-instalador
+          retention-days: 30
+
+  windows:
+    name: Windows (Nuitka + QtIFW)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar uv
+        shell: pwsh
+        run: python3 -m pip install --user uv
+
+      - name: Venv de construcción
+        shell: pwsh
+        run: |
+          uv venv --seed .venv-deploy
+          uv pip install --python .venv-deploy/bin/python -e . pyside6 nuitka
+
+      - name: Instalar QtIFW (chocolatey)
+        shell: pwsh
+        run: choco install qtifw --yes --no-progress
+
+      - name: Compilar con pyside6-deploy
+        shell: pwsh
+        run: .venv-deploy\Scripts\pyside6-deploy.exe --mode standalone --force -c packaging/pyside6deploy.spec src/taller/main.py
+
+      - name: Empaquetar con QtIFW
+        shell: pwsh
+        run: |
+          # binarycreator de chocolatey queda en el PATH
+          $pkg = "packaging/qtifw/packages/taller-equipos"
+          Copy-Item -Recurse dist/taller-equipos.dist/* $pkg/data/ -Force
+          binarycreator -c packaging/qtifw/config/config.xml -p packaging/qtifw/packages dist/taller-equipos-instalador.exe
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: taller-equipos-windows-qtifw
+          path: dist/taller-equipos-instalador.exe
+          retention-days: 30
+
+  macos:
+    name: macOS (Nuitka + QtIFW)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m pip install --user uv
+      - run: |
+          uv venv --seed .venv-deploy
+          uv pip install --python .venv-deploy/bin/python -e . pyside6 nuitka
+      # QtIFW para macOS: el instalador .dmg del framework. No se documenta igual
+      # que los otros dos; este job se completa cuando lo necesite de verdad.
+      - name: Compilar (el binario, sin wizard todavía)
+        run: |
+          .venv-deploy/bin/pyside6-deploy --mode standalone --force src/taller/main.py
+          ls -la taller-equipos.app innerImage 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: taller-equipos-macos-binario
+          path: |
+            taller-equipos.app
+          retention-days: 30
+          if-no-files-found: ignore

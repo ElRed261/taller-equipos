@@ -44,3 +44,5 @@ packaging/icono.ico
 # Identidad local: el logo y el nombre de quien despliega la aplicación
 branding.json
 marca-local/
+.venv-deploy/
+src/taller/deployment/

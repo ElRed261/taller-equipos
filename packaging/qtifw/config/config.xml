@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+  <Name>Taller de equipos</Name>
+  <Version>1.0.0</Version>
+  <Title>Taller de equipos</Title>
+  <Publisher>Taller de equipos</Publisher>
+  <ProductUrl></ProductUrl>
+  <StartMenuDir>Taller de equipos</StartMenuDir>
+  <TargetDir>@HomeDir@/Taller de equipos</TargetDir>
+  <AdminTargetDir>/opt/Taller de equipos</AdminTargetDir>
+  <RunProgram>@TargetDir@/taller-equipos.bin</RunProgram>
+  <!-- Windows y macOS usan el ejecutable de su plataforma; el installscript.qs es quien resuelve la extensión -->
+  <RunProgramArguments></RunProgramArguments>
+  <MaintenanceToolName>Mantenimiento</MaintenanceToolName>
+  <RemoveTargetDir>true</RemoveTargetDir>
+  <AllowNonAdminFullInstallation>true</AllowNonAdminFullInstallation>
+  <InstallerWindowIcon></InstallerWindowIcon>
+  <WizardStyle>Modern</WizardStyle>
+  <ControlScript>control.qs</ControlScript>
+</Installer>

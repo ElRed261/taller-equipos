@@ -272,6 +272,12 @@ wheels = [
 ]
 
 [[package]]
+name = "nuitka"
+version = "4.3.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/46/19/9e0a68ea7bf6124843eaf2163430edc80569d4ce33511928e3958c960fb3/nuitka-4.3.4.tar.gz", hash = "sha256:e98e0c9a3224b581cf8ec0fab92b039b90fb7fa78673550c22833a82de444b25", size = 4779496, upload-time = "2026-11-01T07:44:15.061Z" }
+
+[[package]]
 name = "packaging"
 version = "26.3"
 source = { registry = "https://pypi.org/simple" }
@@ -3215,6 +3221,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "mypy" },
+    { name = "nuitka" },
     { name = "pillow" },
     { name = "pyinstaller" },
     { name = "pytest" },
@@ -3238,6 +3245,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "mypy", specifier = ">=1.14" },
+    { name = "nuitka", specifier = ">=4.3.4" },
     { name = "pillow", specifier = ">=11" },
     { name = "pyinstaller", specifier = ">=6.11" },
     { name = "pytest", specifier = ">=8.3" },

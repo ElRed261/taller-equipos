@@ -58,6 +58,10 @@ def carpeta_migraciones() -> Path:
     empaquetada = getattr(sys, "_MEIPASS", None)
     if empaquetada:
         candidatas.append(Path(empaquetada) / "migrations")
+    # Con Nuitka (pyside6-deploy) no hay _MEIPASS: los datos viajan junto al
+    # ejecutable, así que la carpeta de migraciones va pegada al binario.
+    ejecutable = Path(sys.executable).resolve().parent
+    candidatas.append(ejecutable / "migrations")
     raiz = Path(__file__).resolve().parent.parent.parent
     candidatas.extend(raiz / nombre for nombre in DIRECTORIOS_MIGRACIONES)
     for candidata in candidatas:

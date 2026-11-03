@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+  <DisplayName>Taller de equipos</DisplayName>
+  <Description>Registro de entrada y salida de equipos del taller</Description>
+  <Version>1.0.0</Version>
+  <ReleaseDate>2026-11-02</ReleaseDate>
+  <Default>true</Default>
+  <Script>installscript.qs</Script>
+</Package>
