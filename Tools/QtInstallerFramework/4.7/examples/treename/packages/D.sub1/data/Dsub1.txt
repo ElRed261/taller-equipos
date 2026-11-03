@@ -1,2 +1,0 @@
-Example content for package D subcomponent 1.
-

@@ -46,3 +46,7 @@ branding.json
 marca-local/
 .venv-deploy/
 src/taller/deployment/
+
+# QtIFW: el árbol de producción y las tools óawn viajan
+packaging/qtifw/packages/*/data/
+Tools/
