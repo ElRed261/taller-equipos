@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- quitinstaller.qdoc -->
+  <meta name="description" content="Using a component script to quit an installer.">
+  <title>Quit Installer Example | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="qtifwexamples.html" translate="no">Qt Installer Framework Examples</a></li>
+<li>Quit Installer Example</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<h1 class="title">Quit Installer Example</h1>
+<pre class="cpp" translate="no">
+ /**************************************************************************
+ **
+ ** Copyright (C) 2017 The Qt Company Ltd.
+ ** Contact: https://www.qt.io/licensing/
+ **
+ ** This file is part of the Qt Installer Framework.
+ **
+ ** $QT_BEGIN_LICENSE:GPL-EXCEPT$
+ ** Commercial License Usage
+ ** Licensees holding valid commercial Qt licenses may use this file in
+ ** accordance with the commercial license agreement provided with the
+ ** Software or, alternatively, in accordance with the terms contained in
+ ** a written agreement between you and The Qt Company. For licensing terms
+ ** and conditions see https://www.qt.io/terms-conditions. For further
+ ** information use the contact form at https://www.qt.io/contact-us.
+ **
+ ** GNU General Public License Usage
+ ** Alternatively, this file may be used under the terms of the GNU
+ ** General Public License version 3 as published by the Free Software
+ ** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+ ** included in the packaging of this file. Please review the following
+ ** information to ensure the GNU General Public License requirements will
+ ** be met: https://www.gnu.org/licenses/gpl-3.0.html.
+ **
+ ** $QT_END_LICENSE$
+ **
+ **************************************************************************/
+
+ function Component()
+ {
+     var result = QMessageBox[&quot;question&quot;](&quot;test.quit&quot;, &quot;Installer&quot;, &quot;Do you want to quit the installer?&lt;br&gt;&quot; +
+         &quot;This message box was created using JavaScript.&quot;, QMessageBox.Ok | QMessageBox.Cancel);
+     if (result == QMessageBox.Ok) {
+         installer.setValue(&quot;FinishedText&quot;, &quot;&lt;font color='red' size=3&gt;The installer was quit.&lt;/font&gt;&quot;);
+         installer.setDefaultPageVisible(QInstaller.TargetDirectory, false);
+         installer.setDefaultPageVisible(QInstaller.ReadyForInstallation, false);
+         installer.setDefaultPageVisible(QInstaller.ComponentSelection, false);
+         installer.setDefaultPageVisible(QInstaller.StartMenuSelection, false);
+         installer.setDefaultPageVisible(QInstaller.PerformInstallation, false);
+         installer.setDefaultPageVisible(QInstaller.LicenseCheck, false);
+         gui.clickButton(buttons.NextButton);
+     } else {
+         installer.setValue(&quot;FinishedText&quot;,
+             &quot;&lt;font color='green' size=3&gt;The installer was not quit by JavaScript.&lt;/font&gt;&quot;);
+     }
+ }
+</pre>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- loggingutils.cpp -->
+  <meta name="description" content="The LoggingHandler class provides methods for manipulating the application-wide verbosiveness and format of printed debug messages.">
+  <title>LoggingHandler Class | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>LoggingHandler</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#public-types">Public Types</a></li>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#static-public-members">Static Public Members</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">LoggingHandler Class</h1>
+<span class="small-subtitle" translate="no">class <a href="scripting-qinstaller.html" translate="no">QInstaller</a>::LoggingHandler</span>
+<!-- $$$LoggingHandler-brief -->
+<p>The LoggingHandler class provides methods for manipulating the application-wide verbosiveness and format of printed debug messages. <a href="#details">More...</a></p>
+<!-- @@@LoggingHandler -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;LoggingHandler&gt;</span></td></tr>
+</table></div>
+<ul>
+<li><a href="qinstaller-logginghandler-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="public-types">Public Types</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> enum </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#VerbosityLevel-enum" translate="no">VerbosityLevel</a></b> { Silent, Normal, Detailed, Minimum, Maximum }</td></tr>
+</table></div>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#isVerbose" translate="no">isVerbose</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#messageHandler" translate="no">messageHandler</a></b>(QtMsgType <i>type</i>, const QMessageLogContext &amp;<i>context</i>, const QString &amp;<i>msg</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#outputRedirected" translate="no">outputRedirected</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#printAliasInformation" translate="no">printAliasInformation</a></b>(const QList&lt;QInstaller::ComponentAlias *&gt; &amp;<i>aliases</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#printLocalPackageInformation" translate="no">printLocalPackageInformation</a></b>(const QList&lt;KDUpdater::LocalPackage&gt; &amp;<i>packages</i>) const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#printPackageInformation" translate="no">printPackageInformation</a></b>(const QInstaller::PackagesList &amp;<i>matchedPackages</i>, const QInstaller::LocalPackagesMap &amp;<i>installedPackages</i>) const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#printUpdateInformation" translate="no">printUpdateInformation</a></b>(const QList&lt;QInstaller::Component *&gt; &amp;<i>components</i>) const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#setVerbose" translate="no">setVerbose</a></b>(bool <i>v</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QInstaller::LoggingHandler::VerbosityLevel </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#verboseLevel" translate="no">verboseLevel</a></b>() const</td></tr>
+</table></div>
+<h2 id="static-public-members">Static Public Members</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> QInstaller::LoggingHandler &amp;</td><td class="memItemRight bottomAlign"><b><a href="qinstaller-logginghandler.html#instance" translate="no">instance</a></b>()</td></tr>
+</table></div>
+<!-- $$$LoggingHandler-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+<p>The class also contains utility methods for printing common preformatted messages.</p>
+</div>
+<!-- @@@LoggingHandler -->
+<div class="types">
+<h2>Member Type Documentation</h2>
+<!-- $$$VerbosityLevel$$$Silent$$$Normal$$$Detailed$$$Minimum$$$Maximum -->
+<h3 class="fn" translate="no" id="VerbosityLevel-enum">enum LoggingHandler::<span class="name">VerbosityLevel</span></h3>
+<p>This enum holds the possible levels of output verbosity.</p>
+<div class="table"><table class="valuelist"><tr valign="top" class="odd"><th class="tblConst">Constant</th><th class="tblval">Value</th><th class="tbldscr">Description</th></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller::LoggingHandler::Silent</code></td><td class="topAlign tblval"><code translate="no">0</code></td><td class="topAlign">&nbsp;</td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller::LoggingHandler::Normal</code></td><td class="topAlign tblval"><code translate="no">1</code></td><td class="topAlign">&nbsp;</td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller::LoggingHandler::Detailed</code></td><td class="topAlign tblval"><code translate="no">2</code></td><td class="topAlign">&nbsp;</td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller::LoggingHandler::Minimum</code></td><td class="topAlign tblval"><code translate="no">Silent</code></td><td class="topAlign">Minimum possible verbosity level. Synonym for <code translate="no">VerbosityLevel::Silent</code>.</td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller::LoggingHandler::Maximum</code></td><td class="topAlign tblval"><code translate="no">Detailed</code></td><td class="topAlign">Maximum possible verbosity level. Synonym for <code translate="no">VerbosityLevel::Detailed</code>.</td></tr>
+</table></div>
+<!-- @@@VerbosityLevel -->
+</div>
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$instance[overload1]$$$instance -->
+<h3 class="fn" translate="no" id="instance"><code translate="no">[static] </code><span class="type"><a href="qinstaller-logginghandler.html" translate="no">QInstaller::LoggingHandler</a></span> &amp;LoggingHandler::<span class="name">instance</span>()</h3>
+<p>Returns the only instance of this class.</p>
+<!-- @@@instance -->
+<!-- $$$isVerbose[overload1]$$$isVerbose -->
+<h3 class="fn" translate="no" id="isVerbose"><span class="type">bool</span> LoggingHandler::<span class="name">isVerbose</span>() const</h3>
+<p>Returns <code translate="no">true</code> if the installer is set to verbose output.</p>
+<!-- @@@isVerbose -->
+<!-- $$$messageHandler[overload1]$$$messageHandlerQtMsgTypeconstQMessageLogContext&constQString& -->
+<h3 class="fn" translate="no" id="messageHandler"><span class="type">void</span> LoggingHandler::<span class="name">messageHandler</span>(<span class="type">QtMsgType</span> <i>type</i>, const <span class="type">QMessageLogContext</span> &amp;<i>context</i>, const <span class="type">QString</span> &amp;<i>msg</i>)</h3>
+<p>Prints out preformatted debug messages, warnings, critical and fatal error messages specified by <i translate="no">msg</i> and <i translate="no">type</i>. The message <i translate="no">context</i> provides information about the source code location the message was generated.</p>
+<!-- @@@messageHandler -->
+<!-- $$$outputRedirected[overload1]$$$outputRedirected -->
+<h3 class="fn" translate="no" id="outputRedirected"><span class="type">bool</span> LoggingHandler::<span class="name">outputRedirected</span>() const</h3>
+<p>Returns <code translate="no">true</code> if output is redirected, i.e&#x2e; to a file.</p>
+<!-- @@@outputRedirected -->
+<!-- $$$printAliasInformation[overload1]$$$printAliasInformationconstQList<QInstaller::ComponentAlias*>& -->
+<h3 class="fn" translate="no" id="printAliasInformation"><span class="type">void</span> LoggingHandler::<span class="name">printAliasInformation</span>(const <span class="type">QList</span>&lt;<span class="type"><a href="qinstaller-componentalias.html" translate="no">QInstaller::ComponentAlias</a></span> *&gt; &amp;<i>aliases</i>)</h3>
+<p>Prints basic or more detailed information about component <i translate="no">aliases</i>, depending on the current verbosity level.</p>
+<!-- @@@printAliasInformation -->
+<!-- $$$printLocalPackageInformation[overload1]$$$printLocalPackageInformationconstQList<KDUpdater::LocalPackage>& -->
+<h3 class="fn" translate="no" id="printLocalPackageInformation"><span class="type">void</span> LoggingHandler::<span class="name">printLocalPackageInformation</span>(const <span class="type">QList</span>&lt;<span class="type"><a href="kdupdater-localpackage.html" translate="no">KDUpdater::LocalPackage</a></span>&gt; &amp;<i>packages</i>) const</h3>
+<p>Prints basic or more detailed information about local <i translate="no">packages</i>, depending on the current verbosity level.</p>
+<!-- @@@printLocalPackageInformation -->
+<!-- $$$printPackageInformation[overload1]$$$printPackageInformationconstQInstaller::PackagesList&constQInstaller::LocalPackagesMap& -->
+<h3 class="fn" translate="no" id="printPackageInformation"><span class="type">void</span> LoggingHandler::<span class="name">printPackageInformation</span>(const <span class="type"><a href="qinstaller.html#PackagesList-typedef" translate="no">QInstaller::PackagesList</a></span> &amp;<i>matchedPackages</i>, const <span class="type"><a href="qinstaller.html#LocalPackagesMap-typedef" translate="no">QInstaller::LocalPackagesMap</a></span> &amp;<i>installedPackages</i>) const</h3>
+<p>Prints basic or more detailed information about available <i translate="no">matchedPackages</i>, depending on the current verbosity level. If a package is also present in <i translate="no">installedPackages</i>, the installed version will be included in printed information.</p>
+<!-- @@@printPackageInformation -->
+<!-- $$$printUpdateInformation[overload1]$$$printUpdateInformationconstQList<QInstaller::Component*>& -->
+<h3 class="fn" translate="no" id="printUpdateInformation"><span class="type">void</span> LoggingHandler::<span class="name">printUpdateInformation</span>(const <span class="type">QList</span>&lt;<span class="type"><a href="qinstaller-component.html" translate="no">QInstaller::Component</a></span> *&gt; &amp;<i>components</i>) const</h3>
+<p>Prints update information from <i translate="no">components</i>.</p>
+<!-- @@@printUpdateInformation -->
+<!-- $$$setVerbose[overload1]$$$setVerbosebool -->
+<h3 class="fn" translate="no" id="setVerbose"><span class="type">void</span> LoggingHandler::<span class="name">setVerbose</span>(<span class="type">bool</span> <i>v</i>)</h3>
+<p>Sets to verbose output if <i translate="no">v</i> is set to <code translate="no">true</code>. Calling this multiple times increases or decreases the verbosity level accordingly.</p>
+<p><b>See also </b><a href="qinstaller-logginghandler.html#isVerbose" translate="no">isVerbose</a>().</p>
+<!-- @@@setVerbose -->
+<!-- $$$verboseLevel[overload1]$$$verboseLevel -->
+<h3 class="fn" translate="no" id="verboseLevel"><span class="type"><a href="qinstaller-logginghandler.html#VerbosityLevel-enum" translate="no">QInstaller::LoggingHandler::VerbosityLevel</a></span> LoggingHandler::<span class="name">verboseLevel</span>() const</h3>
+<p>Returns the current verbosity level.</p>
+<!-- @@@verboseLevel -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

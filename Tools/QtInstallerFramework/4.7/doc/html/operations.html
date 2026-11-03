@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- operations.qdoc -->
+  <title>Operations | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>Operations</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+  <link rel="prev" href="scripting.html" />
+  <link rel="next" href="ifw-tools.html" />
+<p class="naviNextPrevious headerNavi">
+<a class="prevPage" href="scripting.html">Component Scripting</a>
+<span class="naviSeparator">  &#9702;  </span>
+<a class="nextPage" href="ifw-tools.html">Tools</a>
+</p>
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#summary-of-operations">Summary of Operations</a></li>
+<li class="level1"><a href="#execution-groups">Execution Groups</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title">Operations</h1>
+<!-- $$$operations.html-description -->
+<div class="descr" id="details">
+<p>The operations are prepared by component and controller scripts or component.xml and performed by the installer.</p>
+<div class="admonition note">
+<p><b>Note: </b>Operations are performed threaded.</p>
+</div>
+<p>Internally, each operation has a <i>DO</i> step that contains instructions for the installer and an <i>UNDO</i> step that contains instructions for the uninstaller.</p>
+<p>Some operations especially in Windows might need native separators. Use <code translate="no">installer.toNativeSeparators()</code> to convert separators to ones that are appropriate for the underlying operating system.</p>
+<h2 id="summary-of-operations">Summary of Operations</h2>
+<p>The following table summarizes the available operations and their syntax in component and controller scripts. Syntax for operations in component.xml is:</p>
+<pre class="cpp" translate="no">
+ <span class="operator">&lt;</span>Operations<span class="operator">&gt;</span>
+   <span class="operator">&lt;</span>Operation name<span class="operator">=</span><span class="string">&quot;operation&quot;</span><span class="operator">&gt;</span>
+     <span class="operator">&lt;</span>Argument<span class="operator">&gt;</span>argument1<span class="operator">&lt;</span><span class="operator">/</span>Argument<span class="operator">&gt;</span>
+     <span class="operator">&lt;</span>Argument<span class="operator">&gt;</span>argument2<span class="operator">&lt;</span><span class="operator">/</span>Argument<span class="operator">&gt;</span>
+   <span class="operator">&lt;</span><span class="operator">/</span>Operation<span class="operator">&gt;</span>
+ <span class="operator">&lt;</span><span class="operator">/</span>Operations<span class="operator">&gt;</span>
+</pre>
+<div class="admonition note">
+<p><b>Note: </b>The argument order in component.xml is the same as in scripting, except for <code translate="no">Extract</code> operation where the argument <code translate="no">archive</code> is optional, and must be defined as the last argument.</p>
+</div>
+<div class="table"><table class="generic">
+ <thead><tr class="qt-style"><th >Operation</th><th >Syntax</th><th >Use</th></tr></thead>
+<tr valign="top" class="odd"><td >Copy</td><td >&quot;Copy&quot; <code translate="no">source</code> <code translate="no">target</code></td><td >Copies a file from <code translate="no">source</code> to <code translate="no">target</code>.</td></tr>
+<tr valign="top" class="even"><td >Move</td><td >&quot;Move&quot; <code translate="no">source</code> <code translate="no">target</code></td><td >Moves a file from <code translate="no">source</code> to <code translate="no">target</code>.</td></tr>
+<tr valign="top" class="odd"><td >SimpleMoveFile</td><td >&quot;SimpleMoveFile&quot; <code translate="no">source</code> <code translate="no">target</code></td><td >Moves a file from <code translate="no">source</code> to <code translate="no">target</code>.<div class="admonition note">
+<p><b>Note: </b>Files will be moved from <code translate="no">target</code> to <code translate="no">source</code> during uninstallation. If you want to move the files persistently, you can overwrite the <i>UNDO</i> by passing <i>UNDOOPERATION</i> and <i>&quot;&quot;</i>, to the end of the argument list.</p>
+</div>
+</td></tr>
+<tr valign="top" class="even"><td >Delete</td><td >&quot;Delete&quot; <code translate="no">filename</code></td><td >Deletes the file specified by <code translate="no">filename</code>.</td></tr>
+<tr valign="top" class="odd"><td >Mkdir</td><td >&quot;Mkdir&quot; <code translate="no">path</code></td><td >Creates the directory path <code translate="no">path</code>.</td></tr>
+<tr valign="top" class="even"><td >Rmdir</td><td >&quot;Rmdir&quot; <code translate="no">path</code></td><td >Removes the directory path <code translate="no">path</code>.</td></tr>
+<tr valign="top" class="odd"><td >CopyDirectory</td><td >&quot;CopyDirectory&quot; <code translate="no">sourcePath</code> <code translate="no">targetPath</code></td><td >Copies a directory from <code translate="no">sourcePath</code> to <code translate="no">targetPath</code>.<div class="admonition note">
+<p><b>Note: </b>Directories will be reset during uninstallation. If you want to copy the directory persistently, you can overwrite the <i>UNDO</i> by passing <i>UNDOOPERATION</i> and <i>&quot;&quot;</i>, to the end of the argument list.</p>
+</div>
+</td></tr>
+<tr valign="top" class="even"><td >AppendFile</td><td >&quot;AppendFile&quot; <code translate="no">filename</code> <code translate="no">text</code></td><td >Appends <code translate="no">text</code> to the file specified by <code translate="no">filename</code>. <code translate="no">text</code> is treated as ASCII text.</td></tr>
+<tr valign="top" class="odd"><td >PrependFile</td><td >&quot;PrependFile&quot; <code translate="no">filename</code> <code translate="no">text</code></td><td >Prepends <code translate="no">text</code> to the file specified by <code translate="no">filename</code>. <code translate="no">text</code> is treated as ASCII text.</td></tr>
+<tr valign="top" class="even"><td >Replace</td><td >&quot;Replace&quot; <code translate="no">file</code> <code translate="no">search</code> <code translate="no">replace</code> <code translate="no">mode</code></td><td >Opens <code translate="no">file</code> to find <code translate="no">search</code> string and replaces that with the <code translate="no">replace</code> string, using <code translate="no">mode</code> that can be either <code translate="no">string</code> or <code translate="no">regex</code>. For regular expressions containing capturing groups, occurrences of <code translate="no">\1</code>, <code translate="no">\2</code>, ..&#x2e;, in <code translate="no">replace</code> are replaced with the string captured by the corresponding capturing group.<p>Note that testing the operation using <code translate="no">devtool</code> does not support commas inside the <code translate="no">search</code> pattern as they are used as argument separators. When using <code translate="no">regex</code> mode you should also ensure the <code translate="no">search</code> pattern adheres to <code translate="no">QRegularExpression</code> class documentation, particularly to the escaping rules for characters.</p>
+</td></tr>
+<tr valign="top" class="odd"><td >LineReplace</td><td >&quot;LineReplace&quot; <code translate="no">file</code> <code translate="no">search</code> <code translate="no">replace</code></td><td >Opens <code translate="no">file</code> to find lines that start with <code translate="no">search</code> string and replaces that with the <code translate="no">replace</code> string. Lines are trimmed before the search.</td></tr>
+<tr valign="top" class="even"><td >Execute</td><td >&quot;Execute&quot; [{<code translate="no">exitcodes</code>}] <code translate="no">command</code> [<code translate="no">parameter1</code> [<code translate="no">parameter..&#x2e;</code> [<code translate="no">parameter10</code>]]]</td><td >Executes the command specified by <code translate="no">command</code>. Up to 10 parameters can be passed. If that is not enough, you can use a JavaScript string array.<p>Optionally, you can pass a comma-separated list of exit codes within curly brackets ({}) as the first argument to specify the exit codes for successful execution. This defaults to &quot;{0}&quot;.</p>
+<p>Other optional named arguments are: &quot;workingdirectory=&lt;your_working_dir&gt;&quot;; &quot;errormessage=&lt;your_custom_errormessage&gt;&quot;</p>
+<p>In addition, a special argument, UNDOEXECUTE, separates the DO step of the operation from the UNDO step.</p>
+<p>Example: <code translate="no">component.addOperation(&quot;Execute&quot;, &quot;touch&quot;, &quot;test.txt&quot;, &quot;UNDOEXECUTE&quot;, &quot;rm&quot;, &quot;test.txt&quot;)</code></p>
+</td></tr>
+<tr valign="top" class="odd"><td >CreateShortcut</td><td >&quot;CreateShortcut&quot; <code translate="no">filename</code> <code translate="no">linkname</code> [<code translate="no">arguments</code>]</td><td >Creates a shortcut from the file specified by <code translate="no">filename</code> to <code translate="no">linkname</code>. On Windows, this creates a .lnk file which can have <code translate="no">arguments</code>. Furthermore, <code translate="no">filename</code> can be an HTTP, HTTPS or FTP URL in which case a URL shortcut is created.<div class="admonition note">
+<p><b>Note: </b>If the <code translate="no">@AllUsersStartMenuProgramsPath@</code> is used for placing the shortcut, then due to a problem on Windows, it will drop any arguments to the target and any description set. In this case, you should place the shortcut elsewhere and copy it to the location desired.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>Creating a shortcut to a network share is not supported. The operation is currently not implemented on other platforms.</p>
+</div>
+</td></tr>
+<tr valign="top" class="even"><td >CreateDesktopEntry</td><td >&quot;CreateDesktopEntry&quot; <code translate="no">filename &quot;key=value[ key2=value2[ key3=value3]]]&quot;</code></td><td >Creates a .desktop initialization file, as specified by freedesktop.org. This operation is useful only on X11 or Wayland based Linux distributions.<p>If <code translate="no">filename</code> is absolute, the desktop entry is stored there. Otherwise, it is stored in the location specified in <code translate="no">$XDG_DATA_HOME/applications</code>, including the default path, as defined by freedesktop.org. For system-wide installations, it is stored in <code translate="no">/usr/local/share/applications</code> instead.</p>
+<p>The key-value pairs are written to the file.</p>
+<p>The file is set to use UTF-8 encoding.</p>
+</td></tr>
+<tr valign="top" class="odd"><td >InstallIcons</td><td >&quot;InstallIcons&quot; <code translate="no">directory</code> <code translate="no">[Vendorprefix]</code></td><td >Installs the contents of <code translate="no">directory</code> into a location, as specified by freedesktop.org. That is, into <code translate="no">$XDG_DATA_HOME/icons</code>, <code translate="no">$HOME/.local/share/icons</code> or <code translate="no">/usr/local/share/icons</code>. The files are removed from their initial location. Make sure to add this operation after the operation that extracts the files from the archive. If you provide a <code translate="no">Vendorprefix</code> it replaces all characters up to the first dash (-) in the filename of the icon with this prefix.</td></tr>
+<tr valign="top" class="even"><td >Extract</td><td >&quot;Extract&quot; <code translate="no">archive</code> <code translate="no">targetdirectory</code></td><td >Extracts <code translate="no">archive</code> to <code translate="no">targetdirectory</code>. Extract operations are called before other operations. Note that in component.xml argument <code translate="no">archive</code> is optional and thus must be defined as the last parameter.</td></tr>
+<tr valign="top" class="odd"><td >GlobalConfig</td><td >&quot;GlobalConfig&quot; <code translate="no">company</code> <code translate="no">application</code> <code translate="no">key</code> <code translate="no">value</code><p>or</p>
+<p>&quot;GlobalConfig&quot; <code translate="no">scope</code> <code translate="no">company</code> <code translate="no">application</code> <code translate="no">key</code> <code translate="no">value</code></p>
+<p>or</p>
+<p>&quot;GlobalConfig&quot; <code translate="no">filename</code> <code translate="no">key</code> <code translate="no">value</code></p>
+</td><td >Stores <code translate="no">value</code> for <code translate="no">key</code> in a configuration file. The configuration file is specified either by <code translate="no">filename</code> (using <code translate="no">QSettings::NativeFormat</code>, which might be the Windows registry) or by <code translate="no">application</code> and <code translate="no">company</code> name. Set <code translate="no">scope</code> to &quot;SystemScope&quot; to create an entry in the system scope.<div class="admonition note">
+<p><b>Note: </b>GlobalConfig will be reset during uninstallation. If you want to make the config persistent, you can overwrite the <i>UNDO</i> by passing <i>UNDOOPERATION</i> and <i>&quot;&quot;</i>, to the end of the argument list.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>The operation is using <a href="scripting-qsettings.html" translate="no">QSettings</a> to store the key value pair. <a href="scripting-qsettings.html" translate="no">QSettings</a> always treats backslash as a special character and provides no API for reading or writing such entries. Do not use slashes ('/' and '\') in section or key names; the backslash character is used to separate sub keys. On windows, '\' are converted by <a href="scripting-qsettings.html" translate="no">QSettings</a> to '/', which makes them identical. Because the backslash character is used by <a href="scripting-qsettings.html" translate="no">QSettings</a> to separate sub keys, you cannot read or write windows registry entries that contain slashes or backslashes. You should use a native windows API if you need to do so.</p>
+</div>
+</td></tr>
+<tr valign="top" class="even"><td >EnvironmentVariable</td><td >&quot;EnvironmentVariable&quot; <code translate="no">key</code> <code translate="no">value</code> [<code translate="no">persistent</code> [<code translate="no">system</code>]]</td><td >Sets the environment variable <code translate="no">key</code> to <code translate="no">value</code>. If <code translate="no">persistent</code> is set to <code translate="no">true</code>, the variable is set persistently. This is currently only supported on Windows. If <code translate="no">system</code> is set to <code translate="no">true</code>, the persistent variable is set system-wide, not only for the current user. Note, if you set path to environment variable, use '\' as separator, for example: @Targetdir@\lib\system.</td></tr>
+<tr valign="top" class="odd"><td >RegisterFileType</td><td >&quot;RegisterFileType&quot; <code translate="no">extension</code> <code translate="no">command</code> [<code translate="no">description</code> [<code translate="no">contentType</code> [<code translate="no">icon</code>]]].</td><td >Registers the file type with <code translate="no">extension</code> to be opened via <code translate="no">command</code>. Optionally, you can specify <code translate="no">description</code>, <code translate="no">contentType</code>, and <code translate="no">icon</code>. This is currently only supported on Windows.<div class="admonition note">
+<p><b>Note: </b>File type will be unregistered during uninstallation. If you want keep the type registered, you can overwrite the <i>UNDO</i> by passing <i>UNDOOPERATION</i> and <i>&quot;&quot;</i>, to the end of the argument list.</p>
+</div>
+</td></tr>
+<tr valign="top" class="even"><td >ConsumeOutput</td><td >&quot;ConsumeOutput&quot; <code translate="no">installerKeyName</code> <code translate="no">executablePath</code> <code translate="no">processArguments</code></td><td >Saves the output from running the executable located at <code translate="no">executablePath</code> with the arguments <code translate="no">processArguments</code> to the installer key specified by <code translate="no">installerKeyName</code>. Additional arguments can be passed.</td></tr>
+<tr valign="top" class="odd"><td >CreateLink</td><td >&quot;CreateLink&quot; <code translate="no">linkPath</code> <code translate="no">targetPath</code></td><td >Creates a link in the location specified by <code translate="no">linkPath</code> that points to the location specified by <code translate="no">targetPath</code>.</td></tr>
+<tr valign="top" class="even"><td >CreateLocalRepository</td><td >&quot;CreateLocalRepository&quot; <code translate="no">binaryPath</code> <code translate="no">repoPath</code></td><td >Creates a local repository in the directory specified by <code translate="no">repoPath</code>. For offline installers, stores binary data in the directory specified by <code translate="no">binaryPath</code>.<div class="admonition note">
+<p><b>Note: </b>The repository will be deleted during uninstallation. If you want keep the repository, you can overwrite the <i>UNDO</i> by passing <i>UNDOOPERATION</i> and <i>&quot;&quot;</i>, to the end of the argument list.</p>
+</div>
+</td></tr>
+<tr valign="top" class="odd"><td >FakeStopProcessForUpdate</td><td >&quot;FakeStopProcessForUpdate&quot; <code translate="no">processlist</code></td><td >Matches running processes against the comma-separated entries in <code translate="no">processlist</code> during uninstallation. If matches are found, shows a messagebox asking the user to stop those processes before continuing.</td></tr>
+<tr valign="top" class="even"><td >License</td><td >&quot;License&quot; <code translate="no">licenses</code></td><td >Copies the license files specified by <code translate="no">licenses</code> to a subfolder called <code translate="no">Licenses</code> in the target directory. This operation is automatically added for packages declaring <code translate="no">&lt;Licenses&gt;</code> in their package description file.</td></tr>
+<tr valign="top" class="odd"><td >MinimumProgress</td><td >&quot;MinimumProgress&quot;</td><td >Increases the progress value by one.</td></tr>
+<tr valign="top" class="even"><td >SelfRestart</td><td >&quot;SelfRestart&quot; <code translate="no">core</code></td><td >Restarts the updater or package manager specified by <code translate="no">core</code>.</td></tr>
+<tr valign="top" class="odd"><td >Settings</td><td >&quot;Settings&quot; <code translate="no">path</code> <code translate="no">method</code> <code translate="no">key</code> <code translate="no">value</code></td><td >Sets or removes the <code translate="no">value</code> of <code translate="no">key</code> in the settings file located at <code translate="no">path</code>, depending on the value of <code translate="no">method</code>: <code translate="no">set</code>, <code translate="no">remove</code>, <code translate="no">add_array_value</code>, and <code translate="no">remove_array_value</code>.</td></tr>
+</table></div>
+<p>The Extract, License, and MinimumProgress operations are automatically added for matching components that do not overwrite the <a href="scripting-component.html#createOperations-method" translate="no">component::createOperations</a>() method. See also <a href="scripting-component.html#autoCreateOperations-prop" translate="no">component::autoCreateOperations</a>.</p>
+<p>If errors occur, you can test operations manually using the <code translate="no">devtool</code>. However, variables are not resolved, so you need to use absolute values.</p>
+<p>For example, to test copying a file:</p>
+<pre class="cpp" translate="no">
+ devtool operation <span class="operator">&lt;</span>binary<span class="operator">&gt;</span> DO<span class="operator">,</span>Copy<span class="operator">,</span><span class="operator">&lt;</span>source<span class="operator">&gt;</span><span class="operator">,</span><span class="operator">&lt;</span>target<span class="operator">&gt;</span>
+</pre>
+<h2 id="execution-groups">Execution Groups</h2>
+<p>The operations owned by a component belong to either of two groups: <i>Unpack</i> or <i>Install</i>. The <code translate="no">Extract</code> operations are performed as part of the <i>Unpack</i> group before all other operations and executed concurrently between all components that are going to be installed. The rest of the operations are performed in the <i>Install</i> group and executed sequentially for each component at a time.</p>
+<p>Custom operations can define their execution group by calling the <code translate="no">setGroup()</code> method in their constructor. For more information about custom operations, see <a href="scripting.html#registering-custom-operations" translate="no">Registering Custom Operations</a>.</p>
+</div>
+<!-- @@@operations.html -->
+<p class="naviNextPrevious footerNavi">
+<a class="prevPage" href="scripting.html">Component Scripting</a>
+<span class="naviSeparator">  &#9702;  </span>
+<a class="nextPage" href="ifw-tools.html">Tools</a>
+</p>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- translations.qdoc -->
+  <meta name="description" content="Using translations to localize installer pages and licenses.">
+  <title>Translation Example | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="qtifwexamples.html" translate="no">Qt Installer Framework Examples</a></li>
+<li>Translation Example</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<h1 class="title">Translation Example</h1>
+<pre class="cpp" translate="no">
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+ &lt;!DOCTYPE TS&gt;
+ &lt;TS version=&quot;2.1&quot; language=&quot;pl_PL&quot;&gt;
+ &lt;context&gt;
+     &lt;name&gt;Page&lt;/name&gt;
+     &lt;message&gt;
+         &lt;location filename=&quot;page.ui&quot; line=&quot;14&quot;/&gt;
+         &lt;source&gt;Translations Example&lt;/source&gt;
+         &lt;translation&gt;Przykład obrazujący przekład na inny język&lt;/translation&gt;
+     &lt;/message&gt;
+     &lt;message&gt;
+         &lt;location filename=&quot;page.ui&quot; line=&quot;36&quot;/&gt;
+         &lt;source&gt;This is some text.&lt;/source&gt;
+         &lt;translation&gt;To jest pewien tekst.&lt;/translation&gt;
+     &lt;/message&gt;
+ &lt;/context&gt;
+ &lt;context&gt;
+     &lt;name&gt;installscript&lt;/name&gt;
+     &lt;message&gt;
+         &lt;location filename=&quot;installscript.qs&quot; line=&quot;64&quot;/&gt;
+         &lt;source&gt;This is a dynamically created page.&lt;/source&gt;
+         &lt;translation&gt;Jest to strona utworzona dynamicznie.&lt;/translation&gt;
+     &lt;/message&gt;
+ &lt;/context&gt;
+ &lt;/TS&gt;
+</pre>

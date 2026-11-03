@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- dynamicpage.qdoc -->
+  <meta name="description" content="Using a component script and dynamic pages to build an installer.">
+  <title>Dynamic Page Installer Example | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="qtifwexamples.html" translate="no">Qt Installer Framework Examples</a></li>
+<li>Dynamic Page Installer Example</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<h1 class="title">Dynamic Page Installer Example</h1>
+<pre class="cpp" translate="no">
+ &lt;?xml version=&quot;1.0&quot;?&gt;
+ &lt;Package&gt;
+     &lt;DisplayName&gt;Example Component 2&lt;/DisplayName&gt;
+     &lt;Description&gt;Dummy component without default property set.&lt;/Description&gt;
+     &lt;Version&gt;1.0.0&lt;/Version&gt;
+     &lt;ReleaseDate&gt;2014-04-07&lt;/ReleaseDate&gt;
+     &lt;Script&gt;installscript.qs&lt;/Script&gt;
+     &lt;Name&gt;org.qtproject.ifw.example.dynamicpage.node2&lt;/Name&gt;
+ &lt;/Package&gt;
+</pre>

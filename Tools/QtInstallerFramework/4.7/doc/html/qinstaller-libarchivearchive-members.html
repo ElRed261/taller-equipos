@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- libarchivearchive.cpp -->
+  <meta name="description" content="The LibArchiveArchive class represents an archive file handled with libarchive archive and compression library.">
+  <title>List of All Members for LibArchiveArchive | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>LibArchiveArchive</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar"><div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">List of All Members for LibArchiveArchive</h1>
+<p>This is the complete list of members for <a href="qinstaller-libarchivearchive.html">QInstaller::LibArchiveArchive</a>, including inherited members.</p>
+<div class="table"><table class="propsummary" translate="no">
+<tr><td class="topAlign"><ul>
+<li class="fn" translate="no">enum <span class="name"><b><a href="qinstaller-abstractarchive.html#CompressionLevel-enum" translate="no">CompressionLevel</a></b></span></li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#LibArchiveArchive-1" translate="no">LibArchiveArchive</a></b></span>(const QString &amp;, QObject *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#LibArchiveArchive-2" translate="no">LibArchiveArchive</a></b></span>(QObject *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#dtor.LibArchiveArchive" translate="no">~LibArchiveArchive</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#cancel" translate="no">cancel</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#cancel" translate="no">cancel</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#close" translate="no">close</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#close" translate="no">close</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#completedChanged" translate="no">completedChanged</a></b></span>(const quint64, const quint64)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#compressionLevel" translate="no">compressionLevel</a></b></span>() const : QInstaller::AbstractArchive::CompressionLevel</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#create" translate="no">create</a></b></span>(const QStringList &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#create" translate="no">create</a></b></span>(const QStringList &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#currentEntryChanged" translate="no">currentEntryChanged</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#dataBlockRequested" translate="no">dataBlockRequested</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#errorString" translate="no">errorString</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#extract" translate="no">extract</a></b></span>(const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#extract" translate="no">extract</a></b></span>(const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#extract-1" translate="no">extract</a></b></span>(const QString &amp;, const quint64) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#extract-1" translate="no">extract</a></b></span>(const QString &amp;, const quint64) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#isSupported" translate="no">isSupported</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#isSupported" translate="no">isSupported</a></b></span>() : bool</li>
+</ul></td><td class="topAlign"><ul>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#list" translate="no">list</a></b></span>() : QVector&lt;QInstaller::ArchiveEntry&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#list" translate="no">list</a></b></span>() : QVector&lt;QInstaller::ArchiveEntry&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#open" translate="no">open</a></b></span>(QIODevice::OpenMode) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#open" translate="no">open</a></b></span>(QIODevice::OpenMode) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#seekRequested" translate="no">seekRequested</a></b></span>(qint64, int)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#setCompressionLevel" translate="no">setCompressionLevel</a></b></span>(const QInstaller::AbstractArchive::CompressionLevel)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#setErrorString" translate="no">setErrorString</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#setFilename" translate="no">setFilename</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#setFilename" translate="no">setFilename</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerAboutToAddDataBlock" translate="no">workerAboutToAddDataBlock</a></b></span>(const QByteArray)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerAboutToCancel" translate="no">workerAboutToCancel</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerAboutToExtract" translate="no">workerAboutToExtract</a></b></span>(const QString &amp;, const quint64)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerAboutToSetDataAtEnd" translate="no">workerAboutToSetDataAtEnd</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerAboutToSetFilePosition" translate="no">workerAboutToSetFilePosition</a></b></span>(qint64)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerAddDataBlock" translate="no">workerAddDataBlock</a></b></span>(const QByteArray)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerCancel" translate="no">workerCancel</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerExtract" translate="no">workerExtract</a></b></span>(const QString &amp;, const quint64)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerFinished" translate="no">workerFinished</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerSetDataAtEnd" translate="no">workerSetDataAtEnd</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerSetFilePosition" translate="no">workerSetFilePosition</a></b></span>(qint64)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-libarchivearchive.html#workerStatus" translate="no">workerStatus</a></b></span>() const : ExtractWorker::Status</li>
+</ul>
+</td></tr>
+</table></div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- abstractfiletask.cpp -->
+  <meta name="description" content="The FileTaskResult class represents the results of a file task.">
+  <title>FileTaskResult Class | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>FileTaskResult</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">FileTaskResult Class</h1>
+<span class="small-subtitle" translate="no">class <a href="scripting-qinstaller.html" translate="no">QInstaller</a>::FileTaskResult</span>
+<!-- $$$FileTaskResult-brief -->
+<p>The FileTaskResult class represents the results of a file task. <a href="#details">More...</a></p>
+<!-- @@@FileTaskResult -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;FileTaskResult&gt;</span></td></tr>
+</table></div>
+<ul>
+<li><a href="qinstaller-filetaskresult-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-filetaskresult.html#FileTaskResult" translate="no">FileTaskResult</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-filetaskresult.html#FileTaskResult-1" translate="no">FileTaskResult</a></b>(const QString &amp;<i>t</i>, const QByteArray &amp;<i>c</i>, const QInstaller::FileTaskItem &amp;<i>i</i>, bool <i>checksumMismatch</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QByteArray </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-filetaskresult.html#checkSum" translate="no">checkSum</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-filetaskresult.html#checksumMismatch" translate="no">checksumMismatch</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QString </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-filetaskresult.html#target" translate="no">target</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QInstaller::FileTaskItem </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-filetaskresult.html#taskItem" translate="no">taskItem</a></b>() const</td></tr>
+</table></div>
+<!-- $$$FileTaskResult-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+</div>
+<!-- @@@FileTaskResult -->
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$FileTaskResult[overload1]$$$FileTaskResult -->
+<h3 class="fn" translate="no" id="FileTaskResult">FileTaskResult::<span class="name">FileTaskResult</span>()</h3>
+<p>Creates file task results.</p>
+<!-- @@@FileTaskResult -->
+<!-- $$$FileTaskResult$$$FileTaskResultconstQString&constQByteArray&constQInstaller::FileTaskItem&bool -->
+<h3 class="fn" translate="no" id="FileTaskResult-1">FileTaskResult::<span class="name">FileTaskResult</span>(const <span class="type">QString</span> &amp;<i>t</i>, const <span class="type">QByteArray</span> &amp;<i>c</i>, const <span class="type"><a href="qinstaller-filetaskitem.html" translate="no">QInstaller::FileTaskItem</a></span> &amp;<i>i</i>, <span class="type">bool</span> <i>checksumMismatch</i>)</h3>
+<p>Creates file task results using the target file specified by <i translate="no">t</i>, checksum specified by <i translate="no">c</i>, file task item specified by <i translate="no">i</i>, and checksum mismatch specified by <i translate="no">checksumMismatch</i>.</p>
+<!-- @@@FileTaskResult -->
+<!-- $$$checkSum[overload1]$$$checkSum -->
+<h3 class="fn" translate="no" id="checkSum"><span class="type">QByteArray</span> FileTaskResult::<span class="name">checkSum</span>() const</h3>
+<p>Returns the checksum of the task result.</p>
+<!-- @@@checkSum -->
+<!-- $$$checksumMismatch[overload1]$$$checksumMismatch -->
+<h3 class="fn" translate="no" id="checksumMismatch"><span class="type">bool</span> FileTaskResult::<span class="name">checksumMismatch</span>() const</h3>
+<p>Returns <code translate="no">true</code> if checksum mismatch is detected otherwise returns <code translate="no">false</code>.</p>
+<!-- @@@checksumMismatch -->
+<!-- $$$target[overload1]$$$target -->
+<h3 class="fn" translate="no" id="target"><span class="type">QString</span> FileTaskResult::<span class="name">target</span>() const</h3>
+<p>Returns the target file of the task result.</p>
+<!-- @@@target -->
+<!-- $$$taskItem[overload1]$$$taskItem -->
+<h3 class="fn" translate="no" id="taskItem"><span class="type"><a href="qinstaller-filetaskitem.html" translate="no">QInstaller::FileTaskItem</a></span> FileTaskResult::<span class="name">taskItem</span>() const</h3>
+<p>Returns file task items.</p>
+<!-- @@@taskItem -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

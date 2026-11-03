@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- qsettings.qdoc -->
+  <meta name="description" content="Provides enums for accessing QSettings format in Windows.">
+  <title>QSettings QML Type | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="scripting-qmlmodule.html" translate="no">scripting</a></li>
+<li>QSettings</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#properties">Properties</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">QSettings QML Type</h1>
+<!-- $$$QSettings-brief -->
+<p>Provides enums for accessing QSettings format in Windows. <a href="#details">More...</a></p>
+<!-- @@@QSettings -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Import Statement:</td><td class="memItemRight bottomAlign"> import scripting</td></tr></table></div><ul>
+<li><a href="scripting-qsettings-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="properties">Properties</h2>
+<ul>
+<li class="fn" translate="no"><b><a href="scripting-qsettings.html#Format-prop" translate="no">Format</a></b> : enumeration</li>
+</ul>
+<!-- $$$QSettings-description -->
+<h2 id="details">Detailed Description</h2>
+<p>On Windows, a registry key can be asked using <a href="scripting-installer.html#value-method" translate="no">installer::value</a>. For accessing the 32-bit system registry from a 64-bit application running on 64-bit Windows, use QSettings.Registry32Format. For accessing the 64-bit system registry from a 32-bit application running on 64-bit Windows, use QSettings.Registry64Format. By default the QSettings.NativeFormatis used.</p>
+<!-- @@@QSettings -->
+<h2>Property Documentation</h2>
+<!-- $$$Format -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="Format-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">Format</span> : <span class="type">enumeration</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>The <a href="scripting-installer.html#value-method" translate="no">installer::value</a> method can take one of the following enums as an argument:</p>
+<ul>
+<li>QSettings.NativeFormat</li>
+<li>QSettings.Registry32Format</li>
+<li>QSettings.Registry64Format</li>
+<li>QSettings.IniFormat</li>
+<li>QSettings.InvalidFormat</li>
+</ul>
+<p>The enum values correspond to the values of the QSettings::Format enum with the same names.</p>
+</div></div><!-- @@@Format -->
+<br/>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

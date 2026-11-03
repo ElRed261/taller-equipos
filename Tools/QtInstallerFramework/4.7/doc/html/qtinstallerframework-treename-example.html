@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- treename.qdoc -->
+  <meta name="description" content="Using components' package.xml files to define custom locations in the component tree.">
+  <title>Tree Name Example | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="qtifwexamples.html" translate="no">Qt Installer Framework Examples</a></li>
+<li>Tree Name Example</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#configuring-the-example-installer">Configuring the Example Installer</a></li>
+<li class="level1"><a href="#creating-the-example-package-information-file">Creating the Example Package Information File</a></li>
+<li class="level1"><a href="#specifying-tree-name-to-root-node">Specifying Tree Name to Root Node</a></li>
+<li class="level1"><a href="#specifying-tree-name-and-moving-children">Specifying Tree Name and Moving Children</a></li>
+<li class="level1"><a href="#specifying-tree-name-to-sub-node">Specifying Tree Name to Sub Node</a></li>
+<li class="level1"><a href="#specifying-tree-name-to-existing-node">Specifying Tree Name to Existing Node</a></li>
+<li class="level1"><a href="#other-considerations">Other Considerations</a></li>
+<li class="level2"><a href="#multiple-tree-names-in-one-component-branch">Multiple Tree Names in One Component Branch</a></li>
+<li class="level2"><a href="#tree-names-of-installed-and-remote-components">Tree Names of Installed and Remote Components</a></li>
+<li class="level2"><a href="#tree-name-and-name-conflicts">Tree Name and Name Conflicts</a></li>
+<li class="level1"><a href="#generating-the-example-installer">Generating the Example Installer</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title">Tree Name Example</h1>
+<!-- $$$treename-brief -->
+<p>Using components' package.xml files to define custom locations in the component tree.</p>
+<!-- @@@treename -->
+<!-- $$$treename-description -->
+<div class="descr" id="details">
+<p class="centerAlign"><img src="images/qtifw-examples-treename.png" alt="" /></p><p><i>Tree Name</i> illustrates how to specify custom locations for components in the component tree view and how that influences the installation and maintenance processes.</p>
+<h4 id="configuring-the-example-installer">Configuring the Example Installer</h4>
+<p>The installer configuration file, config.xml, in the <code translate="no">config</code> directory specifies the text and default values used in the installer:</p>
+<ul>
+<li>The <code translate="no">&lt;Name&gt;</code> element sets the application name and adds it to the page name and introduction text.</li>
+<li>The <code translate="no">&lt;Version&gt;</code> element sets the application version number.</li>
+<li>The <code translate="no">&lt;Title&gt;</code> element sets the installer name and displays it on the title bar.</li>
+<li>The <code translate="no">&lt;Publisher&gt;</code> element sets the publisher of the software (as shown in the Windows Control Panel, for example).</li>
+<li>The <code translate="no">&lt;StartMenuDir&gt;</code> element sets the name of the default program group for the product in the Windows <b>Start</b> menu.</li>
+<li>The <code translate="no">&lt;TargetDir&gt;</code> element sets the default target directory location to be within the <code translate="no">IfwExamples</code> directory in the home directory of the current user (because it uses the pre-existing variable <code translate="no">,</code> @HomeDir@, as part of the value). For more information, see <a href="scripting.html#predefined-variables" translate="no">Predefined Variables</a>.</li>
+</ul>
+<ul>
+<li>The <code translate="no">&lt;WizardShowPageList&gt;</code> element is set to <code translate="no">false</code> to hide the page list widget on the left side of the installer wizard window.</li>
+</ul>
+<pre class="cpp" translate="no">
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ &lt;Installer&gt;
+     &lt;Name&gt;Tree Name Example&lt;/Name&gt;
+     &lt;Version&gt;1.0.0&lt;/Version&gt;
+     &lt;Title&gt;Tree Name Example&lt;/Title&gt;
+     &lt;Publisher&gt;The Qt Company&lt;/Publisher&gt;
+     &lt;StartMenuDir&gt;Qt IFW Examples&lt;/StartMenuDir&gt;
+     &lt;TargetDir&gt;@HomeDir@/IfwExamples/treename&lt;/TargetDir&gt;
+     &lt;WizardShowPageList&gt;false&lt;/WizardShowPageList&gt;
+ &lt;/Installer&gt;
+</pre>
+<h4 id="creating-the-example-package-information-file">Creating the Example Package Information File</h4>
+<p>The installer package information file, package.xml, in the <code translate="no">meta</code> directory specifies the components that are available for installation:</p>
+<ul>
+<li>The <code translate="no">&lt;DisplayName&gt;</code> element sets the human-readable name of the component.</li>
+<li>The <code translate="no">&lt;Description&gt;</code> element sets the human-readable description of the component.</li>
+<li>The <code translate="no">&lt;Version&gt;</code> element sets the version number of the component.</li>
+<li>The <code translate="no">&lt;ReleaseDate&gt;</code> element sets the date of release for this component version.</li>
+</ul>
+<ul>
+<li>The <code translate="no">&lt;TreeName&gt;</code> element specifies the location of the component in the component tree. The element accepts an optional <code translate="no">moveChildren</code> attribute with a boolean value. If the value is set to <code translate="no">true</code>, any child components of this component are also moved to the modified location.<div class="admonition note">
+<p><b>Note: </b>Without this element the identifier of this component decides the location in the component tree.</p>
+</div>
+</li>
+</ul>
+<p>In this example, the package.xml files for the components contain additional elements that specify the component tree locations. The following sections illustrate how the elements are used.</p>
+<h4 id="specifying-tree-name-to-root-node">Specifying Tree Name to Root Node</h4>
+<p>We define a tree name <i>ASub1ToRoot</i> for component <i>A subcomponent 1</i>. Thus, this child component of <i>A</i> becomes a new root component. By default the children are not moved to the new location, so <i>A sub-subcomponent1</i> becomes a new direct child of <i>A</i>.</p>
+<pre class="cpp" translate="no">
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ &lt;Package&gt;
+     &lt;DisplayName&gt;A subcomponent 1 (moved to root)&lt;/DisplayName&gt;
+     &lt;Description&gt;Subcomponent of component A&lt;/Description&gt;
+     &lt;Version&gt;1.0.0-1&lt;/Version&gt;
+     &lt;ReleaseDate&gt;2021-01-01&lt;/ReleaseDate&gt;
+     &lt;TreeName&gt;ASub1ToRoot&lt;/TreeName&gt;
+ &lt;/Package&gt;
+</pre>
+<h4 id="specifying-tree-name-and-moving-children">Specifying Tree Name and Moving Children</h4>
+<p>As above, we define a tree name <i>BSub1ToRoot</i> for component <i>B subcomponent 1</i>, but this time we set the <code translate="no">moveChildren</code> attribute to <code translate="no">true</code>. The component becomes a new root component and the child component <i>B sub-subcomponent 1</i> of this component moves to the new location with the parent.</p>
+<pre class="cpp" translate="no">
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ &lt;Package&gt;
+     &lt;DisplayName&gt;B subcomponent 1 (moved to root with children)&lt;/DisplayName&gt;
+     &lt;Description&gt;Subcomponent of component B&lt;/Description&gt;
+     &lt;Version&gt;1.0.0-1&lt;/Version&gt;
+     &lt;ReleaseDate&gt;2021-01-01&lt;/ReleaseDate&gt;
+     &lt;TreeName moveChildren=&quot;true&quot;&gt;BSub1ToRoot&lt;/TreeName&gt;
+ &lt;/Package&gt;
+</pre>
+<h4 id="specifying-tree-name-to-sub-node">Specifying Tree Name to Sub Node</h4>
+<p>We define a tree name <i>A.subC</i> for component <i>C</i> and set the <code translate="no">moveChildren</code> attribute to <code translate="no">true</code>. Thus, this originally root component is moved as a child component of <i>A</i>. The child components <i>C subcomponent 1</i> and <i>C subcomponent 2</i> move to the new location with the parent.</p>
+<pre class="cpp" translate="no">
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ &lt;Package&gt;
+     &lt;DisplayName&gt;C (moved to sub node with children)&lt;/DisplayName&gt;
+     &lt;Description&gt;Example component C&lt;/Description&gt;
+     &lt;Version&gt;1.0.0-1&lt;/Version&gt;
+     &lt;ReleaseDate&gt;2021-01-01&lt;/ReleaseDate&gt;
+     &lt;TreeName moveChildren=&quot;true&quot;&gt;A.subC&lt;/TreeName&gt;
+ &lt;/Package&gt;
+</pre>
+<h4 id="specifying-tree-name-to-existing-node">Specifying Tree Name to Existing Node</h4>
+<p>We define a tree name <i>D</i> for component <i>E</i>. Node <i>D</i> is already a part of an existing component identifier for <i>D subcomponent 1</i> (<i>D.sub1</i>), but the packages directory does not contain a component for the identifier, so it is possible to declare a tree name <i>D</i>. The component <i>E</i> becomes a new root component and parent of <i>D subcomponent 1</i>. As the <code translate="no">moveChildren</code> attribute is set to <code translate="no">true</code>, the child component <i>E subcomponent 2</i> is moved with the parent.</p>
+<pre class="cpp" translate="no">
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ &lt;Package&gt;
+     &lt;DisplayName&gt;E (moved to free existing node with children)&lt;/DisplayName&gt;
+     &lt;Description&gt;Example component E&lt;/Description&gt;
+     &lt;Version&gt;1.0.0-1&lt;/Version&gt;
+     &lt;ReleaseDate&gt;2021-01-01&lt;/ReleaseDate&gt;
+     &lt;TreeName moveChildren=&quot;true&quot;&gt;D&lt;/TreeName&gt;
+ &lt;/Package&gt;
+</pre>
+<h4 id="other-considerations">Other Considerations</h4>
+<h5 id="multiple-tree-names-in-one-component-branch">Multiple Tree Names in One Component Branch</h5>
+<p>Components in a single branch (<i>A</i>, <i>A.sub1</i>, <i>A.sub1.sub1</i>, <i>A.sub1.sub1.sub2</i> and so on) may each declare a separate tree name. The installer or maintenance tool calculates the new locations for components in an ascending order from leaf components to root components, so that <i>A.sub1.sub1.sub2</i> is moved first and <i>A</i> last.</p>
+<h5 id="tree-names-of-installed-and-remote-components">Tree Names of Installed and Remote Components</h5>
+<p>For online installers, the repositories may declare updated tree names for components, so the following rules apply:</p>
+<ul>
+<li>The tree names for components become static after being installed. Therefore, if the user of the installer has installed component <i>A</i> with tree name <i>ANewName1</i>, and the repository is updated with a new version of component <i>A</i> that declares tree name <i>ANewName2</i>, the new location is only applied when the user updates the component locally with the maintenance tool.</li>
+<li>The automatic tree names of children of components with tree name and <code translate="no">moveChildren</code> set to <code translate="no">true</code> are moved with the parent regardless if installed or not. Therefore, if the user has installed component <i>A.sub1</i> but not component <i>A</i>, and <i>A</i> is updated in the repository with a new tree name, the <i>A.sub1</i> uses also the new tree name in maintenance tool's component tree.</li>
+</ul>
+<h5 id="tree-name-and-name-conflicts">Tree Name and Name Conflicts</h5>
+<p>The tree names may conflict with existing component names or other tree names. Depending on whether the installer or maintenance tool is configured to allow unstable components with <code translate="no">&lt;AllowUnstableComponents&gt;</code> configuration file element, the offending components are either registered as unstable components with their original name or not registered at all.</p>
+<div class="admonition note">
+<p><b>Note: </b>Components from remote repositories can never override already installed components in the tree view. If a conflicting remote component cannot be registered with the original name either in case a local component has reserved it with a tree name, the component is not registered.</p>
+</div>
+<h4 id="generating-the-example-installer">Generating the Example Installer</h4>
+<p>To create the example installer, switch to the example source directory on the command line and enter the following command:</p>
+<ul>
+<li>On Windows:<pre class="cpp" translate="no">
+ <span class="operator">.</span><span class="operator">.</span>\<span class="operator">.</span><span class="operator">.</span>\bin\binarycreator<span class="operator">.</span>exe <span class="operator">-</span>c config\config<span class="operator">.</span>xml <span class="operator">-</span>p packages installer<span class="operator">.</span>exe
+</pre>
+</li>
+<li>On Linux or macOS:<pre class="cpp" translate="no">
+ <span class="operator">.</span><span class="operator">.</span><span class="operator">/</span><span class="operator">.</span><span class="operator">.</span><span class="operator">/</span>bin<span class="operator">/</span>binarycreator <span class="operator">-</span>c config<span class="operator">/</span>config<span class="operator">.</span>xml <span class="operator">-</span>p packages installer
+</pre>
+</li>
+</ul>
+<p>This creates the installer to the current directory.</p>
+<p>Files:</p>
+<ul>
+<li><a href="qtinstallerframework-treename-config-config-xml.html" translate="no">treename/config/config.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-a-sub1-sub1-data-asub1sub1-txt.html" translate="no">treename/packages/A.sub1.sub1/data/Asub1sub1.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-a-sub1-sub1-meta-package-xml.html" translate="no">treename/packages/A.sub1.sub1/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-a-sub1-data-asub1-txt.html" translate="no">treename/packages/A.sub1/data/Asub1.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-a-sub1-meta-package-xml.html" translate="no">treename/packages/A.sub1/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-a-data-a-txt.html" translate="no">treename/packages/A/data/A.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-a-meta-package-xml.html" translate="no">treename/packages/A/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-b-sub1-sub1-data-bsub1sub1-txt.html" translate="no">treename/packages/B.sub1.sub1/data/Bsub1sub1.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-b-sub1-sub1-meta-package-xml.html" translate="no">treename/packages/B.sub1.sub1/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-b-sub1-data-bsub1-txt.html" translate="no">treename/packages/B.sub1/data/Bsub1.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-b-sub1-meta-package-xml.html" translate="no">treename/packages/B.sub1/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-b-data-b-txt.html" translate="no">treename/packages/B/data/B.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-b-meta-package-xml.html" translate="no">treename/packages/B/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-c-sub1-data-csub1-txt.html" translate="no">treename/packages/C.sub1/data/Csub1.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-c-sub1-meta-package-xml.html" translate="no">treename/packages/C.sub1/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-c-sub2-data-csub2-txt.html" translate="no">treename/packages/C.sub2/data/Csub2.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-c-sub2-meta-package-xml.html" translate="no">treename/packages/C.sub2/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-c-data-c-txt.html" translate="no">treename/packages/C/data/C.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-c-meta-package-xml.html" translate="no">treename/packages/C/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-d-sub1-data-dsub1-txt.html" translate="no">treename/packages/D.sub1/data/Dsub1.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-d-sub1-meta-package-xml.html" translate="no">treename/packages/D.sub1/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-e-sub2-data-esub2-txt.html" translate="no">treename/packages/E.sub2/data/Esub2.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-e-sub2-meta-package-xml.html" translate="no">treename/packages/E.sub2/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-packages-e-data-e-txt.html" translate="no">treename/packages/E/data/E.txt</a></li>
+<li><a href="qtinstallerframework-treename-packages-e-meta-package-xml.html" translate="no">treename/packages/E/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-treename-treename-pro.html" translate="no">treename/treename.pro</a></li>
+</ul>
+</div>
+<!-- @@@treename -->
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

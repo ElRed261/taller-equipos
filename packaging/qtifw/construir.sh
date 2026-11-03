@@ -27,8 +27,15 @@ cd "$RAIZ"
 
 VERSION="${VERSION:-$(sed -n 's/^version = "\([^\"]*\)".*/\1/p' pyproject.toml | head -1)}"
 DIST="$RAIZ/dist"
+# pyside6-deploy respeta exec_directory del spec: dist/<nombre>.dist
 DEPLOY="$DIST/taller-equipos.dist"
-QTIFW_BIN="${TALLER_QTIFW:-binarycreator}"
+# Orden de búsqueda: variable de entorno → copia dentro del repo (aqt) → PATH.
+if [[ -n "${TALLER_QTIFW:-}" ]]; then
+    QTIFW_BIN="$TALLER_QTIFW"
+else
+    QTIFW_BIN="$(find Tools -type f -name binarycreator 2>/dev/null | sort | tail -1)"
+    QTIFW_BIN="${QTIFW_BIN:-binarycreator}"
+fi
 
 if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
     sed -n '2,20p' "${BASH_SOURCE[0]}"; exit 0
@@ -52,6 +59,11 @@ if [[ ! -d "$DEPLOY" ]]; then
         src/taller/main.py
 fi
 
+# El compilado a veces sale como main.bin (usa el nombre del entry point);
+# se uniforma a taller-equipos.bin para que el wizard y los atajos sean iguales.
+if [[ -e "$DEPLOY/main.bin" ]]; then
+    mv "$DEPLOY/main.bin" "$DEPLOY/taller-equipos.bin"
+fi
 [[ -e "$DEPLOY/taller-equipos.bin" || -e "$DEPLOY/taller-equipos.exe" ]] \
     || { echo "error: pyside6-deploy no dejó el ejecutable en $DEPLOY" >&2; exit 1; }
 
@@ -59,7 +71,10 @@ fi
 echo "Copiando datos junto al ejecutable…"
 rm -rf "$DEPLOY/migrations"
 cp -a migrations "$DEPLOY/migrations"
-cp -a src/taller/ui/assets "$DEPLOY/_internal/taller-ui-assets"
+# Nuitka no crea _internal (eso era PyInstaller): los assets van en su lugar propio.
+mkdir -p "$DEPLOY/taller/ui"
+rm -rf "$DEPLOY/taller/ui/assets"
+cp -a src/taller/ui/assets "$DEPLOY/taller/ui/assets"
 
 # Paquete de producción para QtIFW: árbol de producción + metadatos del asistente.
 PKG="$RAIZ/packaging/qtifw/packages/taller-equipos"

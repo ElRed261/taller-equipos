@@ -1,46 +1,53 @@
-// Instalación del taller de equipos con Qt Installer Framework.
-//
-// El wizard de QtIFW instalará el árbol compilado (taller-equipos.bin o .exe más
-// sus dependencias, que viajan dentro de `data`) y crea los accesos directos del
-// grupo en el menú. Después la PUESTA EN MARCHA (nuestra, dentro de la app) lleva
-// la configuración de la base a la base de datos y de la marca — eso NO se debe
-// duplicar en el instalador.
-//
-// Referencias: ifw-tools, installscript.qs del ejemplo de Online Installer.
+/****************************************************************************
+**
+** Copyright (C) 2017 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
+**
+** This file is part of the FOO module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:GPL-EXCEPT$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
 
-Component.prototype.createOperations = function () {
-    var operaciones = component.createOperations();
+function Component()
+{
+    // default constructor
+}
 
-    // Copiar el árbol compilado, tal cual sale de pyside6-deploy.
-    operaciones.push(component.addOperation("Extract", "@TargetDir@"));
+Component.prototype.createOperations = function()
+{
+    // call default implementation to actually install README.txt!
+    component.createOperations();
 
-    var ejecutable = systemInfo.productType === "windows" ? "taller-equipos.exe" : "taller-equipos.bin";
-    var extensionShortcut = systemInfo.productType === "windows" ? ".lnk" : ".desktop";
+    if (systemInfo.productType !== "windows") {
+        component.addOperation("CreateShortcut", "@TargetDir@/taller-equipos.bin",
+            "@StartMenuDir@/Taller de equipos.desktop");
+        component.addOperation("CreateShortcut", "@TargetDir@/taller-equipos.bin",
+            "@DesktopDir@/Taller de equipos.desktop");
+    }
 
-    var grupo = "@ApplicationsDir@/taller-equipos";
+    if (systemInfo.productType === "windows") {
+        component.addOperation("CreateShortcut", "@TargetDir@/taller-equipos.bin", "@StartMenuDir@/Taller.lnk",
+            "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/system32/SHELL32.dll",
+            "iconId=2", "description=Open README file");
+    }
 
-    // Acceso directo del menú (Inicio en Windows, grupos en Linux y macOS).
-    operaciones.push(component.addOperation(
-        "CreateShortcut",
-        "@TargetDir@/" + ejecutable,
-        grupo + "/taller-equipos" + extensionShortcut,
-        "icon,workspace,actions,comments,tags="
-    ));
-
-    // Acceso directo en el escritorio: la acción principal de todo el día.
-    operaciones.push(component.addOperation(
-        "CreateShortcut",
-        "@TargetDir@/" + ejecutable,
-        "@DesktopDir@/taller-equipos" + extensionShortcut,
-        "icon,workspace,actions,comments,tags="
-    ));
-
-    // Ejecutar el programa al terminar: ahí aparece la Puesta en marcha propia.
-    operaciones.push(component.addOperation(
-        "Execute",
-        "@TargetDir@/" + ejecutable,
-        "", "", "", "LauncherWasStarted=true"
-    ));
-
-    return operaciones;
-};
+    component.addOperation("Execute", "@TargetDir@/taller-equipos.bin");
+}

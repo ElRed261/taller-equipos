@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- changeuserinterface.qdoc -->
+  <meta name="description" content="Using a component script to change the installer UI.">
+  <title>Change Installer UI Example | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="qtifwexamples.html" translate="no">Qt Installer Framework Examples</a></li>
+<li>Change Installer UI Example</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<h1 class="title">Change Installer UI Example</h1>
+<pre class="cpp" translate="no">
+ /****************************************************************************
+ **
+ ** Copyright (C) 2022 The Qt Company Ltd.
+ ** Contact: https://www.qt.io/licensing/
+ **
+ ** This file is part of the FOO module of the Qt Toolkit.
+ **
+ ** $QT_BEGIN_LICENSE:GPL-EXCEPT$
+ ** Commercial License Usage
+ ** Licensees holding valid commercial Qt licenses may use this file in
+ ** accordance with the commercial license agreement provided with the
+ ** Software or, alternatively, in accordance with the terms contained in
+ ** a written agreement between you and The Qt Company. For licensing terms
+ ** and conditions see https://www.qt.io/terms-conditions. For further
+ ** information use the contact form at https://www.qt.io/contact-us.
+ **
+ ** GNU General Public License Usage
+ ** Alternatively, this file may be used under the terms of the GNU
+ ** General Public License version 3 as published by the Free Software
+ ** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+ ** included in the packaging of this file. Please review the following
+ ** information to ensure the GNU General Public License requirements will
+ ** be met: https://www.gnu.org/licenses/gpl-3.0.html.
+ **
+ ** $QT_END_LICENSE$
+ **
+ ****************************************************************************/
+
+ function Component()
+ {
+     if (!installer.isCommandLineInstance())
+         gui.pageWidgetByObjectName(&quot;LicenseAgreementPage&quot;).entered.connect(changeLicenseLabels);
+ }
+
+ changeLicenseLabels = function()
+ {
+     page = gui.pageWidgetByObjectName(&quot;LicenseAgreementPage&quot;);
+     page.AcceptLicenseLabel.setText(&quot;Yes I do!&quot;);
+ }
+</pre>

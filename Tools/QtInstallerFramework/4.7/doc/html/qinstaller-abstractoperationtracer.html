@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- operationtracer.cpp -->
+  <meta name="description" content="The AbstractOperationTracer is a pure virtual base class for classes tracing starting and finishing of installer operations.">
+  <title>AbstractOperationTracer Class | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>AbstractOperationTracer</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">AbstractOperationTracer Class</h1>
+<span class="small-subtitle" translate="no">class <a href="scripting-qinstaller.html" translate="no">QInstaller</a>::AbstractOperationTracer</span>
+<!-- $$$AbstractOperationTracer-brief -->
+<p>The AbstractOperationTracer is a pure virtual base class for classes tracing starting and finishing of installer operations. <a href="#details">More...</a></p>
+<!-- @@@AbstractOperationTracer -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;AbstractOperationTracer&gt;</span></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Inherited By:</td><td class="memItemRight bottomAlign"> <p><a href="qinstaller-concurrentoperationtracer.html" translate="no">QInstaller::ConcurrentOperationTracer</a> and <a href="qinstaller-operationtracer.html" translate="no">QInstaller::OperationTracer</a></p>
+</td></tr>
+</table></div>
+<ul>
+<li><a href="qinstaller-abstractoperationtracer-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-abstractoperationtracer.html#AbstractOperationTracer" translate="no">AbstractOperationTracer</a></b>(QInstaller::Operation *<i>operation</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-abstractoperationtracer.html#dtor.AbstractOperationTracer" translate="no">~AbstractOperationTracer</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-abstractoperationtracer.html#trace" translate="no">trace</a></b>(const QString &amp;<i>state</i>) = 0</td></tr>
+</table></div>
+<!-- $$$AbstractOperationTracer-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+</div>
+<!-- @@@AbstractOperationTracer -->
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$AbstractOperationTracer[overload1]$$$AbstractOperationTracerQInstaller::Operation* -->
+<h3 class="fn" translate="no" id="AbstractOperationTracer"><code translate="no">[explicit] </code>AbstractOperationTracer::<span class="name">AbstractOperationTracer</span>(<span class="type"><a href="qinstaller.html#Operation-typedef" translate="no">QInstaller::Operation</a></span> *<i>operation</i>)</h3>
+<p>Constructs tracer for <i translate="no">operation</i>. Objects of this class cannot be constructed directly, but the derived classes should explicitly call the base class constructor in their constructors.</p>
+<!-- @@@AbstractOperationTracer -->
+<!-- $$$~AbstractOperationTracer[overload1]$$$~AbstractOperationTracer -->
+<h3 class="fn" translate="no" id="dtor.AbstractOperationTracer"><code translate="no">[virtual noexcept] </code>AbstractOperationTracer::<span class="name">~AbstractOperationTracer</span>()</h3>
+<p>Destructs object. A subclass may override this method.</p>
+<!-- @@@~AbstractOperationTracer -->
+<!-- $$$trace[overload1]$$$traceconstQString& -->
+<h3 class="fn" translate="no" id="trace"><code translate="no">[pure virtual] </code><span class="type">void</span> AbstractOperationTracer::<span class="name">trace</span>(const <span class="type">QString</span> &amp;<i>state</i>)</h3>
+<p>Prints trace output for starting operation in <i translate="no">state</i>. A subclass should implement this method.</p>
+<!-- @@@trace -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

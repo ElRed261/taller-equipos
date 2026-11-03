@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- filedownloader.cpp -->
+  <meta name="description" content="The HttpDownloader class is used to download files over FTP, HTTP, or HTTPS.">
+  <title>HttpDownloader Class | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>HttpDownloader</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#reimplemented-public-functions">Reimplemented Public Functions</a></li>
+<li class="level1"><a href="#public-slots">Public Slots</a></li>
+<li class="level1"><a href="#reimplemented-protected-functions">Reimplemented Protected Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">HttpDownloader Class</h1>
+<span class="small-subtitle" translate="no">class <a href="kdupdater.html" translate="no">KDUpdater</a>::HttpDownloader</span>
+<!-- $$$HttpDownloader-brief -->
+<p>The HttpDownloader class is used to download files over FTP, HTTP, or HTTPS. <a href="#details">More...</a></p>
+<!-- @@@HttpDownloader -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;HttpDownloader&gt;</span></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Inherits:</td><td class="memItemRight bottomAlign"> <a href="kdupdater-filedownloader.html" translate="no">KDUpdater::FileDownloader</a></td></tr>
+</table></div>
+<ul>
+<li><a href="kdupdater-httpdownloader-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#HttpDownloader" translate="no">HttpDownloader</a></b>(QObject *<i>parent</i> = 0)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#dtor.HttpDownloader" translate="no">~HttpDownloader</a></b>()</td></tr>
+</table></div>
+<h2 id="reimplemented-public-functions">Reimplemented Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> virtual bool </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#canDownload" translate="no">canDownload</a></b>() const override</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual KDUpdater::HttpDownloader *</td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#clone" translate="no">clone</a></b>(QObject *<i>parent</i> = 0) const override</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual QString </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#downloadedFileName" translate="no">downloadedFileName</a></b>() const override</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual bool </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#isDownloaded" translate="no">isDownloaded</a></b>() const override</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#setDownloadedFileName" translate="no">setDownloadedFileName</a></b>(const QString &amp;<i>name</i>) override</td></tr>
+</table></div>
+<h2 id="public-slots">Public Slots</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#cancelDownload" translate="no">cancelDownload</a></b>() override</td></tr>
+</table></div>
+<h2 id="reimplemented-protected-functions">Reimplemented Protected Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#onError" translate="no">onError</a></b>() override</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#onSuccess" translate="no">onSuccess</a></b>() override</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-httpdownloader.html#timerEvent" translate="no">timerEvent</a></b>(QTimerEvent *<i>event</i>) override</td></tr>
+</table></div>
+<!-- $$$HttpDownloader-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+<p>HTTPS is supported if Qt is built with SSL.</p>
+</div>
+<!-- @@@HttpDownloader -->
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$HttpDownloader[overload1]$$$HttpDownloaderQObject* -->
+<h3 class="fn" translate="no" id="HttpDownloader"><code translate="no">[explicit] </code>HttpDownloader::<span class="name">HttpDownloader</span>(<span class="type">QObject</span> *<i>parent</i> = 0)</h3>
+<p>Creates an HTTP downloader with the parent <i translate="no">parent</i>.</p>
+<!-- @@@HttpDownloader -->
+<!-- $$$~HttpDownloader[overload1]$$$~HttpDownloader -->
+<h3 class="fn" translate="no" id="dtor.HttpDownloader"><code translate="no">[virtual noexcept] </code>HttpDownloader::<span class="name">~HttpDownloader</span>()</h3>
+<p>Destroys an HTTP downloader.</p>
+<p>Removes the downloaded file if <a href="kdupdater-filedownloader.html#autoRemoveDownloadedFile-prop" translate="no">FileDownloader::isAutoRemoveDownloadedFile</a>() returns <code translate="no">true</code> or <a href="kdupdater-filedownloader.html#autoRemoveDownloadedFile-prop" translate="no">FileDownloader::setAutoRemoveDownloadedFile</a>() was called with <code translate="no">true</code>.</p>
+<!-- @@@~HttpDownloader -->
+<!-- $$$canDownload[overload1]$$$canDownload -->
+<h3 class="fn" translate="no" id="canDownload"><code translate="no">[override virtual] </code><span class="type">bool</span> HttpDownloader::<span class="name">canDownload</span>() const</h3>
+<p>Reimplements: <a href="kdupdater-filedownloader.html#canDownload" translate="no">FileDownloader::canDownload() const</a>.</p>
+<p>Returns <code translate="no">true</code> if the file exists and is readable.</p>
+<!-- @@@canDownload -->
+<!-- $$$cancelDownload[overload1]$$$cancelDownload -->
+<h3 class="fn" translate="no" id="cancelDownload"><code translate="no">[override virtual slot] </code><span class="type">void</span> HttpDownloader::<span class="name">cancelDownload</span>()</h3>
+<p>Reimplements: <a href="kdupdater-filedownloader.html#cancelDownload" translate="no">FileDownloader::cancelDownload</a>().</p>
+<p>Cancels downloading the file.</p>
+<!-- @@@cancelDownload -->
+<!-- $$$clone[overload1]$$$cloneQObject* -->
+<h3 class="fn" translate="no" id="clone"><code translate="no">[override virtual] </code><span class="type"><a href="kdupdater-httpdownloader.html" translate="no">KDUpdater::HttpDownloader</a></span> *HttpDownloader::<span class="name">clone</span>(<span class="type">QObject</span> *<i>parent</i> = 0) const</h3>
+<p>Reimplements: <a href="kdupdater-filedownloader.html#clone" translate="no">FileDownloader::clone(QObject *parent) const</a>.</p>
+<p>Clones the HTTP downloader and assigns it the parent <i translate="no">parent</i>. Returns the new HTTP downloader.</p>
+<!-- @@@clone -->
+<!-- $$$downloadedFileName[overload1]$$$downloadedFileName -->
+<h3 class="fn" translate="no" id="downloadedFileName"><code translate="no">[override virtual] </code><span class="type">QString</span> HttpDownloader::<span class="name">downloadedFileName</span>() const</h3>
+<p>Reimplements: <a href="kdupdater-filedownloader.html#downloadedFileName" translate="no">FileDownloader::downloadedFileName() const</a>.</p>
+<p>Returns the file name of the downloaded file.</p>
+<p><b>See also </b><a href="kdupdater-httpdownloader.html#setDownloadedFileName" translate="no">setDownloadedFileName</a>().</p>
+<!-- @@@downloadedFileName -->
+<!-- $$$isDownloaded[overload1]$$$isDownloaded -->
+<h3 class="fn" translate="no" id="isDownloaded"><code translate="no">[override virtual] </code><span class="type">bool</span> HttpDownloader::<span class="name">isDownloaded</span>() const</h3>
+<p>Reimplements: <a href="kdupdater-filedownloader.html#isDownloaded" translate="no">FileDownloader::isDownloaded() const</a>.</p>
+<p>Returns <code translate="no">true</code> if the file is downloaded.</p>
+<!-- @@@isDownloaded -->
+<!-- $$$onError[overload1]$$$onError -->
+<h3 class="fn" translate="no" id="onError"><code translate="no">[override virtual protected] </code><span class="type">void</span> HttpDownloader::<span class="name">onError</span>()</h3>
+<p>Reimplements: <a href="kdupdater-filedownloader.html#onError" translate="no">FileDownloader::onError</a>().</p>
+<p>Closes the destination file if an error occurs during copying and stops the download speed timer.</p>
+<!-- @@@onError -->
+<!-- $$$onSuccess[overload1]$$$onSuccess -->
+<h3 class="fn" translate="no" id="onSuccess"><code translate="no">[override virtual protected] </code><span class="type">void</span> HttpDownloader::<span class="name">onSuccess</span>()</h3>
+<p>Reimplements: <a href="kdupdater-filedownloader.html#onSuccess" translate="no">FileDownloader::onSuccess</a>().</p>
+<p>Closes the destination file after it has been successfully copied and stops the download speed timer.</p>
+<!-- @@@onSuccess -->
+<!-- $$$setDownloadedFileName[overload1]$$$setDownloadedFileNameconstQString& -->
+<h3 class="fn" translate="no" id="setDownloadedFileName"><code translate="no">[override virtual] </code><span class="type">void</span> HttpDownloader::<span class="name">setDownloadedFileName</span>(const <span class="type">QString</span> &amp;<i>name</i>)</h3>
+<p>Reimplements: <a href="kdupdater-filedownloader.html#setDownloadedFileName" translate="no">FileDownloader::setDownloadedFileName</a>(const QString &amp;name).</p>
+<p>Sets the file name of the downloaded file to <i translate="no">name</i>.</p>
+<p><b>See also </b><a href="kdupdater-httpdownloader.html#downloadedFileName" translate="no">downloadedFileName</a>().</p>
+<!-- @@@setDownloadedFileName -->
+<!-- $$$timerEvent[overload1]$$$timerEventQTimerEvent* -->
+<h3 class="fn" translate="no" id="timerEvent"><code translate="no">[override virtual protected] </code><span class="type">void</span> HttpDownloader::<span class="name">timerEvent</span>(<span class="type">QTimerEvent</span> *<i>event</i>)</h3>
+<p>Called when the download timer event <i translate="no">event</i> occurs.</p>
+<!-- @@@timerEvent -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

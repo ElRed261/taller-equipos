@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- installerfw.qdoc -->
+  <title>Configuration File | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>Configuration File</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+  <link rel="prev" href="ifw-cli.html" />
+  <link rel="next" href="ifw-component-description.html" />
+<p class="naviNextPrevious headerNavi">
+<a class="prevPage" href="ifw-cli.html">Command Line Interface</a>
+<span class="naviSeparator">  &#9702;  </span>
+<a class="nextPage" href="ifw-component-description.html">Package Directory</a>
+</p>
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#summary-of-configuration-file-elements">Summary of Configuration File Elements</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title">Configuration File</h1>
+<!-- $$$ifw-globalconfig.html-description -->
+<div class="descr" id="details">
+<p>The configuration file customizes the UI and behavior of an installer. The file is typically called <code translate="no">config.xml</code> and located in the <code translate="no">config</code> directory.</p>
+<p>A minimal configuration file consists of an <code translate="no">&lt;Installer&gt;</code> root element with <code translate="no">&lt;Name&gt;</code> and <code translate="no">&lt;Version&gt;</code> elements as children. All other elements are optional, and can appear in arbitrary order.</p>
+<p>The following example shows a typical configuration file:</p>
+<pre class="cpp" translate="no">
+ &lt;?xml version=&quot;1.0&quot;?&gt;
+ &lt;Installer&gt;
+     &lt;Name&gt;Some Application&lt;/Name&gt;
+     &lt;Version&gt;1.0.0&lt;/Version&gt;
+     &lt;Title&gt;Some Application Setup&lt;/Title&gt;
+     &lt;Publisher&gt;Your Company&lt;/Publisher&gt;
+     &lt;ProductUrl&gt;http://www.your-fantastic-company.com&lt;/ProductUrl&gt;
+     &lt;InstallerWindowIcon&gt;installericon&lt;/InstallerWindowIcon&gt;
+     &lt;InstallerApplicationIcon&gt;installericon&lt;/InstallerApplicationIcon&gt;
+     &lt;Logo&gt;logo.png&lt;/Logo&gt;
+     &lt;Watermark&gt;watermark.png&lt;/Watermark&gt;
+     &lt;RunProgram&gt;@TargetDir@/YourAppToRun&lt;/RunProgram&gt;
+     &lt;RunProgramArguments&gt;
+         &lt;Argument&gt;Argument 1&lt;/Argument&gt;
+         &lt;Argument&gt;Argument 2&lt;/Argument&gt;
+     &lt;/RunProgramArguments&gt;
+     &lt;RunProgramDescription&gt;My nice application&lt;/RunProgramDescription&gt;
+     &lt;StartMenuDir&gt;Some Application Entry Dir&lt;/StartMenuDir&gt;
+     &lt;MaintenanceToolName&gt;SDKMaintenanceTool&lt;/MaintenanceToolName&gt;
+     &lt;AllowNonAsciiCharacters&gt;true&lt;/AllowNonAsciiCharacters&gt;
+     &lt;Background&gt;background.png&lt;/Background&gt;
+
+     &lt;TargetDir&gt;@HomeDir@/testinstall&lt;/TargetDir&gt;
+     &lt;AdminTargetDir&gt;@RootDir@/testinstall&lt;/AdminTargetDir&gt;
+     &lt;RemoteRepositories&gt;
+         &lt;Repository&gt;
+             &lt;Url&gt;http://www.your-repo-location/packages/&lt;/Url&gt;
+         &lt;/Repository&gt;
+     &lt;/RemoteRepositories&gt;
+     &lt;AliasDefinitionsFile&gt;aliases.xml&lt;/AliasDefinitionsFile&gt;
+ &lt;/Installer&gt;
+</pre>
+<h2 id="summary-of-configuration-file-elements">Summary of Configuration File Elements</h2>
+<p>The following table summarizes the elements in the configuration file.</p>
+<div class="admonition note">
+<p><b>Note: </b>We recommend that you place all files that you refer to in the configuration file in the <code translate="no">config</code> directory. However, you can also use relative paths, which the tools resolve relative to the location of the config.xml file.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>The filenames of the referred files must be unique. That is, if you want to use the same image for both <code translate="no">&lt;Logo&gt;</code> and <code translate="no">&lt;Watermark&gt;</code>, you must add two copies of the image file with different filenames.</p>
+</div>
+<p>You can use predefined variables (embedded in @ characters) as values of the elements. For more information, see <a href="scripting.html#predefined-variables" translate="no">Predefined Variables</a>.</p>
+<div class="table"><table class="generic">
+ <thead><tr class="qt-style"><th >Element</th><th >Description</th></tr></thead>
+<tr valign="top" class="odd"><td >Name <span id="productnametarget"></span></td><td >Name of the product being installed. This is mandatory.</td></tr>
+<tr valign="top" class="even"><td >Version</td><td >Version of the product being installed in the following format: [0-9]+((\.|-)[0-9]+)* such as 1-1; 1.2-2; 3.4&#x2e;7&#x2e; This is mandatory.</td></tr>
+<tr valign="top" class="odd"><td >Title</td><td >Name of the installer as displayed on the title bar.</td></tr>
+<tr valign="top" class="even"><td >Publisher</td><td >Publisher of the software (as shown in the Windows Control Panel).</td></tr>
+<tr valign="top" class="odd"><td >ProductUrl</td><td >URL to a page that contains product information on your web site.</td></tr>
+<tr valign="top" class="even"><td >InstallerApplicationIcon</td><td >Filename for a custom installer icon. The actual file is looked up by attaching a '.icns' (macOS), '.ico' (Windows) suffix. No functionality on Unix.</td></tr>
+<tr valign="top" class="odd"><td >InstallerWindowIcon</td><td >Filename for a custom window icon in PNG format for the Installer application. Used on Windows and Linux, no functionality on macOS.</td></tr>
+<tr valign="top" class="even"><td >Logo</td><td >Filename for a logo in PNG format used as <code translate="no">QWizard::LogoPixmap</code>.</td></tr>
+<tr valign="top" class="odd"><td >Watermark</td><td >Filename for a watermark in PNG format used as <code translate="no">QWizard::WatermarkPixmap</code>. If <code translate="no">&lt;WizardShowPageList&gt;</code> is set to <code translate="no">true</code>, the watermark is hidden.</td></tr>
+<tr valign="top" class="even"><td >Banner</td><td >Filename for a banner in PNG format used as <code translate="no">QWizard::BannerPixmap</code> (only used by ModernStyle).</td></tr>
+<tr valign="top" class="odd"><td >Background</td><td >Filename for an image in PNG format used as <code translate="no">QWizard::BackgroundPixmap</code> (only used by MacStyle). If <code translate="no">&lt;WizardShowPageList&gt;</code> is set to <code translate="no">true</code>, the background is hidden.</td></tr>
+<tr valign="top" class="even"><td >PageListPixmap</td><td >Filename for an image in PNG format shown on top of installer page list. The image is shown only if <code translate="no">&lt;WizardShowPageList&gt;</code> is also set to <code translate="no">true</code>.</td></tr>
+<tr valign="top" class="odd"><td >WizardStyle</td><td >Set the wizard style to be used (&quot;Modern&quot;, &quot;Mac&quot;, &quot;Aero&quot; or &quot;Classic&quot;).</td></tr>
+<tr valign="top" class="even"><td >StyleSheet</td><td >Set the stylesheet file.</td></tr>
+<tr valign="top" class="odd"><td >WizardDefaultWidth</td><td >Sets the default width of the wizard in pixels. Setting a banner image will override this. You can add the <code translate="no">em</code> or <code translate="no">ex</code> suffix to the specified value to use the <i>em</i> or <i>ex</i> unit, as in a CSS file.</td></tr>
+<tr valign="top" class="even"><td >WizardDefaultHeight</td><td >Sets the default height of the wizard in pixels. Setting a watermark image will override this. You can add the <code translate="no">em</code> or <code translate="no">ex</code> suffix to the specified value to use the <i>em</i> or <i>ex</i> unit, as in a CSS file.</td></tr>
+<tr valign="top" class="odd"><td >WizardMinimumWidth</td><td >Sets the minimum width of the wizard in pixels. You can add the <code translate="no">em</code> or <code translate="no">ex</code> suffix to the specified value to use the <i>em</i> or <i>ex</i> unit, as in a CSS file.</td></tr>
+<tr valign="top" class="even"><td >WizardMinimumHeight</td><td >Sets the minimum height of the wizard in pixels. You can add the <code translate="no">em</code> or <code translate="no">ex</code> suffix to the specified value to use the <i>em</i> or <i>ex</i> unit, as in a CSS file.</td></tr>
+<tr valign="top" class="odd"><td >WizardShowPageList</td><td >Set to <code translate="no">false</code> if the widget listing installer pages on the left side of the wizard should not be shown. Defaults to <code translate="no">true</code>. If visible, this widget hides <code translate="no">QWizard::WatermarkPixmap</code> on <code translate="no">QWizard::ClassicStyle</code> and <code translate="no">QWizard::ModernStyle</code>, and <code translate="no">QWizard::BackgroundPixmap</code> on <code translate="no">QWizard::MacStyle</code>.</td></tr>
+<tr valign="top" class="even"><td >ProductImages</td><td >A list of images to be shown on <code translate="no">PerformInstallationPage</code>. This element can have one or several <code translate="no">&lt;ProductImage&gt;</code> child elements that contain an <code translate="no">&lt;Image&gt;</code> child element and an optional <code translate="no">&lt;Url&gt;</code> child element. The <code translate="no">&lt;Image&gt;</code> element specifies a filename for an image in PNG format. Optional <code translate="no">&lt;Url&gt;</code> can be specified for each image. Clicking on the image will open the <code translate="no">&lt;Url&gt;</code> in a browser. If the <code translate="no">&lt;Url&gt;</code> is a reference to a file, it will be opened with a suitable application instead of a Web browser.</td></tr>
+<tr valign="top" class="odd"><td >TitleColor</td><td >Set the color of the titles and subtitles (takes an HTML color code, such as &quot;#88FF33&quot;).</td></tr>
+<tr valign="top" class="even"><td >RunProgram</td><td >Command executed after the installer is done if the user accepts the action. Provide the full path to the application.</td></tr>
+<tr valign="top" class="odd"><td >RunProgramArguments</td><td >Arguments passed to the program specified in <code translate="no">&lt;RunProgram&gt;</code>. You can add several <code translate="no">&lt;Argument&gt;</code> child elements that each specify an argument to <code translate="no">&lt;RunProgram&gt;</code>.</td></tr>
+<tr valign="top" class="even"><td >RunProgramDescription</td><td >Text shown next to the check box for running the program after the installation. If <code translate="no">&lt;RunProgram&gt;</code> is set but no description provided, the UI will display <b translate="no">Run &lt;Name&gt; now.</b> instead.</td></tr>
+<tr valign="top" class="odd"><td >StartMenuDir</td><td >Name of the default program group for the product in the Windows <b translate="no">Start</b> menu.</td></tr>
+<tr valign="top" class="even"><td >TargetDir</td><td >Default target directory for installation. On Linux, this is usually the user's home directory.</td></tr>
+<tr valign="top" class="odd"><td >AdminTargetDir</td><td >Default target directory for installation with administrator rights. Only available on Linux, where you usually do not want to install in the administrator user's home directory.</td></tr>
+<tr valign="top" class="even"><td >LocalCacheDir</td><td >Directory name for storing the metadata cache. This does not include the leading directories, which are determined automatically based on a suitable platform specific location for storing cache files. The user may override the path from the installer settings. The default value is a UUID generated from the name of the product being installed.</td></tr>
+<tr valign="top" class="odd"><td >PersistentLocalCache</td><td >Set to <code translate="no">false</code> if the fetched metadata should be removed from the local cache when the installer exits. Otherwise the contents of the cache are kept to speed up subsequent fetches. Defaults to <code translate="no">true</code>.</td></tr>
+<tr valign="top" class="even"><td >RemoteRepositories</td><td >List of remote repositories. This element can contain several <code translate="no">&lt;Repository&gt;</code> child elements that each contain the <code translate="no">&lt;Url&gt;</code> child element that specifies the URL to access the repository. For more information, see <a href="ifw-online-installers.html#configuring-repositories" translate="no">Configuring Repositories</a>.</td></tr>
+<tr valign="top" class="odd"><td >RepositoryCategories</td><td >Name of a category that can contain a list of <code translate="no">&lt;RemoteRepositories&gt;</code> child elements. For more information, see <a href="ifw-online-installers.html#configuring-repository-categories" translate="no">Configuring Repository Categories</a>.</td></tr>
+<tr valign="top" class="even"><td >MaintenanceToolName</td><td >Filename of the generated maintenance tool. Defaults to <i>maintenancetool</i>. The platform-specific executable file extension is appended.</td></tr>
+<tr valign="top" class="odd"><td >MaintenanceToolIniFile</td><td >Filename for the configuration of the generated maintenance tool. Defaults to <i>MaintenanceToolName</i>.ini.</td></tr>
+<tr valign="top" class="even"><td >MaintenanceToolAlias</td><td >Filename for an alias of the maintenance tool that will be created to the Applications directory. Optional. Only used on macOS.</td></tr>
+<tr valign="top" class="odd"><td >RemoveTargetDir</td><td >Set to <code translate="no">false</code> if the target directory should not be deleted when uninstalling.</td></tr>
+<tr valign="top" class="even"><td >AllowNonAsciiCharacters</td><td >Set to <code translate="no">true</code> if the installation path can contain non-ASCII characters.</td></tr>
+<tr valign="top" class="odd"><td >DisableAuthorizationFallback</td><td >Set to <code translate="no">true</code> if the installation should not ask users to run the authorization fallback in case of authorization errors. Instead abort the installation immediately.</td></tr>
+<tr valign="top" class="even"><td >DisableCommandLineInterface</td><td >Set to <code translate="no">true</code> if command line interface features should be disabled. This prevents the user from passing any consumer command to installer, like <code translate="no">install</code>, <code translate="no">update</code> and <code translate="no">remove</code>. Other options can still be used normally. Defaults to <code translate="no">false</code>.</td></tr>
+<tr valign="top" class="odd"><td >RepositorySettingsPageVisible</td><td >Set to <code translate="no">false</code> to hide the repository settings page inside the settings dialog.</td></tr>
+<tr valign="top" class="even"><td >AllowRepositoriesForOfflineInstaller</td><td >Set to <code translate="no">false</code> to disable usage of any temporary or user configured repositories set for offline installers. The maintenance tool written by an offline installer can still access the repositories. Defaults to <code translate="no">true</code>.</td></tr>
+<tr valign="top" class="odd"><td >AllowSpaceInPath</td><td >Set to <code translate="no">false</code> if the installation path cannot contain space characters.</td></tr>
+<tr valign="top" class="even"><td >DependsOnLocalInstallerBinary</td><td >Set to <code translate="no">true</code> if you want to prohibit installation from an external resource, such as a network drive. This might make sense for e.g&#x2e; very big installers. The option is only used on Windows.</td></tr>
+<tr valign="top" class="odd"><td >TargetConfigurationFile</td><td >Filename for the configuration file on the target. Default is components.xml.</td></tr>
+<tr valign="top" class="even"><td >AliasDefinitionsFile</td><td >Filename for a XML document containing the definitions for component aliases. For more information about how to declare component aliases in the file, see <a href="ifw-aliasconfig.html" translate="no">Alias Definition File</a>.</td></tr>
+<tr valign="top" class="odd"><td >Translations</td><td >List of translation files to be used for translating the user interface. To add several translation files, specify several <code translate="no">&lt;Translation&gt;</code> child elements that each specify the name of the translation. Optional. For more information, see <a href="ifw-customizing-installers.html#translating-pages" translate="no">Translating Pages</a> and <a href="ifw-customizing-installers.html#configuring-and-overwriting-default-translations" translate="no">Configuring and Overwriting Default Translations</a>.</td></tr>
+<tr valign="top" class="even"><td >UrlQueryString</td><td >This string needs to be in the form &quot;key=value&quot; and will be appended to archive download requests. This can be used to transmit information to the webserver hosting the repository.</td></tr>
+<tr valign="top" class="odd"><td >ControlScript</td><td >Filename for a custom installer control script. See <a href="noninteractive.html" translate="no">Controller Scripting</a>.</td></tr>
+<tr valign="top" class="even"><td >CreateLocalRepository</td><td >Set to <code translate="no">true</code> if you want to create a local repository inside the installation directory. This option has no effect on online installers. The repository will be automatically added to the list of default repositories.</td></tr>
+<tr valign="top" class="odd"><td >InstallActionColumnVisible</td><td >Set to <code translate="no">true</code> if you want to add an extra column into component tree showing install actions. This extra column indicates whether a component is going to be installed or uninstalled, or just stay installed or uninstalled.</td></tr>
+<tr valign="top" class="even"><td >SupportsModify</td><td >Set to <code translate="no">false</code> if the product does not support modifying an existing installation.</td></tr>
+<tr valign="top" class="odd"><td >SaveDefaultRepositories</td><td >Set to <code translate="no">false</code> if default repositories <code translate="no">&lt;RemoteRepositories&gt;</code> should not be saved to <i>MaintenanceToolName</i>.ini. By default default repositories are saved. Not saving the repositories means than when you run <i>maintenancetool</i> there are no default repositories in use.</td></tr>
+<tr valign="top" class="even"><td >AllowUnstableComponents</td><td >Set to <code translate="no">true</code> if other components are allowed to be installed although there are unstable components. A component is <i>unstable</i> if it is missing a dependency, has errors in scripts, and so on. Unstable components are grayed in the component tree, and therefore cannot be selected. By default, the value is <code translate="no">false</code> which means that the installation will be aborted if unstable components are found.</td></tr>
+</table></div>
+</div>
+<!-- @@@ifw-globalconfig.html -->
+<p class="naviNextPrevious footerNavi">
+<a class="prevPage" href="ifw-cli.html">Command Line Interface</a>
+<span class="naviSeparator">  &#9702;  </span>
+<a class="nextPage" href="ifw-component-description.html">Package Directory</a>
+</p>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

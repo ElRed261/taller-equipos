@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- updatefinder.cpp -->
+  <meta name="description" content="The UpdaterFinder class finds updates applicable for installed packages.">
+  <title>UpdateFinder Class | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>UpdateFinder</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">UpdateFinder Class</h1>
+<span class="small-subtitle" translate="no">class <a href="kdupdater.html" translate="no">KDUpdater</a>::UpdateFinder</span>
+<!-- $$$UpdateFinder-brief -->
+<p>The UpdaterFinder class finds updates applicable for installed packages. <a href="#details">More...</a></p>
+<!-- @@@UpdateFinder -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;UpdateFinder&gt;</span></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Inherits:</td><td class="memItemRight bottomAlign"> <a href="kdupdater-task.html" translate="no">KDUpdater::Task</a></td></tr>
+</table></div>
+<ul>
+<li><a href="kdupdater-updatefinder-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-updatefinder.html#UpdateFinder" translate="no">UpdateFinder</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-updatefinder.html#dtor.UpdateFinder" translate="no">~UpdateFinder</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-updatefinder.html#setLocalPackageHub" translate="no">setLocalPackageHub</a></b>(std::weak_ptr&lt;LocalPackageHub&gt; <i>hub</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-updatefinder.html#setPackageSources" translate="no">setPackageSources</a></b>(const QSet&lt;QInstaller::PackageSource&gt; &amp;<i>sources</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QList&lt;KDUpdater::Update *&gt; </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-updatefinder.html#updates" translate="no">updates</a></b>() const</td></tr>
+</table></div>
+<!-- $$$UpdateFinder-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+<p>The <a href="kdupdater-updatefinder.html" translate="no">KDUpdater::UpdateFinder</a> class helps in searching for updates and installing them on the application. The class basically processes the application's KDUpdater::PackagesInfo and the UpdateXMLs it aggregates from all the update sources and populates a list of <a href="kdupdater-update.html" translate="no">KDUpdater::Update</a> objects.</p>
+</div>
+<!-- @@@UpdateFinder -->
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$UpdateFinder[overload1]$$$UpdateFinder -->
+<h3 class="fn" translate="no" id="UpdateFinder">UpdateFinder::<span class="name">UpdateFinder</span>()</h3>
+<p>Constructs an update finder.</p>
+<!-- @@@UpdateFinder -->
+<!-- $$$~UpdateFinder[overload1]$$$~UpdateFinder -->
+<h3 class="fn" translate="no" id="dtor.UpdateFinder"><code translate="no">[virtual noexcept] </code>UpdateFinder::<span class="name">~UpdateFinder</span>()</h3>
+<p>Destructor</p>
+<!-- @@@~UpdateFinder -->
+<!-- $$$setLocalPackageHub[overload1]$$$setLocalPackageHubstd::weak_ptr<LocalPackageHub> -->
+<h3 class="fn" translate="no" id="setLocalPackageHub"><span class="type">void</span> UpdateFinder::<span class="name">setLocalPackageHub</span>(<span class="type">std::weak_ptr</span>&lt;<span class="type"><a href="kdupdater-localpackagehub.html" translate="no">LocalPackageHub</a></span>&gt; <i>hub</i>)</h3>
+<p>Sets the information about installed local packages <i translate="no">hub</i>.</p>
+<!-- @@@setLocalPackageHub -->
+<!-- $$$setPackageSources[overload1]$$$setPackageSourcesconstQSet<QInstaller::PackageSource>& -->
+<h3 class="fn" translate="no" id="setPackageSources"><span class="type">void</span> UpdateFinder::<span class="name">setPackageSources</span>(const <span class="type">QSet</span>&lt;<span class="type"><a href="qinstaller-packagesource.html" translate="no">QInstaller::PackageSource</a></span>&gt; &amp;<i>sources</i>)</h3>
+<p>Sets the package <i translate="no">sources</i> information when searching for applicable packages.</p>
+<!-- @@@setPackageSources -->
+<!-- $$$updates[overload1]$$$updates -->
+<h3 class="fn" translate="no" id="updates"><span class="type">QList</span>&lt;<span class="type"><a href="kdupdater-update.html" translate="no">KDUpdater::Update</a></span> *&gt; UpdateFinder::<span class="name">updates</span>() const</h3>
+<p>Returns a list of <a href="kdupdater-update.html" translate="no">KDUpdater::Update</a> objects.</p>
+<!-- @@@updates -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

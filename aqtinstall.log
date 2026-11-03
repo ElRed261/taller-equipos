@@ -1,0 +1,32 @@
+2026-11-03 08:38:13,466 - aqt.helper - DEBUG - helper 139789002299264 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/tools_ifw/Updates.xml.sha256
+2026-11-03 08:39:07,999 - aqt.main - INFO - installer 140314145101696 aqtinstall(aqt) v3.3.0 on Python 3.14.7 [CPython Clang 22.1.3 ]
+2026-11-03 08:39:07,999 - aqt.helper - DEBUG - helper 140314145101696 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/tools_ifw/Updates.xml.sha256
+2026-11-03 08:39:09,269 - aqt.main - ERROR - installer 140314145101696 The package '4.7' was not found while parsing XML of package information!
+==============================Suggested follow-up:==============================
+* Please use 'aqt list-tool linux desktop tools_ifw' to show tool variants available.
+2026-11-03 08:39:15,921 - aqt.helper - DEBUG - helper 139845012162432 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/tools_ifw/Updates.xml.sha256
+2026-11-03 08:39:24,406 - aqt.main - INFO - installer 140372364310400 aqtinstall(aqt) v3.3.0 on Python 3.14.7 [CPython Clang 22.1.3 ]
+2026-11-03 08:39:24,407 - aqt.helper - DEBUG - helper 140372364310400 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/tools_ifw/Updates.xml.sha256
+2026-11-03 08:39:25,676 - aqt.main - ERROR - installer 140372364310400 The package '4.7.0-0-202402150941' was not found while parsing XML of package information!
+==============================Suggested follow-up:==============================
+* Please use 'aqt list-tool linux desktop tools_ifw' to show tool variants available.
+2026-11-03 08:39:38,020 - aqt.main - INFO - installer 140305929492352 aqtinstall(aqt) v3.3.0 on Python 3.14.7 [CPython Clang 22.1.3 ]
+2026-11-03 08:39:38,020 - aqt.helper - DEBUG - helper 140305929492352 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/ifw/Updates.xml.sha256
+2026-11-03 08:39:38,624 - aqt.helper - DEBUG - helper 140305929492352 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/ifw/Updates.xml.sha256
+2026-11-03 08:39:39,244 - aqt.helper - DEBUG - helper 140305929492352 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/ifw/Updates.xml.sha256
+2026-11-03 08:39:39,934 - aqt.helper - DEBUG - helper 140305929492352 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/ifw/Updates.xml.sha256
+2026-11-03 08:39:40,559 - aqt.helper - DEBUG - helper 140305929492352 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/ifw/Updates.xml.sha256
+2026-11-03 08:39:41,160 - aqt.archives - WARNING - archives 140305929492352 Failed to download checksum for the file 'online/qtsdkrepository/linux_x64/desktop/ifw/Updates.xml'. This may happen on unofficial mirrors.
+2026-11-03 08:39:41,763 - aqt.main - ERROR - installer 140305929492352 Failed to locate XML data for the tool 'ifw'.
+==============================Suggested follow-up:==============================
+* Please use 'aqt list-tool linux desktop' to show tools available.
+2026-11-03 08:40:01,547 - aqt.main - INFO - installer 139784605472640 aqtinstall(aqt) v3.3.0 on Python 3.14.7 [CPython Clang 22.1.3 ]
+2026-11-03 08:40:01,548 - aqt.helper - DEBUG - helper 139784605472640 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/tools_ifw/Updates.xml.sha256
+2026-11-03 08:40:03,295 - aqt.helper - DEBUG - helper 139925980813184 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/tools_ifw/qt.tools.ifw.47/4.7.0-0-202402150941ifw-linux-x64.7z.sha256
+2026-11-03 08:40:03,923 - aqt.helper - INFO - helper 139925980813184 Downloading qt.tools.ifw.47...
+2026-11-03 08:40:03,923 - aqt.installer - DEBUG - installer 139925980813184 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/tools_ifw/qt.tools.ifw.47/4.7.0-0-202402150941ifw-linux-x64.7z
+2026-11-03 08:40:04,529 - aqt.helper - DEBUG - helper 139925980813184 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/tools_ifw/qt.tools.ifw.47/4.7.0-0-202402150941ifw-linux-x64.7z
+2026-11-03 08:40:04,529 - aqt.helper - INFO - helper 139925980813184 Redirected: qt.mirror.constant.com
+2026-11-03 08:40:08,904 - aqt.installer - INFO - installer 139925980813184 Finished installation of ifw-linux-x64.7z in 5.61039416
+2026-11-03 08:40:09,010 - aqt.main - INFO - installer 139784605472640 Finished installation
+2026-11-03 08:40:09,010 - aqt.main - INFO - installer 139784605472640 Time elapsed: 7.46273584 second

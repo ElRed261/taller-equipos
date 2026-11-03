@@ -13,8 +13,7 @@
   <RunProgramArguments></RunProgramArguments>
   <MaintenanceToolName>Mantenimiento</MaintenanceToolName>
   <RemoveTargetDir>true</RemoveTargetDir>
-  <AllowNonAdminFullInstallation>true</AllowNonAdminFullInstallation>
+  <!-- no-admin: AdminTargetDir queda bajo /opt, y TargetDir bajo HomeDir -->
   <InstallerWindowIcon></InstallerWindowIcon>
   <WizardStyle>Modern</WizardStyle>
-  <ControlScript>control.qs</ControlScript>
 </Installer>

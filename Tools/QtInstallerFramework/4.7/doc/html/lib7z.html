@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- lib7z_facade.cpp -->
+  <meta name="description" content="The Lib7z namespace contains miscellaneous identifiers used throughout the Lib7z library.">
+  <title>Lib7z Namespace | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>Lib7z Namespace</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#classes">Classes</a></li>
+<li class="level1"><a href="#types">Types</a></li>
+<li class="level1"><a href="#functions">Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">Lib7z Namespace</h1>
+<!-- $$$Lib7z-brief -->
+<p>The Lib7z namespace contains miscellaneous identifiers used throughout the Lib7z library. <a href="#details">More...</a></p>
+<!-- @@@Lib7z -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;Lib7z&gt;</span></td></tr>
+</table></div>
+<h2 id="classes">Classes</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> class </td><td class="memItemRight bottomAlign"><b><a href="lib7z-extractcallback.html" translate="no">ExtractCallback</a></b></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> class </td><td class="memItemRight bottomAlign"><b><a href="lib7z-percentprinter.html" translate="no">PercentPrinter</a></b></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> class </td><td class="memItemRight bottomAlign"><b><a href="lib7z-sevenzipexception.html" translate="no">SevenZipException</a></b></td></tr>
+</table></div>
+<h2 id="types">Types</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="lib7z.html#Compression-typedef" translate="no">Compression</a></b></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="lib7z.html#File-typedef" translate="no">File</a></b></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> enum class </td><td class="memItemRight bottomAlign"><b><a href="lib7z.html#TmpFile-enum" translate="no">TmpFile</a></b> { No, Yes }</td></tr>
+</table></div>
+<h2 id="functions">Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="lib7z.html#createArchive" translate="no">createArchive</a></b>(QFileDevice *<i>archive</i>, const QStringList &amp;<i>sources</i>, Lib7z::Compression <i>level</i> = Compression::Normal, Lib7z::UpdateCallback *<i>callback</i> = 0)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="lib7z.html#createArchive-1" translate="no">createArchive</a></b>(const QString &amp;<i>archive</i>, const QStringList &amp;<i>sources</i>, Lib7z::TmpFile <i>mode</i>, Lib7z::Compression <i>level</i> = Compression::Normal, Lib7z::UpdateCallback *<i>callback</i> = 0)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="lib7z.html#extractArchive" translate="no">extractArchive</a></b>(QFileDevice *<i>archive</i>, const QString &amp;<i>directory</i>, Lib7z::ExtractCallback *<i>callback</i> = 0)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="lib7z.html#initSevenZ" translate="no">initSevenZ</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="lib7z.html#isSupportedArchive" translate="no">isSupportedArchive</a></b>(QFileDevice *<i>archive</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="lib7z.html#isSupportedArchive-1" translate="no">isSupportedArchive</a></b>(const QString &amp;<i>archive</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QVector&lt;Lib7z::File&gt; </td><td class="memItemRight bottomAlign"><b><a href="lib7z.html#listArchive" translate="no">listArchive</a></b>(QFileDevice *<i>archive</i>)</td></tr>
+</table></div>
+<!-- $$$Lib7z-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+</div>
+<!-- @@@Lib7z -->
+<div class="classes">
+<h2>Classes</h2>
+<h3> class <a href="lib7z-extractcallback.html">ExtractCallback</a></h3><!-- $$$ExtractCallback-brief -->
+<p>Provides a callback for archive extraction. <a href="lib7z-extractcallback.html#details">More...</a></p>
+<!-- @@@ExtractCallback -->
+<h3> class <a href="lib7z-percentprinter.html">PercentPrinter</a></h3><!-- $$$PercentPrinter-brief -->
+<p>The PercentPrinter class displays the archiving process. <a href="lib7z-percentprinter.html#details">More...</a></p>
+<!-- @@@PercentPrinter -->
+<h3> class <a href="lib7z-sevenzipexception.html">SevenZipException</a></h3><!-- $$$SevenZipException-brief -->
+<p>The SevenZipException provides a class for lib7z exceptions. <a href="lib7z-sevenzipexception.html#details">More...</a></p>
+<!-- @@@SevenZipException -->
+</div>
+<div class="types">
+<h2>Type Documentation</h2>
+<!-- $$$Compression -->
+<h3 class="fn" translate="no" id="Compression-typedef">Lib7z::<span class="name">Compression</span></h3>
+<p>Synonym for QInstaller::CompressionLevel</p>
+<!-- @@@Compression -->
+<!-- $$$File -->
+<h3 class="fn" translate="no" id="File-typedef">Lib7z::<span class="name">File</span></h3>
+<p>Synonym for <a href="qinstaller-archiveentry.html" translate="no">QInstaller::ArchiveEntry</a></p>
+<!-- @@@File -->
+<!-- $$$TmpFile$$$No$$$Yes -->
+<h3 class="fn" translate="no" id="TmpFile-enum">enum class Lib7z::<span class="name">TmpFile</span></h3>
+<p>This enum type holds the temp file mode:</p>
+<div class="table"><table class="valuelist"><tr valign="top" class="odd"><th class="tblConst">Constant</th><th class="tblval">Value</th><th class="tbldscr">Description</th></tr>
+<tr><td class="topAlign"><code translate="no">Lib7z::TmpFile::No</code></td><td class="topAlign tblval"><code translate="no">0</code></td><td class="topAlign">File is not a temporary file.</td></tr>
+<tr><td class="topAlign"><code translate="no">Lib7z::TmpFile::Yes</code></td><td class="topAlign tblval"><code translate="no">1</code></td><td class="topAlign">File is a tmp file.</td></tr>
+</table></div>
+<!-- @@@TmpFile -->
+</div>
+<div class="func">
+<h2>Function Documentation</h2>
+<!-- $$$createArchive[overload1]$$$createArchiveQFileDevice*constQStringList&Lib7z::CompressionLib7z::UpdateCallback* -->
+<h3 class="fn" translate="no" id="createArchive"><span class="type">void</span> Lib7z::<span class="name">createArchive</span>(<span class="type">QFileDevice</span> *<i>archive</i>, const <span class="type">QStringList</span> &amp;<i>sources</i>, <span class="type"><a href="lib7z.html#Compression-typedef" translate="no">Lib7z::Compression</a></span> <i>level</i> = Compression::Normal, <span class="type">Lib7z::UpdateCallback</span> *<i>callback</i> = 0)</h3>
+<p>Creates an archive using the given file device <i translate="no">archive</i>. <i translate="no">sources</i> can contain one or more files, one or more directories or a combination of files and folders. Also, <code translate="no">*</code> wildcard is supported. The value of <i translate="no">level</i> specifies the compression ratio, the default is set to <code translate="no">5</code> (Normal compression). The <i translate="no">callback</i> can be used to get information about the archive creation process. If no <i translate="no">callback</i> is given, an empty implementation is used.</p>
+<div class="admonition note">
+<p><b>Note: </b>Throws <a href="lib7z-sevenzipexception.html" translate="no">SevenZipException</a> on error.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>Filenames are stored case-sensitive with UTF-8 encoding.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>The ownership of <i translate="no">callback</i> is transferred to the function and gets delete on exit.</p>
+</div>
+<!-- @@@createArchive -->
+<!-- $$$createArchive$$$createArchiveconstQString&constQStringList&Lib7z::TmpFileLib7z::CompressionLib7z::UpdateCallback* -->
+<h3 class="fn" translate="no" id="createArchive-1"><span class="type">void</span> Lib7z::<span class="name">createArchive</span>(const <span class="type">QString</span> &amp;<i>archive</i>, const <span class="type">QStringList</span> &amp;<i>sources</i>, <span class="type"><a href="lib7z.html#TmpFile-enum" translate="no">Lib7z::TmpFile</a></span> <i>mode</i>, <span class="type"><a href="lib7z.html#Compression-typedef" translate="no">Lib7z::Compression</a></span> <i>level</i> = Compression::Normal, <span class="type">Lib7z::UpdateCallback</span> *<i>callback</i> = 0)</h3>
+<p>Creates an archive with the given filename <i translate="no">archive</i>. <i translate="no">sources</i> can contain one or more files, one or more directories or a combination of files and folders. Also, <code translate="no">*</code> wildcard is supported. To be able to use the function during an elevated installation, set <i translate="no">mode</i> to <code translate="no">TmpFile::Yes</code>. The value of <i translate="no">level</i> specifies the compression ratio, the default is set to <code translate="no">5</code> (Normal compression). The <i translate="no">callback</i> can be used to get information about the archive creation process. If no <i translate="no">callback</i> is given, an empty implementation is used.</p>
+<div class="admonition note">
+<p><b>Note: </b>Throws <a href="lib7z-sevenzipexception.html" translate="no">SevenZipException</a> on error.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>If <i translate="no">archive</i> exists, it will be overwritten.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>Filenames are stored case-sensitive with UTF-8 encoding.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>The ownership of <i translate="no">callback</i> is transferred to the function and gets delete on exit.</p>
+</div>
+<!-- @@@createArchive -->
+<!-- $$$extractArchive[overload1]$$$extractArchiveQFileDevice*constQString&Lib7z::ExtractCallback* -->
+<h3 class="fn" translate="no" id="extractArchive"><span class="type">void</span> Lib7z::<span class="name">extractArchive</span>(<span class="type">QFileDevice</span> *<i>archive</i>, const <span class="type">QString</span> &amp;<i>directory</i>, <span class="type"><a href="lib7z-extractcallback.html" translate="no">Lib7z::ExtractCallback</a></span> *<i>callback</i> = 0)</h3>
+<p>Extracts the given <i translate="no">archive</i> content into target directory <i translate="no">directory</i> using the provided extract callback <i translate="no">callback</i>. The output filenames are deduced from the <i translate="no">archive</i> content.</p>
+<div class="admonition note">
+<p><b>Note: </b>Throws <a href="lib7z-sevenzipexception.html" translate="no">SevenZipException</a> on error.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>The ownership of <i translate="no">callback</i> is not transferred to the function.</p>
+</div>
+<!-- @@@extractArchive -->
+<!-- $$$initSevenZ[overload1]$$$initSevenZ -->
+<h3 class="fn" translate="no" id="initSevenZ"><span class="type">void</span> Lib7z::<span class="name">initSevenZ</span>()</h3>
+<p>Initializes 7z and registers codecs and compression methods.</p>
+<!-- @@@initSevenZ -->
+<!-- $$$isSupportedArchive[overload1]$$$isSupportedArchiveQFileDevice* -->
+<h3 class="fn" translate="no" id="isSupportedArchive"><span class="type">bool</span> Lib7z::<span class="name">isSupportedArchive</span>(<span class="type">QFileDevice</span> *<i>archive</i>)</h3>
+<p>Returns <code translate="no">true</code> if the given <i translate="no">archive</i> is supported; otherwise returns <code translate="no">false</code>.</p>
+<div class="admonition note">
+<p><b>Note: </b>Throws <a href="lib7z-sevenzipexception.html" translate="no">SevenZipException</a> on error.</p>
+</div>
+<!-- @@@isSupportedArchive -->
+<!-- $$$isSupportedArchive$$$isSupportedArchiveconstQString& -->
+<h3 class="fn" translate="no" id="isSupportedArchive-1"><span class="type">bool</span> Lib7z::<span class="name">isSupportedArchive</span>(const <span class="type">QString</span> &amp;<i>archive</i>)</h3>
+<p>Returns <code translate="no">true</code> if the given <i translate="no">archive</i> is supported; otherwise returns <code translate="no">false</code>.</p>
+<div class="admonition note">
+<p><b>Note: </b>Throws <a href="lib7z-sevenzipexception.html" translate="no">SevenZipException</a> on error.</p>
+</div>
+<!-- @@@isSupportedArchive -->
+<!-- $$$listArchive[overload1]$$$listArchiveQFileDevice* -->
+<h3 class="fn" translate="no" id="listArchive"><span class="type">QVector</span>&lt;<span class="type"><a href="lib7z.html#File-typedef" translate="no">Lib7z::File</a></span>&gt; Lib7z::<span class="name">listArchive</span>(<span class="type">QFileDevice</span> *<i>archive</i>)</h3>
+<p>Returns a list of files belonging to an <i translate="no">archive</i>.</p>
+<!-- @@@listArchive -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

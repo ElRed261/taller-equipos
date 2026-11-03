@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- filedownloader.cpp -->
+  <meta name="description" content="The FileDownloader class is the base class for file downloaders used in KDUpdater.">
+  <title>FileDownloader Class | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>FileDownloader</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#properties">Properties</a></li>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#public-slots">Public Slots</a></li>
+<li class="level1"><a href="#signals">Signals</a></li>
+<li class="level1"><a href="#protected-functions">Protected Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">FileDownloader Class</h1>
+<span class="small-subtitle" translate="no">class <a href="kdupdater.html" translate="no">KDUpdater</a>::FileDownloader</span>
+<!-- $$$FileDownloader-brief -->
+<p>The FileDownloader class is the base class for file downloaders used in <a href="kdupdater.html" translate="no">KDUpdater</a>. <a href="#details">More...</a></p>
+<!-- @@@FileDownloader -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;FileDownloader&gt;</span></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Inherited By:</td><td class="memItemRight bottomAlign"> <p><a href="kdupdater-httpdownloader.html" translate="no">KDUpdater::HttpDownloader</a>, <a href="kdupdater-localfiledownloader.html" translate="no">KDUpdater::LocalFileDownloader</a>, and <a href="kdupdater-resourcefiledownloader.html" translate="no">KDUpdater::ResourceFileDownloader</a></p>
+</td></tr>
+</table></div>
+<ul>
+<li><a href="kdupdater-filedownloader-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="properties">Properties</h2>
+<ul>
+<li class="fn" translate="no"><b><a href="kdupdater-filedownloader.html#autoRemoveDownloadedFile-prop" translate="no">autoRemoveDownloadedFile</a></b> : bool</li>
+<li class="fn" translate="no"><b><a href="kdupdater-filedownloader.html#scheme-prop" translate="no">scheme</a></b> : QString</li>
+<li class="fn" translate="no"><b><a href="kdupdater-filedownloader.html#url-prop" translate="no">url</a></b> : QUrl</li>
+</ul>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#FileDownloader" translate="no">FileDownloader</a></b>(const QString &amp;<i>scheme</i>, QObject *<i>parent</i> = 0)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#dtor.FileDownloader" translate="no">~FileDownloader</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QByteArray </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#assumedSha1Sum" translate="no">assumedSha1Sum</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QAuthenticator </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#authenticator" translate="no">authenticator</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual bool </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#canDownload" translate="no">canDownload</a></b>() const = 0</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual KDUpdater::FileDownloader *</td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#clone" translate="no">clone</a></b>(QObject *<i>parent</i> = 0) const = 0</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#download" translate="no">download</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual QString </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadedFileName" translate="no">downloadedFileName</a></b>() const = 0</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QString </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#errorString" translate="no">errorString</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#followRedirects" translate="no">followRedirects</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> qint64 </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#getBytesReceived" translate="no">getBytesReceived</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#ignoreSslErrors" translate="no">ignoreSslErrors</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#autoRemoveDownloadedFile-prop" translate="no">isAutoRemoveDownloadedFile</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual bool </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#isDownloaded" translate="no">isDownloaded</a></b>() const = 0</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> KDUpdater::FileDownloaderProxyFactory *</td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#proxyFactory" translate="no">proxyFactory</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QString </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#scheme-prop" translate="no">scheme</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setAssumedSha1Sum" translate="no">setAssumedSha1Sum</a></b>(const QByteArray &amp;<i>sum</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setAuthenticator" translate="no">setAuthenticator</a></b>(const QAuthenticator &amp;<i>authenticator</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#autoRemoveDownloadedFile-prop" translate="no">setAutoRemoveDownloadedFile</a></b>(bool <i>val</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setDownloadedFileName" translate="no">setDownloadedFileName</a></b>(const QString &amp;<i>name</i>) = 0</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setFollowRedirects" translate="no">setFollowRedirects</a></b>(bool <i>val</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setIgnoreSslErrors" translate="no">setIgnoreSslErrors</a></b>(bool <i>ignore</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setProxyFactory" translate="no">setProxyFactory</a></b>(KDUpdater::FileDownloaderProxyFactory *<i>factory</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#scheme-prop" translate="no">setScheme</a></b>(const QString &amp;<i>scheme</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#url-prop" translate="no">setUrl</a></b>(const QUrl &amp;<i>url</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QByteArray </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#sha1Sum" translate="no">sha1Sum</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QUrl </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#url-prop" translate="no">url</a></b>() const</td></tr>
+</table></div>
+<h2 id="public-slots">Public Slots</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#cancelDownload" translate="no">cancelDownload</a></b>()</td></tr>
+</table></div>
+<h2 id="signals">Signals</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#authenticatorChanged" translate="no">authenticatorChanged</a></b>(const QAuthenticator &amp;<i>authenticator</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadAborted" translate="no">downloadAborted</a></b>(const QString &amp;<i>errorMessage</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadCanceled" translate="no">downloadCanceled</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadCompleted" translate="no">downloadCompleted</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadProgress" translate="no">downloadProgress</a></b>(double <i>progress</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadProgress-1" translate="no">downloadProgress</a></b>(qint64 <i>bytesReceived</i>, qint64 <i>bytesToReceive</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadSpeed" translate="no">downloadSpeed</a></b>(qint64 <i>bytesPerSecond</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadStarted" translate="no">downloadStarted</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadStatus" translate="no">downloadStatus</a></b>(const QString &amp;<i>status</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#estimatedDownloadTime" translate="no">estimatedDownloadTime</a></b>(int <i>seconds</i>)</td></tr>
+</table></div>
+<h2 id="protected-functions">Protected Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#addCheckSumData" translate="no">addCheckSumData</a></b>(const QByteArray &amp;<i>data</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#addSample" translate="no">addSample</a></b>(qint64 <i>sample</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> qint64 </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#bytesDownloadedBeforeResume" translate="no">bytesDownloadedBeforeResume</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#clearBytesDownloadedBeforeResume" translate="no">clearBytesDownloadedBeforeResume</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> int </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadDeadlineTimerId" translate="no">downloadDeadlineTimerId</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> int </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#downloadSpeedTimerId" translate="no">downloadSpeedTimerId</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#emitDownloadProgress" translate="no">emitDownloadProgress</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#emitDownloadSpeed" translate="no">emitDownloadSpeed</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#emitDownloadStatus" translate="no">emitDownloadStatus</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#emitEstimatedDownloadTime" translate="no">emitEstimatedDownloadTime</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#isDownloadPaused" translate="no">isDownloadPaused</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#isDownloadResumed" translate="no">isDownloadResumed</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#onError" translate="no">onError</a></b>() = 0</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#onSuccess" translate="no">onSuccess</a></b>() = 0</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#resetCheckSumData" translate="no">resetCheckSumData</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#runDownloadDeadlineTimer" translate="no">runDownloadDeadlineTimer</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#runDownloadSpeedTimer" translate="no">runDownloadSpeedTimer</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setDownloadAborted" translate="no">setDownloadAborted</a></b>(const QString &amp;<i>error</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setDownloadCanceled" translate="no">setDownloadCanceled</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setDownloadCompleted" translate="no">setDownloadCompleted</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setDownloadPaused" translate="no">setDownloadPaused</a></b>(bool <i>paused</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setDownloadResumed" translate="no">setDownloadResumed</a></b>(bool <i>resumed</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#setProgress" translate="no">setProgress</a></b>(qint64 <i>bytesReceived</i>, qint64 <i>bytesToReceive</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#stopDownloadDeadlineTimer" translate="no">stopDownloadDeadlineTimer</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#stopDownloadSpeedTimer" translate="no">stopDownloadSpeedTimer</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> qint64 </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#totalBytesDownloadedBeforeResume" translate="no">totalBytesDownloadedBeforeResume</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#updateBytesDownloadedBeforeResume" translate="no">updateBytesDownloadedBeforeResume</a></b>(qint64 <i>bytes</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="kdupdater-filedownloader.html#updateTotalBytesDownloadedBeforeResume" translate="no">updateTotalBytesDownloadedBeforeResume</a></b>()</td></tr>
+</table></div>
+<!-- $$$FileDownloader-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+<p>File downloaders are used by the <a href="kdupdater-update.html" translate="no">KDUpdater::Update</a> class to download update files. Each subclass of FileDownloader can download files from a specific category of sources (such as <code translate="no">local</code>, <code translate="no">ftp</code>, <code translate="no">http</code>).</p>
+<p>This is an internal class, not a part of the public API. Currently we have the following subclasses of FileDownloader:</p>
+<ul>
+<li><a href="kdupdater-httpdownloader.html" translate="no">HttpDownloader</a> to download files over FTP, HTTP, or HTTPS if Qt is built with SSL.</li>
+<li><a href="kdupdater-localfiledownloader.html" translate="no">LocalFileDownloader</a> to copy files from the local file system.</li>
+<li><a href="kdupdater-resourcefiledownloader.html" translate="no">ResourceFileDownloader</a> to download resource files.</li>
+</ul>
+</div>
+<!-- @@@FileDownloader -->
+<div class="prop">
+<h2>Property Documentation</h2>
+<!-- $$$autoRemoveDownloadedFile-prop$$$isAutoRemoveDownloadedFile$$$setAutoRemoveDownloadedFilebool -->
+<h3 class="fn" translate="no" id="autoRemoveDownloadedFile-prop"><span class="name">autoRemoveDownloadedFile</span> : <span class="type">bool</span></h3>
+<p>This property holds whether the downloaded file should be automatically removed after it is downloaded and the class goes out of scope.</p>
+<p><b>Access functions:</b></p>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft topAlign rightAlign"> bool </td><td class="memItemRight bottomAlign"><span class="name"><b>isAutoRemoveDownloadedFile</b></span>() const</td></tr>
+<tr><td class="memItemLeft topAlign rightAlign"> void </td><td class="memItemRight bottomAlign"><span class="name"><b>setAutoRemoveDownloadedFile</b></span>(bool <i>val</i>)</td></tr>
+</table></div>
+<!-- @@@autoRemoveDownloadedFile -->
+<!-- $$$scheme-prop$$$scheme$$$setSchemeconstQString& -->
+<h3 class="fn" translate="no" id="scheme-prop"><span class="name">scheme</span> : <span class="type">QString</span></h3>
+<p>This property holds the scheme to use for downloading files.</p>
+<p><b>Access functions:</b></p>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft topAlign rightAlign"> QString </td><td class="memItemRight bottomAlign"><span class="name"><b>scheme</b></span>() const</td></tr>
+<tr><td class="memItemLeft topAlign rightAlign"> void </td><td class="memItemRight bottomAlign"><span class="name"><b>setScheme</b></span>(const QString &amp;<i>scheme</i>)</td></tr>
+</table></div>
+<!-- @@@scheme -->
+<!-- $$$url-prop$$$url$$$setUrlconstQUrl& -->
+<h3 class="fn" translate="no" id="url-prop"><span class="name">url</span> : <span class="type">QUrl</span></h3>
+<p>This property holds the URL to download files from.</p>
+<p><b>Access functions:</b></p>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft topAlign rightAlign"> QUrl </td><td class="memItemRight bottomAlign"><span class="name"><b>url</b></span>() const</td></tr>
+<tr><td class="memItemLeft topAlign rightAlign"> void </td><td class="memItemRight bottomAlign"><span class="name"><b>setUrl</b></span>(const QUrl &amp;<i>url</i>)</td></tr>
+</table></div>
+<!-- @@@url -->
+</div>
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$FileDownloader[overload1]$$$FileDownloaderconstQString&QObject* -->
+<h3 class="fn" translate="no" id="FileDownloader"><code translate="no">[explicit] </code>FileDownloader::<span class="name">FileDownloader</span>(const <span class="type">QString</span> &amp;<i>scheme</i>, <span class="type">QObject</span> *<i>parent</i> = 0)</h3>
+<p>Creates a file downloader with the scheme <i translate="no">scheme</i> and parent <i translate="no">parent</i>.</p>
+<!-- @@@FileDownloader -->
+<!-- $$$~FileDownloader[overload1]$$$~FileDownloader -->
+<h3 class="fn" translate="no" id="dtor.FileDownloader"><code translate="no">[virtual noexcept] </code>FileDownloader::<span class="name">~FileDownloader</span>()</h3>
+<p>Destroys the file downloader.</p>
+<!-- @@@~FileDownloader -->
+<!-- $$$addCheckSumData[overload1]$$$addCheckSumDataconstQByteArray& -->
+<h3 class="fn" translate="no" id="addCheckSumData"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">addCheckSumData</span>(const <span class="type">QByteArray</span> &amp;<i>data</i>)</h3>
+<p>This function overloads addCheckSumData().</p>
+<!-- @@@addCheckSumData -->
+<!-- $$$addSample[overload1]$$$addSampleqint64 -->
+<h3 class="fn" translate="no" id="addSample"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">addSample</span>(<span class="type">qint64</span> <i>sample</i>)</h3>
+<p>Adds <i translate="no">sample</i> to the current speed bin.</p>
+<!-- @@@addSample -->
+<!-- $$$assumedSha1Sum[overload1]$$$assumedSha1Sum -->
+<h3 class="fn" translate="no" id="assumedSha1Sum"><span class="type">QByteArray</span> FileDownloader::<span class="name">assumedSha1Sum</span>() const</h3>
+<p>Returns the assumed SHA-1 checksum of the file to download.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#setAssumedSha1Sum" translate="no">setAssumedSha1Sum</a>().</p>
+<!-- @@@assumedSha1Sum -->
+<!-- $$$authenticator[overload1]$$$authenticator -->
+<h3 class="fn" translate="no" id="authenticator"><span class="type">QAuthenticator</span> FileDownloader::<span class="name">authenticator</span>() const</h3>
+<p>Returns a copy of the authenticator that this <a href="kdupdater-filedownloader.html" translate="no">FileDownloader</a> object is using to set the username and password for a download request.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#setAuthenticator" translate="no">setAuthenticator</a>().</p>
+<!-- @@@authenticator -->
+<!-- $$$authenticatorChanged[overload1]$$$authenticatorChangedconstQAuthenticator& -->
+<h3 class="fn" translate="no" id="authenticatorChanged"><code translate="no">[signal] </code><span class="type">void</span> FileDownloader::<span class="name">authenticatorChanged</span>(const <span class="type">QAuthenticator</span> &amp;<i>authenticator</i>)</h3>
+<p>This signal is emitted when the authenticator changes to <i translate="no">authenticator</i>.</p>
+<!-- @@@authenticatorChanged -->
+<!-- $$$bytesDownloadedBeforeResume[overload1]$$$bytesDownloadedBeforeResume -->
+<h3 class="fn" translate="no" id="bytesDownloadedBeforeResume"><code translate="no">[protected] </code><span class="type">qint64</span> FileDownloader::<span class="name">bytesDownloadedBeforeResume</span>()</h3>
+<p>Gets the amount of bytes downloaded before download resume.</p>
+<!-- @@@bytesDownloadedBeforeResume -->
+<!-- $$$canDownload[overload1]$$$canDownload -->
+<h3 class="fn" translate="no" id="canDownload"><code translate="no">[pure virtual] </code><span class="type">bool</span> FileDownloader::<span class="name">canDownload</span>() const</h3>
+<p>Returns <code translate="no">true</code> if the file exists and is readable.</p>
+<!-- @@@canDownload -->
+<!-- $$$cancelDownload[overload1]$$$cancelDownload -->
+<h3 class="fn" translate="no" id="cancelDownload"><code translate="no">[virtual slot] </code><span class="type">void</span> FileDownloader::<span class="name">cancelDownload</span>()</h3>
+<p>Cancels file download.</p>
+<!-- @@@cancelDownload -->
+<!-- $$$clearBytesDownloadedBeforeResume[overload1]$$$clearBytesDownloadedBeforeResume -->
+<h3 class="fn" translate="no" id="clearBytesDownloadedBeforeResume"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">clearBytesDownloadedBeforeResume</span>()</h3>
+<p>Clears the amount of bytes downloaded before download resume.</p>
+<!-- @@@clearBytesDownloadedBeforeResume -->
+<!-- $$$clone[overload1]$$$cloneQObject* -->
+<h3 class="fn" translate="no" id="clone"><code translate="no">[pure virtual] </code><span class="type"><a href="kdupdater-filedownloader.html" translate="no">KDUpdater::FileDownloader</a></span> *FileDownloader::<span class="name">clone</span>(<span class="type">QObject</span> *<i>parent</i> = 0) const</h3>
+<p>Clones the local file downloader and assigns it the parent <i translate="no">parent</i>.</p>
+<!-- @@@clone -->
+<!-- $$$download[overload1]$$$download -->
+<h3 class="fn" translate="no" id="download"><span class="type">void</span> FileDownloader::<span class="name">download</span>()</h3>
+<p>Downloads files.</p>
+<!-- @@@download -->
+<!-- $$$downloadAborted[overload1]$$$downloadAbortedconstQString& -->
+<h3 class="fn" translate="no" id="downloadAborted"><code translate="no">[signal] </code><span class="type">void</span> FileDownloader::<span class="name">downloadAborted</span>(const <span class="type">QString</span> &amp;<i>errorMessage</i>)</h3>
+<p>This signal is emitted when downloading a file is aborted with <i translate="no">errorMessage</i>.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#setDownloadAborted" translate="no">setDownloadAborted</a>().</p>
+<!-- @@@downloadAborted -->
+<!-- $$$downloadCanceled[overload1]$$$downloadCanceled -->
+<h3 class="fn" translate="no" id="downloadCanceled"><code translate="no">[signal] </code><span class="type">void</span> FileDownloader::<span class="name">downloadCanceled</span>()</h3>
+<p>This signal is emitted if downloading a file is canceled.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#setDownloadCanceled" translate="no">setDownloadCanceled</a>().</p>
+<!-- @@@downloadCanceled -->
+<!-- $$$downloadCompleted[overload1]$$$downloadCompleted -->
+<h3 class="fn" translate="no" id="downloadCompleted"><code translate="no">[signal] </code><span class="type">void</span> FileDownloader::<span class="name">downloadCompleted</span>()</h3>
+<p>This signal is emitted when downloading a file ends.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#setDownloadCompleted" translate="no">setDownloadCompleted</a>().</p>
+<!-- @@@downloadCompleted -->
+<!-- $$$downloadDeadlineTimerId[overload1]$$$downloadDeadlineTimerId -->
+<h3 class="fn" translate="no" id="downloadDeadlineTimerId"><code translate="no">[protected] </code><span class="type">int</span> FileDownloader::<span class="name">downloadDeadlineTimerId</span>() const</h3>
+<p>Returns the download deadline timer ID.</p>
+<!-- @@@downloadDeadlineTimerId -->
+<!-- $$$downloadProgress[overload1]$$$downloadProgressdouble -->
+<h3 class="fn" translate="no" id="downloadProgress"><code translate="no">[signal] </code><span class="type">void</span> FileDownloader::<span class="name">downloadProgress</span>(<span class="type">double</span> <i>progress</i>)</h3>
+<p>This signal is emitted with the current download <i translate="no">progress</i>.</p>
+<p><b>Note:</b> Signal <i>downloadProgress</i> is overloaded in this class. To connect to this signal by using the function pointer syntax, Qt provides a convenient helper for obtaining the function pointer as shown in this example:<pre class="cpp" translate="no">
+ connect(fileDownloader<span class="operator">,</span> <span class="type">QOverload</span><span class="operator">&lt;</span><span class="type">double</span><span class="operator">&gt;</span><span class="operator">::</span>of(<span class="operator">&amp;</span>FileDownloader<span class="operator">::</span>downloadProgress)<span class="operator">,</span>
+     <span class="operator">[</span><span class="operator">=</span><span class="operator">]</span>(<span class="type">double</span> progress){ <span class="comment">/* ... */</span> });
+</pre>
+<!-- @@@downloadProgress -->
+<!-- $$$downloadProgress$$$downloadProgressqint64qint64 -->
+<h3 class="fn" translate="no" id="downloadProgress-1"><code translate="no">[signal] </code><span class="type">void</span> FileDownloader::<span class="name">downloadProgress</span>(<span class="type">qint64</span> <i>bytesReceived</i>, <span class="type">qint64</span> <i>bytesToReceive</i>)</h3>
+<p>This signal is emitted with the download progress as the number of received bytes, <i translate="no">bytesReceived</i>, and the total size of the file to download, <i translate="no">bytesToReceive</i>.</p>
+<p><b>Note:</b> Signal <i>downloadProgress</i> is overloaded in this class. To connect to this signal by using the function pointer syntax, Qt provides a convenient helper for obtaining the function pointer as shown in this example:<pre class="cpp" translate="no">
+ connect(fileDownloader<span class="operator">,</span> <span class="type">QOverload</span><span class="operator">&lt;</span><span class="type">qint64</span><span class="operator">,</span> <span class="type">qint64</span><span class="operator">&gt;</span><span class="operator">::</span>of(<span class="operator">&amp;</span>FileDownloader<span class="operator">::</span>downloadProgress)<span class="operator">,</span>
+     <span class="operator">[</span><span class="operator">=</span><span class="operator">]</span>(<span class="type">qint64</span> bytesReceived<span class="operator">,</span> <span class="type">qint64</span> bytesToReceive){ <span class="comment">/* ... */</span> });
+</pre>
+<!-- @@@downloadProgress -->
+<!-- $$$downloadSpeed[overload1]$$$downloadSpeedqint64 -->
+<h3 class="fn" translate="no" id="downloadSpeed"><code translate="no">[signal] </code><span class="type">void</span> FileDownloader::<span class="name">downloadSpeed</span>(<span class="type">qint64</span> <i>bytesPerSecond</i>)</h3>
+<p>This signal is emitted with the download speed in bytes per second as <i translate="no">bytesPerSecond</i>.</p>
+<!-- @@@downloadSpeed -->
+<!-- $$$downloadSpeedTimerId[overload1]$$$downloadSpeedTimerId -->
+<h3 class="fn" translate="no" id="downloadSpeedTimerId"><code translate="no">[protected] </code><span class="type">int</span> FileDownloader::<span class="name">downloadSpeedTimerId</span>() const</h3>
+<p>Returns the download speed timer ID.</p>
+<!-- @@@downloadSpeedTimerId -->
+<!-- $$$downloadStarted[overload1]$$$downloadStarted -->
+<h3 class="fn" translate="no" id="downloadStarted"><code translate="no">[signal] </code><span class="type">void</span> FileDownloader::<span class="name">downloadStarted</span>()</h3>
+<p>This signal is emitted when downloading a file starts.</p>
+<!-- @@@downloadStarted -->
+<!-- $$$downloadStatus[overload1]$$$downloadStatusconstQString& -->
+<h3 class="fn" translate="no" id="downloadStatus"><code translate="no">[signal] </code><span class="type">void</span> FileDownloader::<span class="name">downloadStatus</span>(const <span class="type">QString</span> &amp;<i>status</i>)</h3>
+<p>This signal is emitted with textual representation of the current download <i translate="no">status</i> in the following format: &quot;100 MiB of 150 MiB - (DAYS) (HOURS) (MINUTES) (SECONDS) remaining&quot;.</p>
+<!-- @@@downloadStatus -->
+<!-- $$$downloadedFileName[overload1]$$$downloadedFileName -->
+<h3 class="fn" translate="no" id="downloadedFileName"><code translate="no">[pure virtual] </code><span class="type">QString</span> FileDownloader::<span class="name">downloadedFileName</span>() const</h3>
+<p>Returns the file name of the downloaded file.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#setDownloadedFileName" translate="no">setDownloadedFileName</a>().</p>
+<!-- @@@downloadedFileName -->
+<!-- $$$emitDownloadProgress[overload1]$$$emitDownloadProgress -->
+<h3 class="fn" translate="no" id="emitDownloadProgress"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">emitDownloadProgress</span>()</h3>
+<p>Emits dowload progress.</p>
+<!-- @@@emitDownloadProgress -->
+<!-- $$$emitDownloadSpeed[overload1]$$$emitDownloadSpeed -->
+<h3 class="fn" translate="no" id="emitDownloadSpeed"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">emitDownloadSpeed</span>()</h3>
+<p>Calculates the download speed in bytes per second and emits the <a href="kdupdater-filedownloader.html#downloadSpeed" translate="no">downloadSpeed</a>() signal.</p>
+<!-- @@@emitDownloadSpeed -->
+<!-- $$$emitDownloadStatus[overload1]$$$emitDownloadStatus -->
+<h3 class="fn" translate="no" id="emitDownloadStatus"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">emitDownloadStatus</span>()</h3>
+<p>Builds a textual representation of the download status in the following format: &quot;100 MiB of 150 MiB - (DAYS) (HOURS) (MINUTES) (SECONDS) remaining&quot;.</p>
+<p>Emits the <a href="kdupdater-filedownloader.html#downloadStatus" translate="no">downloadStatus</a>() signal.</p>
+<!-- @@@emitDownloadStatus -->
+<!-- $$$emitEstimatedDownloadTime[overload1]$$$emitEstimatedDownloadTime -->
+<h3 class="fn" translate="no" id="emitEstimatedDownloadTime"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">emitEstimatedDownloadTime</span>()</h3>
+<p>Emits the estimated download time.</p>
+<!-- @@@emitEstimatedDownloadTime -->
+<!-- $$$errorString[overload1]$$$errorString -->
+<h3 class="fn" translate="no" id="errorString"><span class="type">QString</span> FileDownloader::<span class="name">errorString</span>() const</h3>
+<p>Returns an error message.</p>
+<!-- @@@errorString -->
+<!-- $$$estimatedDownloadTime[overload1]$$$estimatedDownloadTimeint -->
+<h3 class="fn" translate="no" id="estimatedDownloadTime"><code translate="no">[signal] </code><span class="type">void</span> FileDownloader::<span class="name">estimatedDownloadTime</span>(<span class="type">int</span> <i>seconds</i>)</h3>
+<p>This signal is emitted with the estimated download time in <i translate="no">seconds</i>.</p>
+<!-- @@@estimatedDownloadTime -->
+<!-- $$$followRedirects[overload1]$$$followRedirects -->
+<h3 class="fn" translate="no" id="followRedirects"><span class="type">bool</span> FileDownloader::<span class="name">followRedirects</span>() const</h3>
+<p>Returns whether redirects should be followed.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#setFollowRedirects" translate="no">setFollowRedirects</a>().</p>
+<!-- @@@followRedirects -->
+<!-- $$$getBytesReceived[overload1]$$$getBytesReceived -->
+<h3 class="fn" translate="no" id="getBytesReceived"><span class="type">qint64</span> FileDownloader::<span class="name">getBytesReceived</span>() const</h3>
+<p>Returns the number of received bytes.</p>
+<!-- @@@getBytesReceived -->
+<!-- $$$ignoreSslErrors[overload1]$$$ignoreSslErrors -->
+<h3 class="fn" translate="no" id="ignoreSslErrors"><span class="type">bool</span> FileDownloader::<span class="name">ignoreSslErrors</span>()</h3>
+<p>Returns <code translate="no">true</code> if SSL errors should be ignored.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#setIgnoreSslErrors" translate="no">setIgnoreSslErrors</a>().</p>
+<!-- @@@ignoreSslErrors -->
+<!-- $$$isDownloadPaused[overload1]$$$isDownloadPaused -->
+<h3 class="fn" translate="no" id="isDownloadPaused"><code translate="no">[protected] </code><span class="type">bool</span> FileDownloader::<span class="name">isDownloadPaused</span>()</h3>
+<p>Returns the download paused state.</p>
+<!-- @@@isDownloadPaused -->
+<!-- $$$isDownloadResumed[overload1]$$$isDownloadResumed -->
+<h3 class="fn" translate="no" id="isDownloadResumed"><code translate="no">[protected] </code><span class="type">bool</span> FileDownloader::<span class="name">isDownloadResumed</span>()</h3>
+<p>Returns the download resumed state.</p>
+<!-- @@@isDownloadResumed -->
+<!-- $$$isDownloaded[overload1]$$$isDownloaded -->
+<h3 class="fn" translate="no" id="isDownloaded"><code translate="no">[pure virtual] </code><span class="type">bool</span> FileDownloader::<span class="name">isDownloaded</span>() const</h3>
+<p>Returns <code translate="no">true</code> if the file is downloaded.</p>
+<!-- @@@isDownloaded -->
+<!-- $$$onError[overload1]$$$onError -->
+<h3 class="fn" translate="no" id="onError"><code translate="no">[pure virtual protected] </code><span class="type">void</span> FileDownloader::<span class="name">onError</span>()</h3>
+<p>Closes the destination file if an error occurs during copying and stops the download speed timer.</p>
+<!-- @@@onError -->
+<!-- $$$onSuccess[overload1]$$$onSuccess -->
+<h3 class="fn" translate="no" id="onSuccess"><code translate="no">[pure virtual protected] </code><span class="type">void</span> FileDownloader::<span class="name">onSuccess</span>()</h3>
+<p>Closes the destination file after it has been successfully copied and stops the download speed timer.</p>
+<!-- @@@onSuccess -->
+<!-- $$$proxyFactory[overload1]$$$proxyFactory -->
+<h3 class="fn" translate="no" id="proxyFactory"><span class="type"><a href="kdupdater-filedownloaderproxyfactory.html" translate="no">KDUpdater::FileDownloaderProxyFactory</a></span> *FileDownloader::<span class="name">proxyFactory</span>() const</h3>
+<p>Returns a copy of the proxy factory that this <a href="kdupdater-filedownloader.html" translate="no">FileDownloader</a> object is using to determine the proxies to be used for requests.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#setProxyFactory" translate="no">setProxyFactory</a>().</p>
+<!-- @@@proxyFactory -->
+<!-- $$$resetCheckSumData[overload1]$$$resetCheckSumData -->
+<h3 class="fn" translate="no" id="resetCheckSumData"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">resetCheckSumData</span>()</h3>
+<p>Resets SHA-1 checksum data of the downloaded file.</p>
+<!-- @@@resetCheckSumData -->
+<!-- $$$runDownloadDeadlineTimer[overload1]$$$runDownloadDeadlineTimer -->
+<h3 class="fn" translate="no" id="runDownloadDeadlineTimer"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">runDownloadDeadlineTimer</span>()</h3>
+<p>Restarts the download deadline timer.</p>
+<!-- @@@runDownloadDeadlineTimer -->
+<!-- $$$runDownloadSpeedTimer[overload1]$$$runDownloadSpeedTimer -->
+<h3 class="fn" translate="no" id="runDownloadSpeedTimer"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">runDownloadSpeedTimer</span>()</h3>
+<p>Starts the download speed timer.</p>
+<!-- @@@runDownloadSpeedTimer -->
+<!-- $$$setAssumedSha1Sum[overload1]$$$setAssumedSha1SumconstQByteArray& -->
+<h3 class="fn" translate="no" id="setAssumedSha1Sum"><span class="type">void</span> FileDownloader::<span class="name">setAssumedSha1Sum</span>(const <span class="type">QByteArray</span> &amp;<i>sum</i>)</h3>
+<p>Sets the assumed SHA-1 checksum of the file to download to <i translate="no">sum</i>.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#assumedSha1Sum" translate="no">assumedSha1Sum</a>().</p>
+<!-- @@@setAssumedSha1Sum -->
+<!-- $$$setAuthenticator[overload1]$$$setAuthenticatorconstQAuthenticator& -->
+<h3 class="fn" translate="no" id="setAuthenticator"><span class="type">void</span> FileDownloader::<span class="name">setAuthenticator</span>(const <span class="type">QAuthenticator</span> &amp;<i>authenticator</i>)</h3>
+<p>Sets the authenticator object for this class to be <i translate="no">authenticator</i>. An authenticator is used to pass on the required authentication information. This might only be of use for HTTP or FTP requests. Emits the authenticator changed signal with the new authenticator in use.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#authenticator" translate="no">authenticator</a>().</p>
+<!-- @@@setAuthenticator -->
+<!-- $$$setDownloadAborted[overload1]$$$setDownloadAbortedconstQString& -->
+<h3 class="fn" translate="no" id="setDownloadAborted"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">setDownloadAborted</span>(const <span class="type">QString</span> &amp;<i>error</i>)</h3>
+<p>Sets the human readable description of the last error that occurred to <i translate="no">error</i>. Emits the <a href="kdupdater-filedownloader.html#downloadStatus" translate="no">downloadStatus</a>() and <a href="kdupdater-filedownloader.html#downloadAborted" translate="no">downloadAborted</a>() signals.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#downloadAborted" translate="no">downloadAborted</a>().</p>
+<!-- @@@setDownloadAborted -->
+<!-- $$$setDownloadCanceled[overload1]$$$setDownloadCanceled -->
+<h3 class="fn" translate="no" id="setDownloadCanceled"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">setDownloadCanceled</span>()</h3>
+<p>Emits the <a href="kdupdater-filedownloader.html#downloadCanceled" translate="no">downloadCanceled</a>() and <a href="kdupdater-filedownloader.html#downloadStatus" translate="no">downloadStatus</a>() signals.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#downloadCanceled" translate="no">downloadCanceled</a>().</p>
+<!-- @@@setDownloadCanceled -->
+<!-- $$$setDownloadCompleted[overload1]$$$setDownloadCompleted -->
+<h3 class="fn" translate="no" id="setDownloadCompleted"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">setDownloadCompleted</span>()</h3>
+<p>Sets the download status to <code translate="no">completed</code> and displays a status message.</p>
+<p>If an assumed SHA-1 checksum is set and the actual calculated checksum does not match it, sets the status to <code translate="no">error</code>. If no SHA-1 is assumed, no check is performed, and status is set to <code translate="no">success</code>.</p>
+<p>Emits the <a href="kdupdater-filedownloader.html#downloadCompleted" translate="no">downloadCompleted</a>() and <a href="kdupdater-filedownloader.html#downloadStatus" translate="no">downloadStatus</a>() signals on success.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#downloadCompleted" translate="no">downloadCompleted</a>().</p>
+<!-- @@@setDownloadCompleted -->
+<!-- $$$setDownloadPaused[overload1]$$$setDownloadPausedbool -->
+<h3 class="fn" translate="no" id="setDownloadPaused"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">setDownloadPaused</span>(<span class="type">bool</span> <i>paused</i>)</h3>
+<p>Sets the download into a <i translate="no">paused</i> state.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#isDownloadPaused" translate="no">isDownloadPaused</a>().</p>
+<!-- @@@setDownloadPaused -->
+<!-- $$$setDownloadResumed[overload1]$$$setDownloadResumedbool -->
+<h3 class="fn" translate="no" id="setDownloadResumed"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">setDownloadResumed</span>(<span class="type">bool</span> <i>resumed</i>)</h3>
+<p>Sets the download into a <i translate="no">resumed</i> state.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#isDownloadResumed" translate="no">isDownloadResumed</a>().</p>
+<!-- @@@setDownloadResumed -->
+<!-- $$$setDownloadedFileName[overload1]$$$setDownloadedFileNameconstQString& -->
+<h3 class="fn" translate="no" id="setDownloadedFileName"><code translate="no">[pure virtual] </code><span class="type">void</span> FileDownloader::<span class="name">setDownloadedFileName</span>(const <span class="type">QString</span> &amp;<i>name</i>)</h3>
+<p>Sets the file name of the downloaded file to <i translate="no">name</i>.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#downloadedFileName" translate="no">downloadedFileName</a>().</p>
+<!-- @@@setDownloadedFileName -->
+<!-- $$$setFollowRedirects[overload1]$$$setFollowRedirectsbool -->
+<h3 class="fn" translate="no" id="setFollowRedirects"><span class="type">void</span> FileDownloader::<span class="name">setFollowRedirects</span>(<span class="type">bool</span> <i>val</i>)</h3>
+<p>Determines that redirects should be followed if <i translate="no">val</i> is <code translate="no">true</code>.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#followRedirects" translate="no">followRedirects</a>().</p>
+<!-- @@@setFollowRedirects -->
+<!-- $$$setIgnoreSslErrors[overload1]$$$setIgnoreSslErrorsbool -->
+<h3 class="fn" translate="no" id="setIgnoreSslErrors"><span class="type">void</span> FileDownloader::<span class="name">setIgnoreSslErrors</span>(<span class="type">bool</span> <i>ignore</i>)</h3>
+<p>Determines that SSL errors should be ignored if <i translate="no">ignore</i> is <code translate="no">true</code>.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#ignoreSslErrors" translate="no">ignoreSslErrors</a>().</p>
+<!-- @@@setIgnoreSslErrors -->
+<!-- $$$setProgress[overload1]$$$setProgressqint64qint64 -->
+<h3 class="fn" translate="no" id="setProgress"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">setProgress</span>(<span class="type">qint64</span> <i>bytesReceived</i>, <span class="type">qint64</span> <i>bytesToReceive</i>)</h3>
+<p>Sets the file download progress to the number of received bytes, <i translate="no">bytesReceived</i>, and the number of total bytes to receive, <i translate="no">bytesToReceive</i>.</p>
+<!-- @@@setProgress -->
+<!-- $$$setProxyFactory[overload1]$$$setProxyFactoryKDUpdater::FileDownloaderProxyFactory* -->
+<h3 class="fn" translate="no" id="setProxyFactory"><span class="type">void</span> FileDownloader::<span class="name">setProxyFactory</span>(<span class="type"><a href="kdupdater-filedownloaderproxyfactory.html" translate="no">KDUpdater::FileDownloaderProxyFactory</a></span> *<i>factory</i>)</h3>
+<p>Sets the proxy factory for this class to be <i translate="no">factory</i>. A proxy factory is used to determine a more specific list of proxies to be used for a given request, instead of trying to use the same proxy value for all requests. This might only be of use for HTTP or FTP requests.</p>
+<p><b>See also </b><a href="kdupdater-filedownloader.html#proxyFactory" translate="no">proxyFactory</a>().</p>
+<!-- @@@setProxyFactory -->
+<!-- $$$sha1Sum[overload1]$$$sha1Sum -->
+<h3 class="fn" translate="no" id="sha1Sum"><span class="type">QByteArray</span> FileDownloader::<span class="name">sha1Sum</span>() const</h3>
+<p>Returns the SHA-1 checksum of the downloaded file.</p>
+<!-- @@@sha1Sum -->
+<!-- $$$stopDownloadDeadlineTimer[overload1]$$$stopDownloadDeadlineTimer -->
+<h3 class="fn" translate="no" id="stopDownloadDeadlineTimer"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">stopDownloadDeadlineTimer</span>()</h3>
+<p>Stops the download deadline timer.</p>
+<!-- @@@stopDownloadDeadlineTimer -->
+<!-- $$$stopDownloadSpeedTimer[overload1]$$$stopDownloadSpeedTimer -->
+<h3 class="fn" translate="no" id="stopDownloadSpeedTimer"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">stopDownloadSpeedTimer</span>()</h3>
+<p>Stops the download speed timer.</p>
+<!-- @@@stopDownloadSpeedTimer -->
+<!-- $$$totalBytesDownloadedBeforeResume[overload1]$$$totalBytesDownloadedBeforeResume -->
+<h3 class="fn" translate="no" id="totalBytesDownloadedBeforeResume"><code translate="no">[protected] </code><span class="type">qint64</span> FileDownloader::<span class="name">totalBytesDownloadedBeforeResume</span>()</h3>
+<p>Gets the total amount of bytes downloaded before download resume.</p>
+<!-- @@@totalBytesDownloadedBeforeResume -->
+<!-- $$$updateBytesDownloadedBeforeResume[overload1]$$$updateBytesDownloadedBeforeResumeqint64 -->
+<h3 class="fn" translate="no" id="updateBytesDownloadedBeforeResume"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">updateBytesDownloadedBeforeResume</span>(<span class="type">qint64</span> <i>bytes</i>)</h3>
+<p>Updates the amount of <i translate="no">bytes</i> downloaded before download resumes.</p>
+<!-- @@@updateBytesDownloadedBeforeResume -->
+<!-- $$$updateTotalBytesDownloadedBeforeResume[overload1]$$$updateTotalBytesDownloadedBeforeResume -->
+<h3 class="fn" translate="no" id="updateTotalBytesDownloadedBeforeResume"><code translate="no">[protected] </code><span class="type">void</span> FileDownloader::<span class="name">updateTotalBytesDownloadedBeforeResume</span>()</h3>
+<p>Updates the total amount of bytes downloaded before download resume.</p>
+<!-- @@@updateTotalBytesDownloadedBeforeResume -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- packagemanagergui.cpp -->
+  <meta name="description" content="The PackageManagerPage class displays information about the product to install.">
+  <title>PackageManagerPage Class | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>PackageManagerPage</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#reimplemented-public-functions">Reimplemented Public Functions</a></li>
+<li class="level1"><a href="#signals">Signals</a></li>
+<li class="level1"><a href="#protected-functions">Protected Functions</a></li>
+<li class="level1"><a href="#reimplemented-protected-functions">Reimplemented Protected Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">PackageManagerPage Class</h1>
+<span class="small-subtitle" translate="no">class <a href="scripting-qinstaller.html" translate="no">QInstaller</a>::PackageManagerPage</span>
+<!-- $$$PackageManagerPage-brief -->
+<p>The PackageManagerPage class displays information about the product to install. <a href="#details">More...</a></p>
+<!-- @@@PackageManagerPage -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;PackageManagerPage&gt;</span></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Inherited By:</td><td class="memItemRight bottomAlign"> <p><a href="qinstaller-componentselectionpage.html" translate="no">QInstaller::ComponentSelectionPage</a>, <a href="qinstaller-finishedpage.html" translate="no">QInstaller::FinishedPage</a>, <a href="qinstaller-introductionpage.html" translate="no">QInstaller::IntroductionPage</a>, <a href="qinstaller-licenseagreementpage.html" translate="no">QInstaller::LicenseAgreementPage</a>, <a href="qinstaller-performinstallationpage.html" translate="no">QInstaller::PerformInstallationPage</a>, <a href="qinstaller-readyforinstallationpage.html" translate="no">QInstaller::ReadyForInstallationPage</a>, <a href="qinstaller-restartpage.html" translate="no">QInstaller::RestartPage</a>, <a href="qinstaller-startmenudirectorypage.html" translate="no">QInstaller::StartMenuDirectoryPage</a>, and <a href="qinstaller-targetdirectorypage.html" translate="no">QInstaller::TargetDirectoryPage</a></p>
+</td></tr>
+</table></div>
+<ul>
+<li><a href="qinstaller-packagemanagerpage-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#PackageManagerPage" translate="no">PackageManagerPage</a></b>(QInstaller::PackageManagerCore *<i>core</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#dtor.PackageManagerPage" translate="no">~PackageManagerPage</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QInstaller::PackageManagerGui *</td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#gui" translate="no">gui</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual bool </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#isInterruptible" translate="no">isInterruptible</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QString </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#pageListTitle" translate="no">pageListTitle</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual QString </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#productName" translate="no">productName</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#setColoredSubTitle" translate="no">setColoredSubTitle</a></b>(const QString &amp;<i>subTitle</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#setColoredTitle" translate="no">setColoredTitle</a></b>(const QString &amp;<i>title</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#setComplete" translate="no">setComplete</a></b>(bool <i>complete</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#setPageListTitle" translate="no">setPageListTitle</a></b>(const QString &amp;<i>title</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#setSettingsButtonRequested" translate="no">setSettingsButtonRequested</a></b>(bool <i>request</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#setShowOnPageList" translate="no">setShowOnPageList</a></b>(bool <i>show</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#setValidatePageComponent" translate="no">setValidatePageComponent</a></b>(QInstaller::Component *<i>component</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#settingsButtonRequested" translate="no">settingsButtonRequested</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#showOnPageList" translate="no">showOnPageList</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual QPixmap </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#wizardPixmap" translate="no">wizardPixmap</a></b>(const QString &amp;<i>pixmapType</i>) const</td></tr>
+</table></div>
+<h2 id="reimplemented-public-functions">Reimplemented Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> virtual bool </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#isComplete" translate="no">isComplete</a></b>() const override</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual bool </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#validatePage" translate="no">validatePage</a></b>() override</td></tr>
+</table></div>
+<h2 id="signals">Signals</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#entered" translate="no">entered</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#left" translate="no">left</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#showOnPageListChanged" translate="no">showOnPageListChanged</a></b>()</td></tr>
+</table></div>
+<h2 id="protected-functions">Protected Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#entering" translate="no">entering</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual QWidget *</td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#findWidget" translate="no">findWidget</a></b>(const QString &amp;<i>objectName</i>) const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#insertWidget" translate="no">insertWidget</a></b>(QWidget *<i>widget</i>, const QString &amp;<i>siblingName</i>, int <i>offset</i> = 1)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#leaving" translate="no">leaving</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QInstaller::PackageManagerCore *</td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#packageManagerCore" translate="no">packageManagerCore</a></b>() const</td></tr>
+</table></div>
+<h2 id="reimplemented-protected-functions">Reimplemented Protected Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> virtual int </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-packagemanagerpage.html#nextId" translate="no">nextId</a></b>() const override</td></tr>
+</table></div>
+<!-- $$$PackageManagerPage-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+</div>
+<!-- @@@PackageManagerPage -->
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$PackageManagerPage[overload1]$$$PackageManagerPageQInstaller::PackageManagerCore* -->
+<h3 class="fn" translate="no" id="PackageManagerPage"><code translate="no">[explicit] </code>PackageManagerPage::<span class="name">PackageManagerPage</span>(<span class="type"><a href="qinstaller-packagemanagercore.html" translate="no">QInstaller::PackageManagerCore</a></span> *<i>core</i>)</h3>
+<p>Constructs a package manager page with <i translate="no">core</i> as parent.</p>
+<!-- @@@PackageManagerPage -->
+<!-- $$$~PackageManagerPage[overload1]$$$~PackageManagerPage -->
+<h3 class="fn" translate="no" id="dtor.PackageManagerPage"><code translate="no">[virtual noexcept] </code>PackageManagerPage::<span class="name">~PackageManagerPage</span>()</h3>
+<p>Destructs a package manager page.</p>
+<!-- @@@~PackageManagerPage -->
+<!-- $$$entered[overload1]$$$entered -->
+<h3 class="fn" translate="no" id="entered"><code translate="no">[signal] </code><span class="type">void</span> PackageManagerPage::<span class="name">entered</span>()</h3>
+<p>This signal is called when a page is entered.</p>
+<!-- @@@entered -->
+<!-- $$$entering[overload1]$$$entering -->
+<h3 class="fn" translate="no" id="entering"><code translate="no">[virtual protected] </code><span class="type">void</span> PackageManagerPage::<span class="name">entering</span>()</h3>
+<p>Called when end users enter the page and the <a href="qinstaller-packagemanagergui.html" translate="no">PackageManagerGui</a>:currentPageChanged() signal is triggered. Supports the QWizardPage::​initializePage() function to ensure that the page's fields are properly initialized based on fields from previous pages. Otherwise, <code translate="no">initializePage()</code> would only be called once if the installer has been set to QWizard::IndependentPages.</p>
+<!-- @@@entering -->
+<!-- $$$findWidget[overload1]$$$findWidgetconstQString& -->
+<h3 class="fn" translate="no" id="findWidget"><code translate="no">[virtual protected] </code><span class="type">QWidget</span> *PackageManagerPage::<span class="name">findWidget</span>(const <span class="type">QString</span> &amp;<i>objectName</i>) const</h3>
+<p>Returns the widget specified by <i translate="no">objectName</i>.</p>
+<!-- @@@findWidget -->
+<!-- $$$gui[overload1]$$$gui -->
+<h3 class="fn" translate="no" id="gui"><span class="type"><a href="qinstaller-packagemanagergui.html" translate="no">QInstaller::PackageManagerGui</a></span> *PackageManagerPage::<span class="name">gui</span>() const</h3>
+<p>Returns the wizard this page belongs to.</p>
+<!-- @@@gui -->
+<!-- $$$insertWidget[overload1]$$$insertWidgetQWidget*constQString&int -->
+<h3 class="fn" translate="no" id="insertWidget"><code translate="no">[virtual protected] </code><span class="type">void</span> PackageManagerPage::<span class="name">insertWidget</span>(<span class="type">QWidget</span> *<i>widget</i>, const <span class="type">QString</span> &amp;<i>siblingName</i>, <span class="type">int</span> <i>offset</i> = 1)</h3>
+<p>Inserts <i translate="no">widget</i> at the position specified by <i translate="no">offset</i> in relation to another widget specified by <i translate="no">siblingName</i>. The default position is directly behind the sibling.</p>
+<!-- @@@insertWidget -->
+<!-- $$$isComplete[overload1]$$$isComplete -->
+<h3 class="fn" translate="no" id="isComplete"><code translate="no">[override virtual] </code><span class="type">bool</span> PackageManagerPage::<span class="name">isComplete</span>() const</h3>
+<p>Returns <code translate="no">true</code> if the page is complete; otherwise, returns <code translate="no">false</code>.</p>
+<!-- @@@isComplete -->
+<!-- $$$isInterruptible[overload1]$$$isInterruptible -->
+<h3 class="fn" translate="no" id="isInterruptible"><code translate="no">[virtual] </code><span class="type">bool</span> PackageManagerPage::<span class="name">isInterruptible</span>() const</h3>
+<p>Returns <code translate="no">true</code> if the installation can be interrupted.</p>
+<!-- @@@isInterruptible -->
+<!-- $$$leaving[overload1]$$$leaving -->
+<h3 class="fn" translate="no" id="leaving"><code translate="no">[virtual protected] </code><span class="type">void</span> PackageManagerPage::<span class="name">leaving</span>()</h3>
+<p>Called when end users leave the page and the <a href="qinstaller-packagemanagergui.html" translate="no">PackageManagerGui</a>:currentPageChanged() signal is triggered.</p>
+<!-- @@@leaving -->
+<!-- $$$left[overload1]$$$left -->
+<h3 class="fn" translate="no" id="left"><code translate="no">[signal] </code><span class="type">void</span> PackageManagerPage::<span class="name">left</span>()</h3>
+<p>This signal is called when a page is left.</p>
+<!-- @@@left -->
+<!-- $$$nextId[overload1]$$$nextId -->
+<h3 class="fn" translate="no" id="nextId"><code translate="no">[override virtual protected] </code><span class="type">int</span> PackageManagerPage::<span class="name">nextId</span>() const</h3>
+<p>Determines which page should be shown next depending on whether the application is being installed, updated, or uninstalled.</p>
+<p>The license check page is shown only if a component that provides a license is selected for installation. It is hidden during uninstallation and update.</p>
+<!-- @@@nextId -->
+<!-- $$$packageManagerCore[overload1]$$$packageManagerCore -->
+<h3 class="fn" translate="no" id="packageManagerCore"><code translate="no">[protected] </code><span class="type"><a href="qinstaller-packagemanagercore.html" translate="no">QInstaller::PackageManagerCore</a></span> *PackageManagerPage::<span class="name">packageManagerCore</span>() const</h3>
+<p>Returns the package manager core.</p>
+<!-- @@@packageManagerCore -->
+<!-- $$$pageListTitle[overload1]$$$pageListTitle -->
+<h3 class="fn" translate="no" id="pageListTitle"><span class="type">QString</span> PackageManagerPage::<span class="name">pageListTitle</span>() const</h3>
+<p>Returns the title shown on installer page indicator for this page. If empty, a fallback title is being used instead.</p>
+<p><b>See also </b><a href="qinstaller-packagemanagerpage.html#setPageListTitle" translate="no">setPageListTitle</a>().</p>
+<!-- @@@pageListTitle -->
+<!-- $$$productName[overload1]$$$productName -->
+<h3 class="fn" translate="no" id="productName"><code translate="no">[virtual] </code><span class="type">QString</span> PackageManagerPage::<span class="name">productName</span>() const</h3>
+<p>Returns the product name of the application being installed.</p>
+<!-- @@@productName -->
+<!-- $$$setColoredSubTitle[overload1]$$$setColoredSubTitleconstQString& -->
+<h3 class="fn" translate="no" id="setColoredSubTitle"><span class="type">void</span> PackageManagerPage::<span class="name">setColoredSubTitle</span>(const <span class="type">QString</span> &amp;<i>subTitle</i>)</h3>
+<p>Sets the font color of <i translate="no">subTitle</i>.</p>
+<!-- @@@setColoredSubTitle -->
+<!-- $$$setColoredTitle[overload1]$$$setColoredTitleconstQString& -->
+<h3 class="fn" translate="no" id="setColoredTitle"><span class="type">void</span> PackageManagerPage::<span class="name">setColoredTitle</span>(const <span class="type">QString</span> &amp;<i>title</i>)</h3>
+<p>Sets the font color of <i translate="no">title</i>. The title is specified in the <code translate="no">&lt;Title&gt;</code> element of the package information file. It is the name of the installer as displayed on the title bar.</p>
+<!-- @@@setColoredTitle -->
+<!-- $$$setComplete[overload1]$$$setCompletebool -->
+<h3 class="fn" translate="no" id="setComplete"><span class="type">void</span> PackageManagerPage::<span class="name">setComplete</span>(<span class="type">bool</span> <i>complete</i>)</h3>
+<p>Sets the package manager page to complete if <i translate="no">complete</i> is <code translate="no">true</code>. Emits the completeChanged() signal.</p>
+<p><b>See also </b><a href="qinstaller-packagemanagerpage.html#isComplete" translate="no">isComplete</a>().</p>
+<!-- @@@setComplete -->
+<!-- $$$setPageListTitle[overload1]$$$setPageListTitleconstQString& -->
+<h3 class="fn" translate="no" id="setPageListTitle"><span class="type">void</span> PackageManagerPage::<span class="name">setPageListTitle</span>(const <span class="type">QString</span> &amp;<i>title</i>)</h3>
+<p>Sets the title shown on installer page indicator for this page to <i translate="no">title</i>. Pages that do not set this will use a fallback title instead.</p>
+<p><b>See also </b><a href="qinstaller-packagemanagerpage.html#pageListTitle" translate="no">pageListTitle</a>().</p>
+<!-- @@@setPageListTitle -->
+<!-- $$$setSettingsButtonRequested[overload1]$$$setSettingsButtonRequestedbool -->
+<h3 class="fn" translate="no" id="setSettingsButtonRequested"><span class="type">void</span> PackageManagerPage::<span class="name">setSettingsButtonRequested</span>(<span class="type">bool</span> <i>request</i>)</h3>
+<p>Determines that the page should request the <b translate="no">Settings</b> button if <i translate="no">request</i> is <code translate="no">true</code>.</p>
+<p><b>See also </b><a href="qinstaller-packagemanagerpage.html#settingsButtonRequested" translate="no">settingsButtonRequested</a>().</p>
+<!-- @@@setSettingsButtonRequested -->
+<!-- $$$setShowOnPageList[overload1]$$$setShowOnPageListbool -->
+<h3 class="fn" translate="no" id="setShowOnPageList"><span class="type">void</span> PackageManagerPage::<span class="name">setShowOnPageList</span>(<span class="type">bool</span> <i>show</i>)</h3>
+<p>Sets the page visibility on installer page indicator based on <i translate="no">show</i>. All pages are shown by default.</p>
+<p><b>See also </b><a href="qinstaller-packagemanagerpage.html#showOnPageList" translate="no">showOnPageList</a>().</p>
+<!-- @@@setShowOnPageList -->
+<!-- $$$setValidatePageComponent[overload1]$$$setValidatePageComponentQInstaller::Component* -->
+<h3 class="fn" translate="no" id="setValidatePageComponent"><span class="type">void</span> PackageManagerPage::<span class="name">setValidatePageComponent</span>(<span class="type"><a href="qinstaller-component.html" translate="no">QInstaller::Component</a></span> *<i>component</i>)</h3>
+<p>Sets the <i translate="no">component</i> that validates the page.</p>
+<!-- @@@setValidatePageComponent -->
+<!-- $$$settingsButtonRequested[overload1]$$$settingsButtonRequested -->
+<h3 class="fn" translate="no" id="settingsButtonRequested"><span class="type">bool</span> PackageManagerPage::<span class="name">settingsButtonRequested</span>() const</h3>
+<p>Returns <code translate="no">true</code> if the page requests the wizard to show the <b translate="no">Settings</b> button.</p>
+<!-- @@@settingsButtonRequested -->
+<!-- $$$showOnPageList[overload1]$$$showOnPageList -->
+<h3 class="fn" translate="no" id="showOnPageList"><span class="type">bool</span> PackageManagerPage::<span class="name">showOnPageList</span>() const</h3>
+<p>Returns <code translate="no">true</code> if the page should be shown on installer page indicator.</p>
+<p><b>See also </b><a href="qinstaller-packagemanagerpage.html#setShowOnPageList" translate="no">setShowOnPageList</a>().</p>
+<!-- @@@showOnPageList -->
+<!-- $$$showOnPageListChanged[overload1]$$$showOnPageListChanged -->
+<h3 class="fn" translate="no" id="showOnPageListChanged"><code translate="no">[signal] </code><span class="type">void</span> PackageManagerPage::<span class="name">showOnPageListChanged</span>()</h3>
+<p>Called when page visibility on page list has changed and refresh is needed.</p>
+<!-- @@@showOnPageListChanged -->
+<!-- $$$validatePage[overload1]$$$validatePage -->
+<h3 class="fn" translate="no" id="validatePage"><code translate="no">[override virtual] </code><span class="type">bool</span> PackageManagerPage::<span class="name">validatePage</span>()</h3>
+<p>Returns <code translate="no">true</code> if the end user has entered complete and valid information.</p>
+<!-- @@@validatePage -->
+<!-- $$$wizardPixmap[overload1]$$$wizardPixmapconstQString& -->
+<h3 class="fn" translate="no" id="wizardPixmap"><code translate="no">[virtual] </code><span class="type">QPixmap</span> PackageManagerPage::<span class="name">wizardPixmap</span>(const <span class="type">QString</span> &amp;<i>pixmapType</i>) const</h3>
+<p>Returns the pixmap specified by <i translate="no">pixmapType</i>. <i translate="no">pixmapType</i> can be <code translate="no">&lt;Banner&gt;</code>, <code translate="no">&lt;Logo&gt;</code> or <code translate="no">&lt;Watermark&gt;</code> element of the package information file. If @2x image is provided, returns that instead for high DPI displays.</p>
+<!-- @@@wizardPixmap -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

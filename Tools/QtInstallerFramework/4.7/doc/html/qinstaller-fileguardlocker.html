@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- fileguard.cpp -->
+  <meta name="description" content="The FileGuardLocker class locks a file path and releases it on destruction.">
+  <title>FileGuardLocker Class | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>FileGuardLocker</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">FileGuardLocker Class</h1>
+<span class="small-subtitle" translate="no">class <a href="scripting-qinstaller.html" translate="no">QInstaller</a>::FileGuardLocker</span>
+<!-- $$$FileGuardLocker-brief -->
+<p>The <code translate="no">FileGuardLocker</code> class locks a file path and releases it on destruction. <a href="#details">More...</a></p>
+<!-- @@@FileGuardLocker -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;FileGuardLocker&gt;</span></td></tr>
+</table></div>
+<ul>
+<li><a href="qinstaller-fileguardlocker-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-fileguardlocker.html#FileGuardLocker" translate="no">FileGuardLocker</a></b>(const QString &amp;<i>path</i>, QInstaller::FileGuard *<i>guard</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-fileguardlocker.html#dtor.FileGuardLocker" translate="no">~FileGuardLocker</a></b>()</td></tr>
+</table></div>
+<!-- $$$FileGuardLocker-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+<p>A convenience class for locking a file path using the resource acquisition is initialization (RAII) programming idiom.</p>
+</div>
+<!-- @@@FileGuardLocker -->
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$FileGuardLocker[overload1]$$$FileGuardLockerconstQString&QInstaller::FileGuard* -->
+<h3 class="fn" translate="no" id="FileGuardLocker"><code translate="no">[explicit] </code>FileGuardLocker::<span class="name">FileGuardLocker</span>(const <span class="type">QString</span> &amp;<i>path</i>, <span class="type"><a href="qinstaller-fileguard.html" translate="no">QInstaller::FileGuard</a></span> *<i>guard</i>)</h3>
+<p>Constructs the object and attempts to lock <i translate="no">path</i> with <i translate="no">guard</i>. If the lock is already held by another thread, this method will wait for it to become available.</p>
+<!-- @@@FileGuardLocker -->
+<!-- $$$~FileGuardLocker[overload1]$$$~FileGuardLocker -->
+<h3 class="fn" translate="no" id="dtor.FileGuardLocker"><code translate="no">[noexcept] </code>FileGuardLocker::<span class="name">~FileGuardLocker</span>()</h3>
+<p>Destructs the object and unlocks the locked file path.</p>
+<!-- @@@~FileGuardLocker -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

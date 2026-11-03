@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- componentalias.qdoc -->
+  <meta name="description" content="Using installer's aliases.xml file to define component aliases and their relations to other aliases and components.">
+  <title>Component Alias Example | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="qtifwexamples.html" translate="no">Qt Installer Framework Examples</a></li>
+<li>Component Alias Example</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#configuring-the-example-installer">Configuring the Example Installer</a></li>
+<li class="level1"><a href="#creating-the-example-package-information-file">Creating the Example Package Information File</a></li>
+<li class="level1"><a href="#referring-to-component-aliases-from-command-line">Referring to Component Aliases from Command Line</a></li>
+<li class="level2"><a href="#searching-available-component-aliases">Searching Available Component Aliases</a></li>
+<li class="level2"><a href="#installing-available-component-aliases">Installing Available Component Aliases</a></li>
+<li class="level1"><a href="#virtual-component-aliases">Virtual Component Aliases</a></li>
+<li class="level1"><a href="#optional-dependencies-for-component-aliases">Optional Dependencies for Component Aliases</a></li>
+<li class="level1"><a href="#generating-the-example-installer">Generating the Example Installer</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title">Component Alias Example</h1>
+<!-- $$$componentalias-brief -->
+<p>Using installer's aliases.xml file to define component aliases and their relations to other aliases and components.</p>
+<!-- @@@componentalias -->
+<!-- $$$componentalias-description -->
+<div class="descr" id="details">
+<p><i>Component Alias</i> illustrates how to specify component aliases and how they influence the installation and maintenance processes for command line usage.</p>
+<h4 id="configuring-the-example-installer">Configuring the Example Installer</h4>
+<p>The installer configuration file, config.xml, in the <code translate="no">config</code> directory specifies the text and default values used in the installer:</p>
+<ul>
+<li>The <code translate="no">&lt;Name&gt;</code> element sets the application name and adds it to the page name and introduction text.</li>
+<li>The <code translate="no">&lt;Version&gt;</code> element sets the application version number.</li>
+<li>The <code translate="no">&lt;Title&gt;</code> element sets the installer name and displays it on the title bar.</li>
+<li>The <code translate="no">&lt;Publisher&gt;</code> element sets the publisher of the software (as shown in the Windows Control Panel, for example).</li>
+<li>The <code translate="no">&lt;StartMenuDir&gt;</code> element sets the name of the default program group for the product in the Windows <b>Start</b> menu.</li>
+<li>The <code translate="no">&lt;TargetDir&gt;</code> element sets the default target directory location to be within the <code translate="no">IfwExamples</code> directory in the home directory of the current user (because it uses the pre-existing variable <code translate="no">,</code> @HomeDir@, as part of the value). For more information, see <a href="scripting.html#predefined-variables" translate="no">Predefined Variables</a>.</li>
+</ul>
+<ul>
+<li>The <code translate="no">&lt;AliasDefinitionsFile&gt;</code> element is set to <code translate="no">aliases.xml</code> to tell the installer the source for the alias definitions.</li>
+</ul>
+<pre class="cpp" translate="no">
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ &lt;Installer&gt;
+     &lt;Name&gt;Component Alias Example&lt;/Name&gt;
+     &lt;Version&gt;1.0.0&lt;/Version&gt;
+     &lt;Title&gt;Component Alias Example&lt;/Title&gt;
+     &lt;Publisher&gt;Qt-Project&lt;/Publisher&gt;
+     &lt;StartMenuDir&gt;Qt IFW Examples&lt;/StartMenuDir&gt;
+     &lt;TargetDir&gt;@HomeDir@/IfwExamples/componentalias&lt;/TargetDir&gt;
+     &lt;AliasDefinitionsFile&gt;aliases.xml&lt;/AliasDefinitionsFile&gt;
+ &lt;/Installer&gt;
+</pre>
+<p>In this example, the aliases.xml file declares three component aliases. Two aliases, <code translate="no">set1</code> and <code translate="no">set2</code> require a subset of available components, while <code translate="no">set-full</code> requires the former two aliases, thus all available components.</p>
+<pre class="cpp" translate="no">
+ &lt;?xml version=&quot;1.0&quot;?&gt;
+ &lt;Aliases&gt;
+     &lt;Alias&gt;
+         &lt;Name&gt;set1&lt;/Name&gt;
+         &lt;DisplayName&gt;Component Set 1&lt;/DisplayName&gt;
+         &lt;Description&gt;Alias for components A, B, and C&lt;/Description&gt;
+         &lt;Version&gt;1.0.0&lt;/Version&gt;
+         &lt;Virtual&gt;false&lt;/Virtual&gt;
+         &lt;RequiredComponents&gt;componentA,componentB,componentC&lt;/RequiredComponents&gt;
+     &lt;/Alias&gt;
+     &lt;Alias&gt;
+         &lt;Name&gt;set2&lt;/Name&gt;
+         &lt;DisplayName&gt;Component Set 2&lt;/DisplayName&gt;
+         &lt;Description&gt;Alias for components D, and E&lt;/Description&gt;
+         &lt;Version&gt;1.0.0&lt;/Version&gt;
+         &lt;Virtual&gt;false&lt;/Virtual&gt;
+         &lt;RequiredComponents&gt;componentD,componentE&lt;/RequiredComponents&gt;
+     &lt;/Alias&gt;
+     &lt;Alias&gt;
+         &lt;Name&gt;set-full&lt;/Name&gt;
+         &lt;DisplayName&gt;Full Component Set&lt;/DisplayName&gt;
+         &lt;Description&gt;Alias for full installation&lt;/Description&gt;
+         &lt;Version&gt;1.0.0&lt;/Version&gt;
+         &lt;Virtual&gt;false&lt;/Virtual&gt;
+         &lt;RequiredAliases&gt;set1,set2&lt;/RequiredAliases&gt;
+     &lt;/Alias&gt;
+ &lt;/Aliases&gt;
+</pre>
+<p>For full reference of the alias definitions file syntax, see <a href="ifw-aliasconfig.html" translate="no">Alias Definition File</a>.</p>
+<h4 id="creating-the-example-package-information-file">Creating the Example Package Information File</h4>
+<p>The installer package information file, package.xml, in the <code translate="no">meta</code> directory specifies the components that are available for installation:</p>
+<ul>
+<li>The <code translate="no">&lt;DisplayName&gt;</code> element sets the human-readable name of the component.</li>
+<li>The <code translate="no">&lt;Description&gt;</code> element sets the human-readable description of the component.</li>
+<li>The <code translate="no">&lt;Version&gt;</code> element sets the version number of the component.</li>
+<li>The <code translate="no">&lt;ReleaseDate&gt;</code> element sets the date of release for this component version.</li>
+</ul>
+<h4 id="referring-to-component-aliases-from-command-line">Referring to Component Aliases from Command Line</h4>
+<p>The declared component aliases can be used from the installer's command line interface with the <code translate="no">search</code> and <code translate="no">install</code> commands.</p>
+<h5 id="searching-available-component-aliases">Searching Available Component Aliases</h5>
+<p>The <code translate="no">search</code> command will by default search available aliases first, and then normal components:</p>
+<pre class="cpp" translate="no">
+ $ installer search
+</pre>
+<p>The command will print a table of aliases that were declared in the alias definition file:</p>
+<pre class="cpp" translate="no">
+ Name: set<span class="operator">-</span>full
+ Display name: Full Component Set
+ Description: Alias <span class="keyword">for</span> full installation
+ Version: <span class="number">1.0.0</span>
+ Components:
+ Required aliases: set1<span class="operator">,</span>set2
+ <span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span>
+ Name: set1
+ Display name: Component Set <span class="number">1</span>
+ Description: Alias <span class="keyword">for</span> components A<span class="operator">,</span> B<span class="operator">,</span> <span class="keyword">and</span> C
+ Version: <span class="number">1.0.0</span>
+ Components: componentA<span class="operator">,</span>componentB<span class="operator">,</span>componentC
+ Required aliases:
+ <span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span><span class="operator">=</span>
+ Name: set2
+ Display name: Component Set <span class="number">2</span>
+ Description: Alias <span class="keyword">for</span> components D<span class="operator">,</span> <span class="keyword">and</span> E
+ Version: <span class="number">1.0.0</span>
+ Components: componentD<span class="operator">,</span>componentE
+ Required aliases:
+</pre>
+<h5 id="installing-available-component-aliases">Installing Available Component Aliases</h5>
+<p>The <code translate="no">install</code> command can be used to install the components referred by a component alias:</p>
+<pre class="cpp" translate="no">
+ $ installer install set1
+</pre>
+<p>This command is practically equivalent to selecting the components explicitly by their names:</p>
+<pre class="cpp" translate="no">
+ $ installer install componentA componentB componentC
+</pre>
+<p>When selecting aliases for installation, the component changes summary will show separate sections for components selected by a aliases, to differentiate from manual selection:</p>
+<pre class="cpp" translate="no">
+ $ installer install set1 componentD
+</pre>
+<p>This will output the following component changes summary:</p>
+<pre class="cpp" translate="no">
+ Components selected by alias <span class="string">&quot;set1&quot;</span>:
+ componentA
+ componentB
+ componentC
+ Selected components without dependencies:
+ componentD
+</pre>
+<p>The <code translate="no">&lt;RequiredComponents&gt;</code> property does not declare a hard dependency for components, and those can be later on updated or uninstalled individually from the alias:</p>
+<pre class="cpp" translate="no">
+ $ maintenancetool remove componentA
+</pre>
+<p>After this, selecting the <code translate="no">set1</code> alias for installation again would also select <code translate="no">componentA</code> for reinstallation.</p>
+<h4 id="virtual-component-aliases">Virtual Component Aliases</h4>
+<p>Component aliases may be declared <code translate="no">&lt;Virtual&gt;</code>. This works similarly with virtual components, so that they cannot be manually selected by the user and do not show in component search results. Such aliases must be included by other aliases with the <code translate="no">&lt;RequiredAliases&gt;</code> property.</p>
+<h4 id="optional-dependencies-for-component-aliases">Optional Dependencies for Component Aliases</h4>
+<p>In addition to dependencies declared with <code translate="no">&lt;RequiredComponents&gt;</code> and <code translate="no">&lt;RequiredAliases&gt;</code> as shown in this example, aliases may have optional dependencies declared with <code translate="no">&lt;OptionalComponents&gt;</code> and <code translate="no">&lt;OptionalAliases&gt;</code> properties. The latter properties differ from the requirements in that they do not cause the alias declaring the requirement to become unselectable, in case the referenced components or aliases are not known to the installer.</p>
+<p>This provides the packager some flexibility for declaring the dependencies. For example, an installer may be expected to use an optional repository, which contains components that a component alias optionally depends on, but the alias should be also available for installation when the repository is disabled.</p>
+<h4 id="generating-the-example-installer">Generating the Example Installer</h4>
+<p>To create the example installer, switch to the example source directory on the command line and enter the following command:</p>
+<ul>
+<li>On Windows:<pre class="cpp" translate="no">
+ <span class="operator">.</span><span class="operator">.</span>\<span class="operator">.</span><span class="operator">.</span>\bin\binarycreator<span class="operator">.</span>exe <span class="operator">-</span>c config\config<span class="operator">.</span>xml <span class="operator">-</span>p packages installer<span class="operator">.</span>exe
+</pre>
+</li>
+<li>On Linux or macOS:<pre class="cpp" translate="no">
+ <span class="operator">.</span><span class="operator">.</span><span class="operator">/</span><span class="operator">.</span><span class="operator">.</span><span class="operator">/</span>bin<span class="operator">/</span>binarycreator <span class="operator">-</span>c config<span class="operator">/</span>config<span class="operator">.</span>xml <span class="operator">-</span>p packages installer
+</pre>
+</li>
+</ul>
+<p>This creates the installer to the current directory.</p>
+<p>Files:</p>
+<ul>
+<li><a href="qtinstallerframework-componentalias-componentalias-pro.html" translate="no">componentalias/componentalias.pro</a></li>
+<li><a href="qtinstallerframework-componentalias-config-aliases-xml.html" translate="no">componentalias/config/aliases.xml</a></li>
+<li><a href="qtinstallerframework-componentalias-config-config-xml.html" translate="no">componentalias/config/config.xml</a></li>
+<li><a href="qtinstallerframework-componentalias-packages-componenta-data-installcontenta-txt.html" translate="no">componentalias/packages/componentA/data/installcontentA.txt</a></li>
+<li><a href="qtinstallerframework-componentalias-packages-componenta-meta-package-xml.html" translate="no">componentalias/packages/componentA/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-componentalias-packages-componentb-data-installcontentb-txt.html" translate="no">componentalias/packages/componentB/data/installcontentB.txt</a></li>
+<li><a href="qtinstallerframework-componentalias-packages-componentb-meta-package-xml.html" translate="no">componentalias/packages/componentB/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-componentalias-packages-componentc-data-installcontentc-txt.html" translate="no">componentalias/packages/componentC/data/installcontentC.txt</a></li>
+<li><a href="qtinstallerframework-componentalias-packages-componentc-meta-package-xml.html" translate="no">componentalias/packages/componentC/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-componentalias-packages-componentd-data-installcontentd-txt.html" translate="no">componentalias/packages/componentD/data/installcontentD.txt</a></li>
+<li><a href="qtinstallerframework-componentalias-packages-componentd-meta-package-xml.html" translate="no">componentalias/packages/componentD/meta/package.xml</a></li>
+<li><a href="qtinstallerframework-componentalias-packages-componente-data-installcontente-txt.html" translate="no">componentalias/packages/componentE/data/installcontentE.txt</a></li>
+<li><a href="qtinstallerframework-componentalias-packages-componente-meta-package-xml.html" translate="no">componentalias/packages/componentE/meta/package.xml</a></li>
+</ul>
+</div>
+<!-- @@@componentalias -->
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- updateoperation.cpp -->
+  <meta name="description" content="The UpdateOperation class is an abstract base class for update operations.">
+  <title>List of All Members for UpdateOperation | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>UpdateOperation</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar"><div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">List of All Members for UpdateOperation</h1>
+<p>This is the complete list of members for <a href="kdupdater-updateoperation.html">KDUpdater::UpdateOperation</a>, including inherited members.</p>
+<div class="table"><table class="propsummary" translate="no">
+<tr><td class="topAlign"><ul>
+<li class="fn" translate="no">enum <span class="name"><b><a href="kdupdater-updateoperation.html#Error-enum" translate="no">Error</a></b></span></li>
+<li class="fn" translate="no">enum <span class="name"><b><a href="kdupdater-updateoperation.html#OperationGroup-enum" translate="no">OperationGroup</a></b></span></li>
+<li class="fn" translate="no">flags <span class="name"><b><a href="kdupdater-updateoperation.html#OperationGroup-enum" translate="no">OperationGroups</a></b></span></li>
+<li class="fn" translate="no">enum <span class="name"><b><a href="kdupdater-updateoperation.html#OperationType-enum" translate="no">OperationType</a></b></span></li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#argumentKeyValue" translate="no">argumentKeyValue</a></b></span>(const QString &amp;, const QString &amp;) const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#arguments" translate="no">arguments</a></b></span>() const : QStringList</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#backup" translate="no">backup</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#checkArgumentCount" translate="no">checkArgumentCount</a></b></span>(int, int, const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#checkArgumentCount-1" translate="no">checkArgumentCount</a></b></span>(int) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#clear" translate="no">clear</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#clearValue" translate="no">clearValue</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#deleteFileNowOrLater" translate="no">deleteFileNowOrLater</a></b></span>(const QString &amp;, QString *) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#error" translate="no">error</a></b></span>() const : int</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#errorString" translate="no">errorString</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#filesForDelayedDeletion" translate="no">filesForDelayedDeletion</a></b></span>() const : QStringList</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#fromXml" translate="no">fromXml</a></b></span>(const QDomDocument &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#fromXml-1" translate="no">fromXml</a></b></span>(const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#group" translate="no">group</a></b></span>() const : KDUpdater::UpdateOperation::OperationGroup</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#hasValue" translate="no">hasValue</a></b></span>(const QString &amp;) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#name" translate="no">name</a></b></span>() const : QString</li>
+</ul></td><td class="topAlign"><ul>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#operationCommand" translate="no">operationCommand</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#packageManager" translate="no">packageManager</a></b></span>() const : QInstaller::PackageManagerCore *</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#parsePerformOperationArguments" translate="no">parsePerformOperationArguments</a></b></span>() : QStringList</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#parseUndoOperationArguments" translate="no">parseUndoOperationArguments</a></b></span>() : QStringList</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#performOperation" translate="no">performOperation</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#registerForDelayedDeletion" translate="no">registerForDelayedDeletion</a></b></span>(const QStringList &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#requiresUnreplacedVariables" translate="no">requiresUnreplacedVariables</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#setArguments" translate="no">setArguments</a></b></span>(const QStringList &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#setError" translate="no">setError</a></b></span>(int, const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#setErrorString" translate="no">setErrorString</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#setGroup" translate="no">setGroup</a></b></span>(const KDUpdater::UpdateOperation::OperationGroup &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#setName" translate="no">setName</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#setRequiresUnreplacedVariables" translate="no">setRequiresUnreplacedVariables</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#setValue" translate="no">setValue</a></b></span>(const QString &amp;, const QVariant &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#sizeHint" translate="no">sizeHint</a></b></span>() : quint64</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#testOperation" translate="no">testOperation</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#toXml" translate="no">toXml</a></b></span>() const : QDomDocument</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#undoOperation" translate="no">undoOperation</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#value" translate="no">value</a></b></span>(const QString &amp;) const : QVariant</li>
+<li class="fn" translate="no"><span class="name"><b><a href="kdupdater-updateoperation.html#variableReplacement" translate="no">variableReplacement</a></b></span>(QString *) : bool</li>
+</ul>
+</td></tr>
+</table></div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

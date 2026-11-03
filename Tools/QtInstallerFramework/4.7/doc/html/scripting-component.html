@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- component.qdoc -->
+  <meta name="description" content="Represents the current component that the Qt Script belongs to.">
+  <title>component QML Type | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="scripting-qmlmodule.html" translate="no">scripting</a></li>
+<li>component</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#properties">Properties</a></li>
+<li class="level1"><a href="#signals">Signals</a></li>
+<li class="level1"><a href="#methods">Methods</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">component QML Type</h1>
+<!-- $$$component-brief -->
+<p>Represents the current component that the Qt Script belongs to. <a href="#details">More...</a></p>
+<!-- @@@component -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Import Statement:</td><td class="memItemRight bottomAlign"> import scripting</td></tr></table></div><ul>
+<li><a href="scripting-component-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="properties">Properties</h2>
+<ul>
+<li class="fn" translate="no"><b><a href="scripting-component.html#archives-prop" translate="no">archives</a></b> : stringlist</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#autoCreateOperations-prop" translate="no">autoCreateOperations</a></b> : boolean</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#autoDependencies-prop" translate="no">autoDependencies</a></b> : stringlist</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#default-prop" translate="no">default</a></b> : boolean</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#dependencies-prop" translate="no">dependencies</a></b> : stringlist</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#displayName-prop" translate="no">displayName</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#enabled-prop" translate="no">enabled</a></b> : boolean</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#fromOnlineRepository-prop" translate="no">fromOnlineRepository</a></b> : boolean</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#installed-prop" translate="no">installed</a></b> : boolean</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#name-prop" translate="no">name</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#repositoryUrl-prop" translate="no">repositoryUrl</a></b> : url</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#userInterfaces-prop" translate="no">userInterfaces</a></b> : stringlist</li>
+</ul>
+<h2 id="signals">Signals</h2>
+<ul>
+<li class="fn" translate="no"><b><a href="scripting-component.html#loaded-signal" translate="no">loaded</a></b>()</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#valueChanged-signal" translate="no">valueChanged</a></b>(string <i>key</i>, string <i>value</i>)</li>
+<li class="fn" translate="no"><b><a href="scripting-component.html#virtualStateChanged-signal" translate="no">virtualStateChanged</a></b>()</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<ul>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#addAutoDependOn-method" translate="no">addAutoDependOn</a></b>(string <i>newDependOn</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#addDependency-method" translate="no">addDependency</a></b>(string <i>newDependency</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#addDownloadableArchive-method" translate="no">addDownloadableArchive</a></b>(string <i>path</i>)</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#addElevatedOperation-method" translate="no">addElevatedOperation</a></b>(string <i>operation</i>, string <i>parameter1</i>, string <i>parameter2</i>, <i>...</i>, string <i>parameter10</i>)</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#addElevatedOperation-method-1" translate="no">addElevatedOperation</a></b>(string <i>operation</i>, stringlist <i>parameters</i>)</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#addOperation-method" translate="no">addOperation</a></b>(string <i>operation</i>, stringlist <i>parameters</i>)</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#addOperation-method-1" translate="no">addOperation</a></b>(string <i>operation</i>, string <i>parameter1</i>, string <i>parameter2</i>, <i>...</i>, string <i>parameter10</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#addStopProcessForUpdateRequest-method" translate="no">addStopProcessForUpdateRequest</a></b>(string <i>process</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#beginInstallation-method" translate="no">beginInstallation</a></b>()</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#componentChangeRequested-method" translate="no">componentChangeRequested</a></b>()</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#createOperations-method" translate="no">createOperations</a></b>()</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#createOperationsForArchive-method" translate="no">createOperationsForArchive</a></b>(string <i>archive</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#createOperationsForPath-method" translate="no">createOperationsForPath</a></b>(string <i>path</i>)</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#installationRequested-method" translate="no">installationRequested</a></b>()</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#isAutoDependOn-method" translate="no">isAutoDependOn</a></b>(QSet&lt;string&gt; <i>componentsToInstall</i>)</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#isDefault-method" translate="no">isDefault</a></b>()</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#isForcedUpdate-method" translate="no">isForcedUpdate</a></b>()</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#isFromOnlineRepository-method" translate="no">isFromOnlineRepository</a></b>()</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#isInstalled-method" translate="no">isInstalled</a></b>()</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#isUninstalled-method" translate="no">isUninstalled</a></b>()</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#isUpdateAvailable-method" translate="no">isUpdateAvailable</a></b>()</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#registerPathForUninstallation-method" translate="no">registerPathForUninstallation</a></b>(string <i>path</i>, boolean <i>wipe</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#removeDownloadableArchive-method" translate="no">removeDownloadableArchive</a></b>(string <i>path</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#removeStopProcessForUpdateRequest-method" translate="no">removeStopProcessForUpdateRequest</a></b>(string <i>process</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#setAutoCreateOperations-method" translate="no">setAutoCreateOperations</a></b>(boolean <i>autoCreateOperations</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#setInstalled-method" translate="no">setInstalled</a></b>()</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#setStopProcessForUpdateRequest-method" translate="no">setStopProcessForUpdateRequest</a></b>(string <i>process</i>, boolean <i>requested</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#setUninstalled-method" translate="no">setUninstalled</a></b>()</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#setUpdateAvailable-method" translate="no">setUpdateAvailable</a></b>(boolean <i>isUpdateAvailable</i>)</li>
+<li class="fn" translate="no">void <b><a href="scripting-component.html#setValue-method" translate="no">setValue</a></b>(string <i>key</i>, string <i>value</i>)</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#uninstallationRequested-method" translate="no">uninstallationRequested</a></b>()</li>
+<li class="fn" translate="no">boolean <b><a href="scripting-component.html#updateRequested-method" translate="no">updateRequested</a></b>()</li>
+<li class="fn" translate="no">QWidget <b><a href="scripting-component.html#userInterface-method" translate="no">userInterface</a></b>(string <i>name</i>)</li>
+<li class="fn" translate="no">string <b><a href="scripting-component.html#value-method" translate="no">value</a></b>(string <i>key</i>, string <i>defaultValue</i>)</li>
+</ul>
+<!-- $$$component-description -->
+<h2 id="details">Detailed Description</h2>
+<p>A minimal valid script needs to contain a constructor, which can look like this:</p>
+<pre class="cpp" translate="no">
+ function Component()
+ {
+     <span class="comment">// Access the global component's name property and log it to the debug console.</span>
+     console<span class="operator">.</span>log(<span class="string">&quot;component: &quot;</span> <span class="operator">+</span> component<span class="operator">.</span>displayName);
+ }
+</pre>
+<p>The <code translate="no">Component</code> class and the script engine both modify the script before it is evaluated. When the modifications are applied to the above snippet, the script changes to:</p>
+<pre class="cpp" translate="no">
+ (function() { <span class="operator">[</span><span class="number">1</span><span class="operator">]</span>
+     var component <span class="operator">=</span> installer<span class="operator">.</span>componentByName(<span class="char">'Component.Name.This.Script.Belongs.To'</span>); <span class="operator">[</span><span class="number">2</span><span class="operator">]</span>
+     function Component()
+     {
+         <span class="comment">// Access the global component's name property and log it to the debug console.</span>
+         console<span class="operator">.</span>log(<span class="string">&quot;component: &quot;</span> <span class="operator">+</span> component<span class="operator">.</span>displayName);
+     }
+
+     <span class="keyword">if</span> (typeof Component <span class="operator">!</span><span class="operator">=</span> undefined) <span class="operator">[</span><span class="number">1</span><span class="operator">]</span>
+         <span class="keyword">return</span> <span class="keyword">new</span> Component; <span class="operator">[</span><span class="number">1</span><span class="operator">]</span>
+     <span class="keyword">else</span> <span class="operator">[</span><span class="number">1</span><span class="operator">]</span>
+         <span class="keyword">throw</span> <span class="string">&quot;Missing Component constructor. Please check your script.&quot;</span> <span class="operator">[</span><span class="number">1</span><span class="operator">]</span>
+ })();
+
+ <span class="operator">[</span><span class="number">1</span><span class="operator">]</span> Changes done by the script engine<span class="operator">.</span>
+ <span class="operator">[</span><span class="number">2</span><span class="operator">]</span> Changes done by the Component <span class="keyword">class</span><span class="operator">.</span>
+</pre>
+<div class="admonition note">
+<p><b>Note: </b>The <i>component</i> (in lower case) is the global variable the C++ <code translate="no">Component</code> class introduced. The <i>component</i> variable represents the C++ <code translate="no">Component</code> object that the script belongs to. The <i>Component</i> (in upper case) is a JavaScript object that gets instantiated by the script engine.</p>
+</div>
+<!-- @@@component -->
+<h2>Property Documentation</h2>
+<!-- $$$archives -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="archives-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">archives</span> : <span class="type">stringlist</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns the list of archive URL's (prefixed with <code translate="no">installer://</code>) registered for the component.</p>
+<p><b>See also </b><a href="scripting-component.html#addDownloadableArchive-method" translate="no">addDownloadableArchive</a> and <a href="scripting-component.html#removeDownloadableArchive-method" translate="no">removeDownloadableArchive</a>.</p>
+</div></div><!-- @@@archives -->
+<br/>
+<!-- $$$autoCreateOperations -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="autoCreateOperations-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">autoCreateOperations</span> : <span class="type">boolean</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Specifies whether some standard operations for the component should be automatically created when the installation starts. The default is <code translate="no">true</code>.</p>
+</div></div><!-- @@@autoCreateOperations -->
+<br/>
+<!-- $$$autoDependencies -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="autoDependencies-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">autoDependencies</span> : <span class="type">stringlist</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns the value of the <code translate="no">&lt;AutoDependOn&gt;</code> tag in the package information file.</p>
+</div></div><!-- @@@autoDependencies -->
+<br/>
+<!-- $$$default -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="default-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">default</span> : <span class="type">boolean</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>This read-only property indicates if the component is a default one.</p>
+<div class="admonition note">
+<p><b>Note: </b>Always <code translate="no">false</code> for virtual components.</p>
+</div>
+<p><b>See also </b><a href="scripting-component.html#isDefault-method" translate="no">isDefault</a>.</p>
+</div></div><!-- @@@default -->
+<br/>
+<!-- $$$dependencies -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="dependencies-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">dependencies</span> : <span class="type">stringlist</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>This read-only property contains components this component depends on.</p>
+</div></div><!-- @@@dependencies -->
+<br/>
+<!-- $$$displayName -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="displayName-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">displayName</span> : <span class="type">string</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns the name of the component as shown in the user interface.</p>
+</div></div><!-- @@@displayName -->
+<br/>
+<!-- $$$enabled -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="enabled-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">enabled</span> : <span class="type">boolean</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Indicates whether the component is currently enabled. The property is both readable and writable.</p>
+</div></div><!-- @@@enabled -->
+<br/>
+<!-- $$$fromOnlineRepository -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="fromOnlineRepository-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">fromOnlineRepository</span> : <span class="type">boolean</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns whether this component has been loaded from an online repository.</p>
+<p><b>See also </b><a href="scripting-component.html#isFromOnlineRepository-method" translate="no">isFromOnlineRepository</a>.</p>
+</div></div><!-- @@@fromOnlineRepository -->
+<br/>
+<!-- $$$installed -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="installed-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">installed</span> : <span class="type">boolean</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>This read-only property returns if the component is installed.</p>
+<p><b>See also </b><a href="scripting-component.html#isInstalled-method" translate="no">isInstalled</a>.</p>
+</div></div><!-- @@@installed -->
+<br/>
+<!-- $$$name -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="name-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">name</span> : <span class="type">string</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns the name of the component as set in the <code translate="no">&lt;Name&gt;</code> tag of the package information file.</p>
+</div></div><!-- @@@name -->
+<br/>
+<!-- $$$repositoryUrl -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="repositoryUrl-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">repositoryUrl</span> : <span class="type">url</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns the repository URL the component is downloaded from. When this component is not downloaded from an online repository, returns an empty #QUrl.</p>
+</div></div><!-- @@@repositoryUrl -->
+<br/>
+<!-- $$$userInterfaces -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="userInterfaces-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">userInterfaces</span> : <span class="type">stringlist</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns a list of all user interface class names known to this component.</p>
+</div></div><!-- @@@userInterfaces -->
+<br/>
+<h2>Signal Documentation</h2>
+<!-- $$$loaded[overload1]$$$loaded -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="loaded-signal">
+<td class="tblQmlFuncNode"><p>
+<span class="name">loaded</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Emitted when the component has been loaded.</p>
+<div class="admonition note"><p><b>Note: </b>The corresponding handler is <code translate="no">onLoaded</code>.</p>
+</div></div></div><!-- @@@loaded -->
+<br/>
+<!-- $$$valueChanged[overload1]$$$valueChangedstringstring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="valueChanged-signal">
+<td class="tblQmlFuncNode"><p>
+<span class="name">valueChanged</span>(<span class="type">string</span> <i>key</i>, <span class="type">string</span> <i>value</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Emitted when the value of the variable with the name <i translate="no">key</i> changes to <i translate="no">value</i>.</p>
+<div class="admonition note"><p><b>Note: </b>The corresponding handler is <code translate="no">onValueChanged</code>.</p>
+</div><p><b>See also </b><a href="scripting-component.html#setValue-method" translate="no">setValue</a>.</p>
+</div></div><!-- @@@valueChanged -->
+<br/>
+<!-- $$$virtualStateChanged[overload1]$$$virtualStateChanged -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="virtualStateChanged-signal">
+<td class="tblQmlFuncNode"><p>
+<span class="name">virtualStateChanged</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Emitted when the virtual state of the component changes.</p>
+<div class="admonition note"><p><b>Note: </b>The corresponding handler is <code translate="no">onVirtualStateChanged</code>.</p>
+</div></div></div><!-- @@@virtualStateChanged -->
+<br/>
+<h2>Method Documentation</h2>
+<!-- $$$ -->
+<div class="qmlitem"><div class="fngroup">
+<div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="isAutoDependOn-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">isAutoDependOn</span>(<span class="type">QSet</span>&lt;<span class="type">string</span>&gt; <i>componentsToInstall</i>)</p></td></tr>
+<tr valign="top" class="odd" id="isDefault-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">isDefault</span>()</p></td></tr>
+</table></div></div>
+</div><div class="qmldoc"><p>Determines whether the component comes as an auto dependency. Returns <code translate="no">true</code> if all components in <i translate="no">componentsToInstall</i> are already installed or selected for installation and this component thus needs to be installed as well.</p>
+<p>/*!</p>
+<p>Indicates if the component is a default one.</p>
+<div class="admonition note">
+<p><b>Note: </b>Always returns <code translate="no">false</code> for virtual components.</p>
+</div>
+<p><b>See also </b><a href="scripting-component.html#default-prop" translate="no">default</a>.</p>
+</div></div><!-- @@@ -->
+<br/>
+<!-- $$$addAutoDependOn[overload1]$$$addAutoDependOnstring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="addAutoDependOn-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">addAutoDependOn</span>(<span class="type">string</span> <i>newDependOn</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Adds the component specified by <i translate="no">newDependOn</i> to the automatic depend-on list. Alternatively, multiple components can be specified by separating each with a comma.</p>
+<p><b>See also </b><a href="scripting-component.html#autoDependencies-prop" translate="no">autoDependencies</a>.</p>
+</div></div><!-- @@@addAutoDependOn -->
+<br/>
+<!-- $$$addDependency[overload1]$$$addDependencystring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="addDependency-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">addDependency</span>(<span class="type">string</span> <i>newDependency</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Adds a new component <i translate="no">newDependency</i> to the list of dependencies. Alternatively, multiple components can be specified by separating each with a comma.</p>
+<p><b>See also </b><a href="scripting-component.html#dependencies-prop" translate="no">dependencies</a>.</p>
+</div></div><!-- @@@addDependency -->
+<br/>
+<!-- $$$addDownloadableArchive[overload1]$$$addDownloadableArchivestring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="addDownloadableArchive-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">addDownloadableArchive</span>(<span class="type">string</span> <i>path</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Adds the archive <i translate="no">path</i> to this component. This can only be called when this component was downloaded from an online repository. When adding <i translate="no">path</i>, it will be downloaded from the repository when the installation starts.</p>
+<p><b>See also </b><a href="scripting-component.html#removeDownloadableArchive-method" translate="no">removeDownloadableArchive</a>, <a href="scripting-component.html#fromOnlineRepository-prop" translate="no">fromOnlineRepository</a>, and <a href="scripting-component.html#archives-prop" translate="no">archives</a>.</p>
+</div></div><!-- @@@addDownloadableArchive -->
+<br/>
+<!-- $$$addElevatedOperation[overload1]$$$addElevatedOperationstringstringstring...string -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="addElevatedOperation-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">addElevatedOperation</span>(<span class="type">string</span> <i>operation</i>, <span class="type">string</span> <i>parameter1</i> = &quot;&quot;, <span class="type">string</span> <i>parameter2</i> = &quot;&quot;, ..., <span class="type">string</span> <i>parameter10</i> = &quot;&quot;)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Convenience method for calling addElevatedOperation(string, stringlist) with up to 10 arguments <i translate="no">parameter1</i>, <i translate="no">parameter2</i>, ..&#x2e; <i translate="no">parameter10</i>. Creates and adds an installation operation for <i translate="no">operation</i>. The operation is executed with elevated rights.</p>
+</div></div><!-- @@@addElevatedOperation -->
+<br/>
+<!-- $$$addElevatedOperation$$$addElevatedOperationstringstringlist -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="addElevatedOperation-method-1">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">addElevatedOperation</span>(<span class="type">string</span> <i>operation</i>, <span class="type">stringlist</span> <i>parameters</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Creates and adds an installation operation for <i translate="no">operation</i>. Add any number of <i translate="no">parameters</i>. The contents of the parameters get variables like &quot;@TargetDir@&quot; replaced with their values, if contained. <i translate="no">operation</i> is executed with elevated rights.</p>
+</div></div><!-- @@@addElevatedOperation -->
+<br/>
+<!-- $$$addOperation[overload1]$$$addOperationstringstringlist -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="addOperation-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">addOperation</span>(<span class="type">string</span> <i>operation</i>, <span class="type">stringlist</span> <i>parameters</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Creates and adds an installation operation for <i translate="no">operation</i>. Add any number of <i translate="no">parameters</i>. The contents of the parameters get variables like &quot;@TargetDir@&quot; replaced with their values, if contained.</p>
+<p>The method is typically called from within <a href="scripting-component.html#createOperations-method" translate="no">component::createOperations</a>().</p>
+</div></div><!-- @@@addOperation -->
+<br/>
+<!-- $$$addOperation$$$addOperationstringstringstring...string -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="addOperation-method-1">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">addOperation</span>(<span class="type">string</span> <i>operation</i>, <span class="type">string</span> <i>parameter1</i> = &quot;&quot;, <span class="type">string</span> <i>parameter2</i> = &quot;&quot;, ..., <span class="type">string</span> <i>parameter10</i> = &quot;&quot;)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Convenience method for calling addOperation(string, stringlist) with up to 10 arguments <i translate="no">parameter1</i>, <i translate="no">parameter2</i>, ..&#x2e; <i translate="no">parameter10</i>. Creates and adds an installation operation for <i translate="no">operation</i>.</p>
+</div></div><!-- @@@addOperation -->
+<br/>
+<!-- $$$addStopProcessForUpdateRequest[overload1]$$$addStopProcessForUpdateRequeststring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="addStopProcessForUpdateRequest-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">addStopProcessForUpdateRequest</span>(<span class="type">string</span> <i>process</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Adds a request for quitting the process <i translate="no">process</i> before installing, updating, or uninstalling the component.</p>
+</div></div><!-- @@@addStopProcessForUpdateRequest -->
+<br/>
+<!-- $$$beginInstallation[overload1]$$$beginInstallation -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="beginInstallation-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">beginInstallation</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Starts the component installation. You can override this method by providing a method with the same name in the component script.</p>
+<pre class="cpp" translate="no">
+ Component<span class="operator">.</span>prototype<span class="operator">.</span>beginInstallation <span class="operator">=</span> function()
+ {
+     <span class="comment">// call default implementation</span>
+     component<span class="operator">.</span>beginInstallation();
+     <span class="comment">// ...</span>
+ }
+</pre>
+</div></div><!-- @@@beginInstallation -->
+<br/>
+<!-- $$$componentChangeRequested[overload1]$$$componentChangeRequested -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="componentChangeRequested-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">componentChangeRequested</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns <code translate="no">true</code> if this component will be changed (update, installation, or uninstallation).</p>
+</div></div><!-- @@@componentChangeRequested -->
+<br/>
+<!-- $$$createOperations[overload1]$$$createOperations -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="createOperations-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">createOperations</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Creates all operations needed to install this component. You can override this method by providing a method with the same name in the component script:</p>
+<pre class="cpp" translate="no">
+ Component<span class="operator">.</span>prototype<span class="operator">.</span>createOperations <span class="operator">=</span> function()
+ {
+     <span class="comment">// call default implementation</span>
+     component<span class="operator">.</span>createOperations();
+     <span class="comment">// ... add custom operations</span>
+ }
+</pre>
+<p>The default implementation calls <a href="scripting-component.html#createOperationsForArchive-method" translate="no">createOperationsForArchive</a> for all archives in this component.</p>
+<p><b>See also </b><a href="scripting-component.html#addOperation-method" translate="no">component::addOperation</a>().</p>
+</div></div><!-- @@@createOperations -->
+<br/>
+<!-- $$$createOperationsForArchive[overload1]$$$createOperationsForArchivestring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="createOperationsForArchive-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">createOperationsForArchive</span>(<span class="type">string</span> <i>archive</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Creates all operations needed to install this component's <i translate="no">archive</i>. This method gets called from <a href="scripting-component.html#createOperations-method" translate="no">createOperations</a>. You can override this method by providing a method with the same name in the component script.</p>
+<div class="admonition note">
+<p><b>Note: </b>If you call this method from a script, it will not call the script's method with the same name.</p>
+</div>
+<p>The default implementation calls <a href="scripting-component.html#createOperationsForPath-method" translate="no">createOperationsForPath</a> for everything contained in the archive. If <i translate="no">archive</i> is a compressed archive known to the installer system, an Extract operation is created, instead.</p>
+</div></div><!-- @@@createOperationsForArchive -->
+<br/>
+<!-- $$$createOperationsForPath[overload1]$$$createOperationsForPathstring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="createOperationsForPath-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">createOperationsForPath</span>(<span class="type">string</span> <i>path</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Creates all operations needed to install this component's <i translate="no">path</i>. <i translate="no">path</i> is a full qualified filename including the component's name. This method gets called from <a href="scripting-component.html#createOperationsForArchive-method" translate="no">createOperationsForArchive</a>. You can override it by providing a method with the same name in the component script.</p>
+<div class="admonition note">
+<p><b>Note: </b>RSA signature files are omitted by this method.</p>
+</div>
+<div class="admonition note">
+<p><b>Note: </b>If you call this method from a script, it will not call the script's method with the same name.</p>
+</div>
+<p>The default implementation is recursively creating Copy and Mkdir operations for all files and folders within <i translate="no">path</i>.</p>
+</div></div><!-- @@@createOperationsForPath -->
+<br/>
+<!-- $$$installationRequested[overload1]$$$installationRequested -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="installationRequested-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">installationRequested</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Determines whether the user wants to install the component.</p>
+</div></div><!-- @@@installationRequested -->
+<br/>
+<!-- $$$isForcedUpdate[overload1]$$$isForcedUpdate -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="isForcedUpdate-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">isForcedUpdate</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns <code translate="no">true</code> if the component is installed and has a <code translate="no">ForcedUpdate</code> flag set. Forced updates will be updated together with essential components before any other component can be updated or installed.</p>
+</div></div><!-- @@@isForcedUpdate -->
+<br/>
+<!-- $$$isFromOnlineRepository[overload1]$$$isFromOnlineRepository -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="isFromOnlineRepository-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">isFromOnlineRepository</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Determines whether this component has been loaded from an online repository.</p>
+<p><b>See also </b><a href="scripting-component.html#addDownloadableArchive-method" translate="no">addDownloadableArchive</a> and <a href="scripting-component.html#fromOnlineRepository-prop" translate="no">fromOnlineRepository</a>.</p>
+</div></div><!-- @@@isFromOnlineRepository -->
+<br/>
+<!-- $$$isInstalled[overload1]$$$isInstalled -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="isInstalled-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">isInstalled</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Determines whether the component is installed.</p>
+</div></div><!-- @@@isInstalled -->
+<br/>
+<!-- $$$isUninstalled[overload1]$$$isUninstalled -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="isUninstalled-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">isUninstalled</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Determines whether the component is uninstalled.</p>
+</div></div><!-- @@@isUninstalled -->
+<br/>
+<!-- $$$isUpdateAvailable[overload1]$$$isUpdateAvailable -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="isUpdateAvailable-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">isUpdateAvailable</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Determines whether update is available for component.</p>
+</div></div><!-- @@@isUpdateAvailable -->
+<br/>
+<!-- $$$registerPathForUninstallation[overload1]$$$registerPathForUninstallationstringboolean -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="registerPathForUninstallation-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">registerPathForUninstallation</span>(<span class="type">string</span> <i>path</i>, <span class="type">boolean</span> <i>wipe</i> = false)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Registers the file or directory at <i translate="no">path</i> for being removed when this component gets uninstalled. In case of a directory, this will be recursive. If <i translate="no">wipe</i> is set to <code translate="no">true</code>, the directory will also be deleted if it contains changes done by the user after installation.</p>
+</div></div><!-- @@@registerPathForUninstallation -->
+<br/>
+<!-- $$$removeDownloadableArchive[overload1]$$$removeDownloadableArchivestring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="removeDownloadableArchive-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">removeDownloadableArchive</span>(<span class="type">string</span> <i>path</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Removes the archive <i translate="no">path</i> previously added via <a href="scripting-component.html#addDownloadableArchive-method" translate="no">addDownloadableArchive</a> from this component. This can only be called when this component was downloaded from an online repository.</p>
+<p><b>See also </b><a href="scripting-component.html#addDownloadableArchive-method" translate="no">addDownloadableArchive</a>, <a href="scripting-component.html#fromOnlineRepository-prop" translate="no">fromOnlineRepository</a>, and <a href="scripting-component.html#archives-prop" translate="no">archives</a>.</p>
+</div></div><!-- @@@removeDownloadableArchive -->
+<br/>
+<!-- $$$removeStopProcessForUpdateRequest[overload1]$$$removeStopProcessForUpdateRequeststring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="removeStopProcessForUpdateRequest-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">removeStopProcessForUpdateRequest</span>(<span class="type">string</span> <i>process</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Removes the request for quitting the process <i translate="no">process</i> again.</p>
+</div></div><!-- @@@removeStopProcessForUpdateRequest -->
+<br/>
+<!-- $$$setAutoCreateOperations[overload1]$$$setAutoCreateOperationsboolean -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="setAutoCreateOperations-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">setAutoCreateOperations</span>(<span class="type">boolean</span> <i>autoCreateOperations</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Sets the value of <a href="scripting-component.html#autoCreateOperations-prop" translate="no">autoCreateOperations</a> property to <i translate="no">autoCreateOperations</i>.</p>
+</div></div><!-- @@@setAutoCreateOperations -->
+<br/>
+<!-- $$$setInstalled[overload1]$$$setInstalled -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="setInstalled-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">setInstalled</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Set's the components state to installed.</p>
+<p><b>See also </b><a href="scripting-component.html#isInstalled-method" translate="no">isInstalled</a>().</p>
+</div></div><!-- @@@setInstalled -->
+<br/>
+<!-- $$$setStopProcessForUpdateRequest[overload1]$$$setStopProcessForUpdateRequeststringboolean -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="setStopProcessForUpdateRequest-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">setStopProcessForUpdateRequest</span>(<span class="type">string</span> <i>process</i>, <span class="type">boolean</span> <i>requested</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>A convenience method for adding or removing the request for stopping <i translate="no">process</i> depending on whether <i translate="no">requested</i> is <code translate="no">true</code> (add) or <code translate="no">false</code> (remove).</p>
+</div></div><!-- @@@setStopProcessForUpdateRequest -->
+<br/>
+<!-- $$$setUninstalled[overload1]$$$setUninstalled -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="setUninstalled-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">setUninstalled</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Sets the component state to uninstalled.</p>
+<p><b>See also </b><a href="scripting-component.html#isUninstalled-method" translate="no">isUninstalled</a>().</p>
+</div></div><!-- @@@setUninstalled -->
+<br/>
+<!-- $$$setUpdateAvailable[overload1]$$$setUpdateAvailableboolean -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="setUpdateAvailable-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">setUpdateAvailable</span>(<span class="type">boolean</span> <i>isUpdateAvailable</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Sets a flag that the core found an update based on the value of <i translate="no">isUpdateAvailable</i>.</p>
+<p><b>See also </b><a href="scripting-component.html#isUpdateAvailable-method" translate="no">isUpdateAvailable</a>().</p>
+</div></div><!-- @@@setUpdateAvailable -->
+<br/>
+<!-- $$$setValue[overload1]$$$setValuestringstring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="setValue-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">setValue</span>(<span class="type">string</span> <i>key</i>, <span class="type">string</span> <i>value</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Sets the value of the variable with <i translate="no">key</i> to <i translate="no">value</i>.</p>
+<p><b>See also </b><a href="scripting-component.html#value-method" translate="no">value</a>().</p>
+</div></div><!-- @@@setValue -->
+<br/>
+<!-- $$$uninstallationRequested[overload1]$$$uninstallationRequested -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="uninstallationRequested-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">uninstallationRequested</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Determines whether the user wants to uninstall the component.</p>
+</div></div><!-- @@@uninstallationRequested -->
+<br/>
+<!-- $$$updateRequested[overload1]$$$updateRequested -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="updateRequested-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">boolean</span> <span class="name">updateRequested</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Determines whether the user wants to install the update for this component.</p>
+</div></div><!-- @@@updateRequested -->
+<br/>
+<!-- $$$userInterface[overload1]$$$userInterfacestring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="userInterface-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">QWidget</span> <span class="name">userInterface</span>(<span class="type">string</span> <i>name</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns the QWidget created for <i translate="no">name</i> or <code translate="no">0</code> if the widget has been deleted or cannot be found.</p>
+</div></div><!-- @@@userInterface -->
+<br/>
+<!-- $$$value[overload1]$$$valuestringstring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="value-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">string</span> <span class="name">value</span>(<span class="type">string</span> <i>key</i>, <span class="type">string</span> <i>defaultValue</i> = &quot;&quot;)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns the value of variable name <i translate="no">key</i>. If <i translate="no">key</i> is not known yet, <i translate="no">defaultValue</i> is returned.</p>
+<div class="admonition note">
+<p><b>Note: </b>If a component is virtual and you ask for the component value with the key &quot;Default&quot;, it will always return <code translate="no">false</code>.</p>
+</div>
+<p><b>See also </b><a href="scripting-component.html#setValue-method" translate="no">setValue</a>().</p>
+</div></div><!-- @@@value -->
+<br/>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

@@ -1,35 +1,41 @@
-# Configuración de pyside6-deploy (Nuitka) del taller de equipos.
-#
-# Este spec lo genera pyside6-deploy --init y el build lo consume con -c.
-# está en inglés porque es un artefacto de compilación.
-#
-# Reglas del proyecto:
-#   - standalone, nunca onefile: la ventana tiene que aparecer al instante y un
-#     autoextraíble en /tmp por cada doble clic es exactamente lo contrario.
-#   - Los datos (migraciones y assets) viajan junto al ejecutable; ver
-#     packaging/qtifw/construir.sh, que es quien los copia.
-#
-[Config]
-# Entry principal de la app. pyside6-deploy compila en la plataforma donde corre.
-application = src/taller/main.py
-name = taller-equipos
+[app]
+title = taller-equipos
+
+# la raíz del proyecto = el entry point abre la app y el resto de taller/
+# llega por imports normales con --follow-imports.
+project_dir = ..
+input_file = /home/stward/Proyectos/taller-equipos/src/taller/main.py
+
+# path to the project file relative to project_dir
+project_file = 
+
+# directorio donde pyside6-deploy deja el resultado
+exec_directory = dist
+
+# icono del proyecto = lo genera scripts/generar_icono.py; genérico, sin marca.
+icon = packaging/icono.png
+
+[python]
+packages = Nuitka
+
+[qt]
+
+# path to required qml files. comma separated
+qml_files = 
+
+# excluded qml plugin binaries
+excluded_qml_plugins = 
+modules = Core,DBus,Gui,Svg,Widgets
+plugins = accessiblebridge,egldeviceintegrations,generic,iconengines,imageformats,platforminputcontexts,platforms,platformthemes,styles,xcbglintegrations
+
+[nuitka]
+
+# standalone = carpeta con el ejecutable y sus dependencias; arranca al
+# instante, sin autoextraerse en cada doble clic (medido = onefile tardaba
+# segundos en aparecer en las máquinas del taller).
 mode = standalone
 
-# Módulos del proyecto que nuitka no ve por imports dinámicos.
-extra_modules =
-    taller
-    alembic
-    sqlalchemy
-    psycopg
-    pydantic
-    pydantic_settings
-    argon2
+# info de los consultorios de nuitka extra = sin traducciones de Qt (ahora son
+# usadas) y no las dlls intermedias.
+extra_args = --quiet --noinclude-qt-translations --include-qt-plugins=platforminputcontexts
 
-# Directorios que no viajan en el paquete (están en el repo, no en el binario).
-extra_ignore_dirs =
-    tests
-    migrations
-    docs
-    odd
-    packaging
-    dist

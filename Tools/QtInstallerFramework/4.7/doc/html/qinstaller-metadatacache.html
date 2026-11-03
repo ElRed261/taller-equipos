@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- metadatacache.cpp -->
+  <meta name="description" content="The MetadataCache is a class for a checksum based storage of Metadata objects on disk.">
+  <title>MetadataCache Class | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>MetadataCache</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">MetadataCache Class</h1>
+<span class="small-subtitle" translate="no">class <a href="scripting-qinstaller.html" translate="no">QInstaller</a>::MetadataCache</span>
+<!-- $$$MetadataCache-brief -->
+<p>The MetadataCache is a class for a checksum based storage of <code translate="no">Metadata</code> objects on disk. <a href="#details">More...</a></p>
+<!-- @@@MetadataCache -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;MetadataCache&gt;</span></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Inherits:</td><td class="memItemRight bottomAlign"> <a href="qinstaller-genericdatacache.html" translate="no">QInstaller::GenericDataCache</a></td></tr>
+</table></div>
+<ul>
+<li><a href="qinstaller-metadatacache-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-metadatacache.html#MetadataCache" translate="no">MetadataCache</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-metadatacache.html#MetadataCache-1" translate="no">MetadataCache</a></b>(const QString &amp;<i>path</i>)</td></tr>
+</table></div>
+<!-- $$$MetadataCache-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+<p>MetadataCache manages a cache storage for a set <a href="qinstaller-genericdatacache.html#path" translate="no">path</a>(), which contains a subdirectory for each registered <code translate="no">Metadata</code> item. The cache has a manifest file in its root directory, which lists the version and type of the cache, and all its items. The file is updated automatically when the metadata cache object is destructed, or it can be updated periodically by calling <a href="qinstaller-genericdatacache.html#sync" translate="no">sync</a>().</p>
+</div>
+<!-- @@@MetadataCache -->
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$MetadataCache[overload1]$$$MetadataCache -->
+<h3 class="fn" translate="no" id="MetadataCache">MetadataCache::<span class="name">MetadataCache</span>()</h3>
+<p>Constructs a new empty cache. The cache is invalid until set with a path and initialized.</p>
+<!-- @@@MetadataCache -->
+<!-- $$$MetadataCache$$$MetadataCacheconstQString& -->
+<h3 class="fn" translate="no" id="MetadataCache-1"><code translate="no">[explicit] </code>MetadataCache::<span class="name">MetadataCache</span>(const <span class="type">QString</span> &amp;<i>path</i>)</h3>
+<p>Constructs a cache to <i translate="no">path</i>. The cache is initialized automatically.</p>
+<!-- @@@MetadataCache -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

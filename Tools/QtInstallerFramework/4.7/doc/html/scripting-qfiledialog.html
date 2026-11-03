@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- qfiledialog.qdoc -->
+  <meta name="description" content="Provides a dialog that allows users to select files or directories.">
+  <title>QFileDialog QML Type | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="scripting-qmlmodule.html" translate="no">scripting</a></li>
+<li>QFileDialog</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#methods">Methods</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">QFileDialog QML Type</h1>
+<!-- $$$QFileDialog-brief -->
+<p>Provides a dialog that allows users to select files or directories. <a href="#details">More...</a></p>
+<!-- @@@QFileDialog -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Import Statement:</td><td class="memItemRight bottomAlign"> import scripting</td></tr></table></div><ul>
+<li><a href="scripting-qfiledialog-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="methods">Methods</h2>
+<ul>
+<li class="fn" translate="no">string <b><a href="scripting-qfiledialog.html#getExistingDirectory-method" translate="no">getExistingDirectory</a></b>(string <i>caption</i>, string <i>dir</i>)</li>
+<li class="fn" translate="no">string <b><a href="scripting-qfiledialog.html#getOpenFileName-method" translate="no">getOpenFileName</a></b>(string <i>caption</i>, string <i>dir</i>, string <i>filter</i>)</li>
+</ul>
+<!-- $$$QFileDialog-description -->
+<h2 id="details">Detailed Description</h2>
+<p>Use the <a href="scripting-qfiledialog.html#getExistingDirectory-method" translate="no">QFileDialog::getExistingDirectory</a>() method to create a modal dialog that displays an existing directory selected by the user. Use the <a href="scripting-qfiledialog.html#getOpenFileName-method" translate="no">QFileDialog::getOpenFileName</a>() method to create a dialog that displays matching files in the directory selected by the user. When a command line interface is used, a dialog is not displayed. Instead, the user can type the directory or the file name in the console. For automatic installations, <code translate="no">--file-query</code> with <code translate="no">identifier=value</code> pairs can be given separated with a comma. For example, <code translate="no">--file-query filedialog.id=C:/Temp,filedialog.id2=C:/Temp2</code>.</p>
+<!-- @@@QFileDialog -->
+<h2>Method Documentation</h2>
+<!-- $$$getExistingDirectory[overload1]$$$getExistingDirectorystringstring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="getExistingDirectory-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">string</span> <span class="name">getExistingDirectory</span>(<span class="type">string</span> <i>caption</i>, <span class="type">string</span> <i>dir</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns an existing directory selected by the user.</p>
+<p>The dialog's working directory is set to <i translate="no">dir</i>, and the caption is set to <i translate="no">caption</i>. Either of these may be an empty string, in which case the current directory and a default caption will be used, respectively.</p>
+</div></div><!-- @@@getExistingDirectory -->
+<br/>
+<!-- $$$getOpenFileName[overload1]$$$getOpenFileNamestringstringstring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="getOpenFileName-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">string</span> <span class="name">getOpenFileName</span>(<span class="type">string</span> <i>caption</i>, <span class="type">string</span> <i>dir</i>, <span class="type">string</span> <i>filter</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns an existing file selected by the user. If the user selects <b translate="no">Cancel</b>, returns a null string.</p>
+<p>The file dialog's caption is set to <i translate="no">caption</i>. If <code translate="no">caption</code> is not specified, a default caption is used.</p>
+<p>The file dialog's working directory is set to <i translate="no">dir</i>. If <code translate="no">dir</code> includes a file name, the file will be selected. Only files that match the specified <i translate="no">filter</i> are shown. Either of these may be an empty string.</p>
+<p>To specify multiple filters, separate them with two semicolons (;;). For example:</p>
+<pre class="cpp" translate="no">
+ <span class="string">&quot;Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)&quot;</span>
+</pre>
+<p>On Windows, and macOS, this static function will use the native file dialog and not a <a href="scripting-qfiledialog.html" translate="no">QFileDialog</a>.</p>
+</div></div><!-- @@@getOpenFileName -->
+<br/>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- packagemanagercore.cpp -->
+  <meta name="description" content="The PackageManagerCore class provides the core functionality of the Qt Installer Framework.">
+  <title>List of All Members for PackageManagerCore | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>PackageManagerCore</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar"><div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">List of All Members for PackageManagerCore</h1>
+<p>This is the complete list of members for <a href="qinstaller-packagemanagercore.html">QInstaller::PackageManagerCore</a>, including inherited members.</p>
+<div class="table"><table class="propsummary" translate="no">
+<tr><td class="topAlign"><ul>
+<li class="fn" translate="no">enum class <span class="name"><b><a href="qinstaller-packagemanagercore.html#ComponentType-enum" translate="no">ComponentType</a></b></span></li>
+<li class="fn" translate="no">flags <span class="name"><b><a href="qinstaller-packagemanagercore.html#ComponentType-enum" translate="no">ComponentTypes</a></b></span></li>
+<li class="fn" translate="no">enum <span class="name"><b><a href="qinstaller-packagemanagercore.html#Status-enum" translate="no">Status</a></b></span></li>
+<li class="fn" translate="no">enum <span class="name"><b><a href="qinstaller-packagemanagercore.html#WizardPage-enum" translate="no">WizardPage</a></b></span></li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#PackageManagerCore-1" translate="no">PackageManagerCore</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#PackageManagerCore-2" translate="no">PackageManagerCore</a></b></span>(qint64, const QList&lt;QInstaller::OperationBlob&gt; &amp;, const QString &amp;, const QString &amp;, const QString &amp;, Protocol::Mode, const QHash&lt;QString, QString&gt; &amp;, const bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#dtor.PackageManagerCore" translate="no">~PackageManagerCore</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#aboutCalculateComponentsToInstall" translate="no">aboutCalculateComponentsToInstall</a></b></span>() const</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#aboutCalculateComponentsToUninstall" translate="no">aboutCalculateComponentsToUninstall</a></b></span>() const</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#acceptMessageBoxDefaultButton" translate="no">acceptMessageBoxDefaultButton</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#addAliasSource" translate="no">addAliasSource</a></b></span>(const QInstaller::AliasSource &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#addFilesForDelayedDeletion" translate="no">addFilesForDelayedDeletion</a></b></span>(const QStringList &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#addLicenseItem" translate="no">addLicenseItem</a></b></span>(const QHash&lt;QString, QVariantMap&gt; &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#addResourcesForOfflineGeneration" translate="no">addResourcesForOfflineGeneration</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#addUserRepositories" translate="no">addUserRepositories</a></b></span>(const QStringList &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#addWizardPage" translate="no">addWizardPage</a></b></span>(QInstaller::Component *, const QString &amp;, int) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#addWizardPageItem" translate="no">addWizardPageItem</a></b></span>(QInstaller::Component *, const QString &amp;, int, int) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#aliasByName" translate="no">aliasByName</a></b></span>(const QString &amp;) const : QInstaller::ComponentAlias *</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#aliasesMarkedForInstallation" translate="no">aliasesMarkedForInstallation</a></b></span>() const : QList&lt;QInstaller::ComponentAlias *&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#appendRootComponent" translate="no">appendRootComponent</a></b></span>(QInstaller::Component *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#appendUpdaterComponent" translate="no">appendUpdaterComponent</a></b></span>(QInstaller::Component *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#autoAcceptMessageBoxes" translate="no">autoAcceptMessageBoxes</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#autoRejectMessageBoxes" translate="no">autoRejectMessageBoxes</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#calculateComponentsToInstall" translate="no">calculateComponentsToInstall</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#calculateComponentsToUninstall" translate="no">calculateComponentsToUninstall</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#cancelMetaInfoJob" translate="no">cancelMetaInfoJob</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#checkAvailableSpace" translate="no">checkAvailableSpace</a></b></span>(QString &amp;) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#checkableName" translate="no">checkableName</a></b></span>(const QString &amp;) : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#clearLicenses" translate="no">clearLicenses</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#clearLocalCache" translate="no">clearLocalCache</a></b></span>(QString *) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#commitSessionOperations" translate="no">commitSessionOperations</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#componentAdded" translate="no">componentAdded</a></b></span>(QInstaller::Component *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#componentByName" translate="no">componentByName</a></b></span>(const QString &amp;, const QList&lt;QInstaller::Component *&gt; &amp;) : QInstaller::Component *</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#componentByName-1" translate="no">componentByName</a></b></span>(const QString &amp;) const : QInstaller::Component *</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#componentResolveReasons" translate="no">componentResolveReasons</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#componentScriptEngine" translate="no">componentScriptEngine</a></b></span>() const : QInstaller::ScriptEngine *</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#components" translate="no">components</a></b></span>(QInstaller::PackageManagerCore::ComponentTypes, const QString &amp;) const : QList&lt;QInstaller::Component *&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#components-1" translate="no">components</a></b></span>(const QString &amp;) const : QList&lt;QInstaller::Component *&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#componentsMarkedForInstallation" translate="no">componentsMarkedForInstallation</a></b></span>() const : QList&lt;QInstaller::Component *&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#componentsRecalculated" translate="no">componentsRecalculated</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#componentsToInstallError" translate="no">componentsToInstallError</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#componentsToUninstall" translate="no">componentsToUninstall</a></b></span>() const : QList&lt;QInstaller::Component *&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#componentsToUninstallError" translate="no">componentsToUninstallError</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#containsFileDialogAutomaticAnswer" translate="no">containsFileDialogAutomaticAnswer</a></b></span>(const QString &amp;) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#containsValue" translate="no">containsValue</a></b></span>(const QString &amp;) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#controlScriptEngine" translate="no">controlScriptEngine</a></b></span>() const : QInstaller::ScriptEngine *</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#coreNetworkSettingsChanged" translate="no">coreNetworkSettingsChanged</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#createAutoDependencyHash" translate="no">createAutoDependencyHash</a></b></span>(const QString &amp;, const QString &amp;, const QString &amp;) const</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#createLocalDependencyHash" translate="no">createLocalDependencyHash</a></b></span>(const QString &amp;, const QString &amp;) const</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#createLocalRepositoryFromBinary" translate="no">createLocalRepositoryFromBinary</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#createOfflineInstaller" translate="no">createOfflineInstaller</a></b></span>(const QStringList &amp;) : PackageManagerCore::Status</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#currentPageChanged" translate="no">currentPageChanged</a></b></span>(int)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#defaultComponentModel" translate="no">defaultComponentModel</a></b></span>() const : QInstaller::ComponentModel *</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#defaultTranslationsLoadedForLanguage" translate="no">defaultTranslationsLoadedForLanguage</a></b></span>(QLocale::Language)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#dependees" translate="no">dependees</a></b></span>(const QInstaller::Component *) const : QList&lt;QInstaller::Component *&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#deselectComponent" translate="no">deselectComponent</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#directoryWritable" translate="no">directoryWritable</a></b></span>(const QString &amp;) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#disableWriteMaintenanceTool" translate="no">disableWriteMaintenanceTool</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#downloadArchivesFinished" translate="no">downloadArchivesFinished</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#downloadNeededArchives" translate="no">downloadNeededArchives</a></b></span>(double) : int</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#dropAdminRights" translate="no">dropAdminRights</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#environmentVariable" translate="no">environmentVariable</a></b></span>(const QString &amp;) const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#error" translate="no">error</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#execute" translate="no">execute</a></b></span>(const QString &amp;, const QStringList &amp;, const QString &amp;, const QString &amp;, const QString &amp;) const : QList&lt;QVariant&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#executeDetached" translate="no">executeDetached</a></b></span>(const QString &amp;, const QStringList &amp;, const QString &amp;) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#fetchCompressedPackagesTree" translate="no">fetchCompressedPackagesTree</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#fetchLocalPackagesTree" translate="no">fetchLocalPackagesTree</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#fetchRemotePackagesTree" translate="no">fetchRemotePackagesTree</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#fileDialogAutomaticAnswers" translate="no">fileDialogAutomaticAnswers</a></b></span>() const : QHash&lt;QString, QString&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#fileExists" translate="no">fileExists</a></b></span>(const QString &amp;) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#filesForDelayedDeletion" translate="no">filesForDelayedDeletion</a></b></span>() const : QStringList</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#findLibrary" translate="no">findLibrary</a></b></span>(const QString &amp;, const QStringList &amp;) : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#findPath" translate="no">findPath</a></b></span>(const QString &amp;, const QStringList &amp;) : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#finishAllComponentsReset" translate="no">finishAllComponentsReset</a></b></span>(const QList&lt;QInstaller::Component *&gt; &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#finishButtonClicked" translate="no">finishButtonClicked</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#finishUpdaterComponentsReset" translate="no">finishUpdaterComponentsReset</a></b></span>(const QList&lt;QInstaller::Component *&gt; &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#finishedCalculateComponentsToInstall" translate="no">finishedCalculateComponentsToInstall</a></b></span>() const</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#finishedCalculateComponentsToUninstall" translate="no">finishedCalculateComponentsToUninstall</a></b></span>() const</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#finishedWithSuccess" translate="no">finishedWithSuccess</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#foundEssentialUpdate" translate="no">foundEssentialUpdate</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#fromNativeSeparators" translate="no">fromNativeSeparators</a></b></span>(const QString &amp;) : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#gainAdminRights" translate="no">gainAdminRights</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#guiObject" translate="no">guiObject</a></b></span>() const : QObject *</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#guiObjectChanged" translate="no">guiObjectChanged</a></b></span>(QObject *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#hasAdminRights" translate="no">hasAdminRights</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#installDefaultComponentsSilently" translate="no">installDefaultComponentsSilently</a></b></span>() : PackageManagerCore::Status</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#installReason" translate="no">installReason</a></b></span>(QInstaller::Component *) const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#installSelectedComponentsSilently" translate="no">installSelectedComponentsSilently</a></b></span>(const QStringList &amp;) : PackageManagerCore::Status</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#installationAllowedToDirectory" translate="no">installationAllowedToDirectory</a></b></span>(const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#installationFinished" translate="no">installationFinished</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#installationInterrupted" translate="no">installationInterrupted</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#installationStarted" translate="no">installationStarted</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#installerBaseBinary" translate="no">installerBaseBinary</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#installerBinaryMarkerChanged" translate="no">installerBinaryMarkerChanged</a></b></span>(qint64)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#installerBinaryPath" translate="no">installerBinaryPath</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#interrupt" translate="no">interrupt</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isCommandLineDefaultInstall" translate="no">isCommandLineDefaultInstall</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isCommandLineInstance" translate="no">isCommandLineInstance</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isDependencyForRequestedComponent" translate="no">isDependencyForRequestedComponent</a></b></span>(const QInstaller::Component *) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isFileExtensionRegistered" translate="no">isFileExtensionRegistered</a></b></span>(const QString &amp;) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isInstaller" translate="no">isInstaller</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isMaintainer" translate="no">isMaintainer</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isOfflineGenerator" translate="no">isOfflineGenerator</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isOfflineOnly" translate="no">isOfflineOnly</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isPackageManager" translate="no">isPackageManager</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isPackageViewer" translate="no">isPackageViewer</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isProcessRunning" translate="no">isProcessRunning</a></b></span>(const QString &amp;) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isUninstaller" translate="no">isUninstaller</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isUpdater" translate="no">isUpdater</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isUserSetBinaryMarker" translate="no">isUserSetBinaryMarker</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#isVerbose" translate="no">isVerbose</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#key" translate="no">key</a></b></span>(const QString &amp;) const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#killProcess" translate="no">killProcess</a></b></span>(const QString &amp;) const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#languageChanged" translate="no">languageChanged</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#listAvailableAliases" translate="no">listAvailableAliases</a></b></span>(const QString &amp;) : bool</li>
+</ul></td><td class="topAlign"><ul>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#listAvailablePackages" translate="no">listAvailablePackages</a></b></span>(const QString &amp;, const QHash&lt;QString, QString&gt; &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#listInstalledPackages" translate="no">listInstalledPackages</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#localDependenciesToComponent" translate="no">localDependenciesToComponent</a></b></span>(const QInstaller::Component *) const : QStringList</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#localInstalledPackages" translate="no">localInstalledPackages</a></b></span>() : QInstaller::LocalPackagesMap</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#localInstallerBinaryUsed" translate="no">localInstallerBinaryUsed</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#maintenanceToolName" translate="no">maintenanceToolName</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#maxConcurrentOperations" translate="no">maxConcurrentOperations</a></b></span>() : int</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#metaJobInfoMessage" translate="no">metaJobInfoMessage</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#metaJobProgress" translate="no">metaJobProgress</a></b></span>(int)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#metaJobTotalProgress" translate="no">metaJobTotalProgress</a></b></span>(int)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#needsHardRestart" translate="no">needsHardRestart</a></b></span>() const : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#networkSettingsChanged" translate="no">networkSettingsChanged</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#noDefaultInstallation" translate="no">noDefaultInstallation</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#noForceInstallation" translate="no">noForceInstallation</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#offlineBinaryName" translate="no">offlineBinaryName</a></b></span>() const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#offlineGenerationFinished" translate="no">offlineGenerationFinished</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#offlineGenerationStarted" translate="no">offlineGenerationStarted</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#operationExists" translate="no">operationExists</a></b></span>(const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#orderedComponentsToInstall" translate="no">orderedComponentsToInstall</a></b></span>() const : QList&lt;QInstaller::Component *&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#parseNameAndVersion" translate="no">parseNameAndVersion</a></b></span>(const QString &amp;, QString *, QString *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#parseNames" translate="no">parseNames</a></b></span>(const QStringList &amp;) : QStringList</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#performOperation" translate="no">performOperation</a></b></span>(const QString &amp;, const QStringList &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#proxyFactory" translate="no">proxyFactory</a></b></span>() const : QInstaller::PackageManagerProxyFactory *</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#readConsoleLine" translate="no">readConsoleLine</a></b></span>(const QString &amp;, qint64) const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#readFile" translate="no">readFile</a></b></span>(const QString &amp;, const QString &amp;) const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#recalculateAllComponents" translate="no">recalculateAllComponents</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#remotePackages" translate="no">remotePackages</a></b></span>() : QInstaller::PackagesList</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#removeFileDialogAutomaticAnswer" translate="no">removeFileDialogAutomaticAnswer</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#removeInstallationSilently" translate="no">removeInstallationSilently</a></b></span>() : PackageManagerCore::Status</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#removeWizardPage" translate="no">removeWizardPage</a></b></span>(QInstaller::Component *, const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#removeWizardPageItem" translate="no">removeWizardPageItem</a></b></span>(QInstaller::Component *, const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#replaceVariables" translate="no">replaceVariables</a></b></span>(const QString &amp;) const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#replaceVariables-1" translate="no">replaceVariables</a></b></span>(const QByteArray &amp;) const : QByteArray</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#replaceVariables-2" translate="no">replaceVariables</a></b></span>(const QStringList &amp;) const : QStringList</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#requiredDiskSpace" translate="no">requiredDiskSpace</a></b></span>() const : quint64</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#requiredTemporaryDiskSpace" translate="no">requiredTemporaryDiskSpace</a></b></span>() const : quint64</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#reset" translate="no">reset</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#resetBinaryMarkerSupplement" translate="no">resetBinaryMarkerSupplement</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#resetLocalCache" translate="no">resetLocalCache</a></b></span>(bool) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#rollBackInstallation" translate="no">rollBackInstallation</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#rootComponentsAdded" translate="no">rootComponentsAdded</a></b></span>(QList&lt;QInstaller::Component *&gt;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#run" translate="no">run</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#runInstaller" translate="no">runInstaller</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#runOfflineGenerator" translate="no">runOfflineGenerator</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#runPackageUpdater" translate="no">runPackageUpdater</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#runUninstaller" translate="no">runUninstaller</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#selectComponent" translate="no">selectComponent</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setAutoAcceptLicenses" translate="no">setAutoAcceptLicenses</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setAutoConfirmCommand" translate="no">setAutoConfirmCommand</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setAutomatedPageSwitchEnabled" translate="no">setAutomatedPageSwitchEnabled</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setCanceled" translate="no">setCanceled</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setCheckAvailableSpace" translate="no">setCheckAvailableSpace</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setCommandLineInstance" translate="no">setCommandLineInstance</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setCompleteUninstallation" translate="no">setCompleteUninstallation</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setCreateLocalRepositoryFromBinary" translate="no">setCreateLocalRepositoryFromBinary</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setDefaultPageVisible" translate="no">setDefaultPageVisible</a></b></span>(int, bool) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setDependsOnLocalInstallerBinary" translate="no">setDependsOnLocalInstallerBinary</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setFileDialogAutomaticAnswer" translate="no">setFileDialogAutomaticAnswer</a></b></span>(const QString &amp;, const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setFoundEssentialUpdate" translate="no">setFoundEssentialUpdate</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setGuiObject" translate="no">setGuiObject</a></b></span>(QObject *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setInstaller" translate="no">setInstaller</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setInstallerBaseBinary" translate="no">setInstallerBaseBinary</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setMaxConcurrentOperations" translate="no">setMaxConcurrentOperations</a></b></span>(int)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setMessageBoxAutomaticAnswer" translate="no">setMessageBoxAutomaticAnswer</a></b></span>(const QString &amp;, int)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setNeedsHardRestart" translate="no">setNeedsHardRestart</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setNoDefaultInstallation" translate="no">setNoDefaultInstallation</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setNoForceInstallation" translate="no">setNoForceInstallation</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setOfflineBaseBinary" translate="no">setOfflineBaseBinary</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setOfflineBinaryName" translate="no">setOfflineBinaryName</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setOfflineGenerator" translate="no">setOfflineGenerator</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setPackageManager" translate="no">setPackageManager</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setPackageViewer" translate="no">setPackageViewer</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setProxyFactory" translate="no">setProxyFactory</a></b></span>(QInstaller::PackageManagerProxyFactory *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setTemporaryRepositories" translate="no">setTemporaryRepositories</a></b></span>(const QStringList &amp;, bool, bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setUninstaller" translate="no">setUninstaller</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setUpdater" translate="no">setUpdater</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setUserSetBinaryMarker" translate="no">setUserSetBinaryMarker</a></b></span>(qint64)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setValidatorForCustomPage" translate="no">setValidatorForCustomPage</a></b></span>(QInstaller::Component *, const QString &amp;, const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setValidatorForCustomPageRequested" translate="no">setValidatorForCustomPageRequested</a></b></span>(QInstaller::Component *, const QString &amp;, const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setValue" translate="no">setValue</a></b></span>(const QString &amp;, const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setVerbose" translate="no">setVerbose</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setVirtualComponentsFont" translate="no">setVirtualComponentsFont</a></b></span>(const QFont &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#setVirtualComponentsVisible" translate="no">setVirtualComponentsVisible</a></b></span>(bool)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#settings" translate="no">settings</a></b></span>() const : QInstaller::Settings &amp;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#size" translate="no">size</a></b></span>(QInstaller::Component *, const QString &amp;) const : quint64</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#sortedLicenses" translate="no">sortedLicenses</a></b></span>() : QHash&lt;QString, QMap&lt;QString, QString&gt;&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#startAllComponentsReset" translate="no">startAllComponentsReset</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#startUpdaterComponentsReset" translate="no">startUpdaterComponentsReset</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#status-prop" translate="no">status</a></b></span>() const : QInstaller::PackageManagerCore::Status</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#status-prop" translate="no">statusChanged</a></b></span>(QInstaller::PackageManagerCore::Status)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#targetDirWarning" translate="no">targetDirWarning</a></b></span>(const QString &amp;) const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#titleMessageChanged" translate="no">titleMessageChanged</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#toNativeSeparators" translate="no">toNativeSeparators</a></b></span>(const QString &amp;) : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#uninstallComponentsSilently" translate="no">uninstallComponentsSilently</a></b></span>(const QStringList &amp;) : PackageManagerCore::Status</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#uninstallReason" translate="no">uninstallReason</a></b></span>(QInstaller::Component *) const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#uninstallationFinished" translate="no">uninstallationFinished</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#uninstallationStarted" translate="no">uninstallationStarted</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#unstableComponentFound" translate="no">unstableComponentFound</a></b></span>(const QString &amp;, const QString &amp;, const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#updateComponentsSilently" translate="no">updateComponentsSilently</a></b></span>(const QStringList &amp;) : PackageManagerCore::Status</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#updateFinished" translate="no">updateFinished</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#updaterComponentModel" translate="no">updaterComponentModel</a></b></span>() const : QInstaller::ComponentModel *</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#updaterComponentsAdded" translate="no">updaterComponentsAdded</a></b></span>(QList&lt;QInstaller::Component *&gt;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#value" translate="no">value</a></b></span>(const QString &amp;, const QString &amp;, const int &amp;) const : QString</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#valueChanged" translate="no">valueChanged</a></b></span>(const QString &amp;, const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#values" translate="no">values</a></b></span>(const QString &amp;, const QStringList &amp;) const : QStringList</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#versionMatches" translate="no">versionMatches</a></b></span>(const QString &amp;, const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#virtualComponentsFont" translate="no">virtualComponentsFont</a></b></span>() : QFont</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#virtualComponentsVisible" translate="no">virtualComponentsVisible</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#wizardPageInsertionRequested" translate="no">wizardPageInsertionRequested</a></b></span>(QWidget *, QInstaller::PackageManagerCore::WizardPage)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#wizardPageRemovalRequested" translate="no">wizardPageRemovalRequested</a></b></span>(QWidget *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#wizardPageVisibilityChangeRequested" translate="no">wizardPageVisibilityChangeRequested</a></b></span>(bool, int)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#wizardWidgetInsertionRequested" translate="no">wizardWidgetInsertionRequested</a></b></span>(QWidget *, QInstaller::PackageManagerCore::WizardPage, int)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#wizardWidgetRemovalRequested" translate="no">wizardWidgetRemovalRequested</a></b></span>(QWidget *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#writeMaintenanceConfigFiles" translate="no">writeMaintenanceConfigFiles</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-packagemanagercore.html#writeMaintenanceTool" translate="no">writeMaintenanceTool</a></b></span>()</li>
+</ul>
+</td></tr>
+</table></div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

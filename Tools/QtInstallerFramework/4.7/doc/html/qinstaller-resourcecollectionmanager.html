@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- binaryformat.cpp -->
+  <meta name="description" content="The ResourceCollectionManager class is an abstraction that groups together a number of resource collections.">
+  <title>ResourceCollectionManager Class | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>ResourceCollectionManager</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">ResourceCollectionManager Class</h1>
+<span class="small-subtitle" translate="no">class <a href="scripting-qinstaller.html" translate="no">QInstaller</a>::ResourceCollectionManager</span>
+<!-- $$$ResourceCollectionManager-brief -->
+<p>The ResourceCollectionManager class is an abstraction that groups together a number of resource collections. <a href="#details">More...</a></p>
+<!-- @@@ResourceCollectionManager -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign">  <span class="preprocessor">#include &lt;ResourceCollectionManager&gt;</span></td></tr>
+</table></div>
+<ul>
+<li><a href="qinstaller-resourcecollectionmanager-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-resourcecollectionmanager.html#clear" translate="no">clear</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QInstaller::ResourceCollection </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-resourcecollectionmanager.html#collectionByName" translate="no">collectionByName</a></b>(const QByteArray &amp;<i>name</i>) const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> int </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-resourcecollectionmanager.html#collectionCount" translate="no">collectionCount</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> QList&lt;QInstaller::ResourceCollection&gt; </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-resourcecollectionmanager.html#collections" translate="no">collections</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-resourcecollectionmanager.html#insertCollection" translate="no">insertCollection</a></b>(const QInstaller::ResourceCollection &amp;<i>collection</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-resourcecollectionmanager.html#read" translate="no">read</a></b>(QFileDevice *<i>dev</i>, qint64 <i>offset</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-resourcecollectionmanager.html#removeCollection" translate="no">removeCollection</a></b>(const QByteArray &amp;<i>name</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Range&lt;qint64&gt; </td><td class="memItemRight bottomAlign"><b><a href="qinstaller-resourcecollectionmanager.html#write" translate="no">write</a></b>(QFileDevice *<i>out</i>, qint64 <i>offset</i>) const</td></tr>
+</table></div>
+<!-- $$$ResourceCollectionManager-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+<p>The resource collections it groups can be written to and read from a QFileDevice.</p>
+</div>
+<!-- @@@ResourceCollectionManager -->
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$clear[overload1]$$$clear -->
+<h3 class="fn" translate="no" id="clear"><span class="type">void</span> ResourceCollectionManager::<span class="name">clear</span>()</h3>
+<p>Clears the contents of the collection manager.</p>
+<!-- @@@clear -->
+<!-- $$$collectionByName[overload1]$$$collectionByNameconstQByteArray& -->
+<h3 class="fn" translate="no" id="collectionByName"><span class="type"><a href="qinstaller-resourcecollection.html" translate="no">QInstaller::ResourceCollection</a></span> ResourceCollectionManager::<span class="name">collectionByName</span>(const <span class="type">QByteArray</span> &amp;<i>name</i>) const</h3>
+<p>Returns the collection associated with the name <i translate="no">name</i>.</p>
+<!-- @@@collectionByName -->
+<!-- $$$collectionCount[overload1]$$$collectionCount -->
+<h3 class="fn" translate="no" id="collectionCount"><span class="type">int</span> ResourceCollectionManager::<span class="name">collectionCount</span>() const</h3>
+<p>Returns the number of collections in the collection manager.</p>
+<!-- @@@collectionCount -->
+<!-- $$$collections[overload1]$$$collections -->
+<h3 class="fn" translate="no" id="collections"><span class="type">QList</span>&lt;<span class="type"><a href="qinstaller-resourcecollection.html" translate="no">QInstaller::ResourceCollection</a></span>&gt; ResourceCollectionManager::<span class="name">collections</span>() const</h3>
+<p>Returns the collections the collection manager contains.</p>
+<!-- @@@collections -->
+<!-- $$$insertCollection[overload1]$$$insertCollectionconstQInstaller::ResourceCollection& -->
+<h3 class="fn" translate="no" id="insertCollection"><span class="type">void</span> ResourceCollectionManager::<span class="name">insertCollection</span>(const <span class="type"><a href="qinstaller-resourcecollection.html" translate="no">QInstaller::ResourceCollection</a></span> &amp;<i>collection</i>)</h3>
+<p>Inserts the <i translate="no">collection</i> into the collection manager.</p>
+<!-- @@@insertCollection -->
+<!-- $$$read[overload1]$$$readQFileDevice*qint64 -->
+<h3 class="fn" translate="no" id="read"><span class="type">void</span> ResourceCollectionManager::<span class="name">read</span>(<span class="type">QFileDevice</span> *<i>dev</i>, <span class="type">qint64</span> <i>offset</i>)</h3>
+<p>Reads the resource collection from the file <i translate="no">dev</i>. The <i translate="no">offset</i> argument is used to set the collection's resources segment information.</p>
+<!-- @@@read -->
+<!-- $$$removeCollection[overload1]$$$removeCollectionconstQByteArray& -->
+<h3 class="fn" translate="no" id="removeCollection"><span class="type">void</span> ResourceCollectionManager::<span class="name">removeCollection</span>(const <span class="type">QByteArray</span> &amp;<i>name</i>)</h3>
+<p>Removes all occurrences of <i translate="no">name</i> from the collection manager.</p>
+<!-- @@@removeCollection -->
+<!-- $$$write[overload1]$$$writeQFileDevice*qint64 -->
+<h3 class="fn" translate="no" id="write"><span class="type">Range</span>&lt;<span class="type">qint64</span>&gt; ResourceCollectionManager::<span class="name">write</span>(<span class="type">QFileDevice</span> *<i>out</i>, <span class="type">qint64</span> <i>offset</i>) const</h3>
+<p>Writes the resource collection to the file <i translate="no">out</i>. The <i translate="no">offset</i> argument is used to set the collection's segment information.</p>
+<!-- @@@write -->
+</div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

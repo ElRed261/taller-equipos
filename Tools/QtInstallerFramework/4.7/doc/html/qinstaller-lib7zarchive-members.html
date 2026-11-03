@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- lib7zarchive.cpp -->
+  <meta name="description" content="The Lib7zArchive class represents an archive file handled with the LZMA software development kit.">
+  <title>List of All Members for Lib7zArchive | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li>Lib7zArchive</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar"><div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">List of All Members for Lib7zArchive</h1>
+<p>This is the complete list of members for <a href="qinstaller-lib7zarchive.html">QInstaller::Lib7zArchive</a>, including inherited members.</p>
+<div class="table"><table class="propsummary" translate="no">
+<tr><td class="topAlign"><ul>
+<li class="fn" translate="no">enum <span class="name"><b><a href="qinstaller-abstractarchive.html#CompressionLevel-enum" translate="no">CompressionLevel</a></b></span></li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#Lib7zArchive-1" translate="no">Lib7zArchive</a></b></span>(const QString &amp;, QObject *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#Lib7zArchive-2" translate="no">Lib7zArchive</a></b></span>(QObject *)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#dtor.Lib7zArchive" translate="no">~Lib7zArchive</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#cancel" translate="no">cancel</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#cancel" translate="no">cancel</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#close" translate="no">close</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#close" translate="no">close</a></b></span>()</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#completedChanged" translate="no">completedChanged</a></b></span>(const quint64, const quint64)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#compressionLevel" translate="no">compressionLevel</a></b></span>() const : QInstaller::AbstractArchive::CompressionLevel</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#create" translate="no">create</a></b></span>(const QStringList &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#create" translate="no">create</a></b></span>(const QStringList &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#currentEntryChanged" translate="no">currentEntryChanged</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#errorString" translate="no">errorString</a></b></span>() const : QString</li>
+</ul></td><td class="topAlign"><ul>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#extract" translate="no">extract</a></b></span>(const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#extract" translate="no">extract</a></b></span>(const QString &amp;) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#extract-1" translate="no">extract</a></b></span>(const QString &amp;, const quint64) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#extract-1" translate="no">extract</a></b></span>(const QString &amp;, const quint64) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#isSupported" translate="no">isSupported</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#isSupported" translate="no">isSupported</a></b></span>() : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#list" translate="no">list</a></b></span>() : QVector&lt;QInstaller::ArchiveEntry&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#list" translate="no">list</a></b></span>() : QVector&lt;QInstaller::ArchiveEntry&gt;</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#open" translate="no">open</a></b></span>(QIODevice::OpenMode) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#open" translate="no">open</a></b></span>(QIODevice::OpenMode) : bool</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#setCompressionLevel" translate="no">setCompressionLevel</a></b></span>(const QInstaller::AbstractArchive::CompressionLevel)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#setErrorString" translate="no">setErrorString</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-lib7zarchive.html#setFilename" translate="no">setFilename</a></b></span>(const QString &amp;)</li>
+<li class="fn" translate="no"><span class="name"><b><a href="qinstaller-abstractarchive.html#setFilename" translate="no">setFilename</a></b></span>(const QString &amp;)</li>
+</ul>
+</td></tr>
+</table></div>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

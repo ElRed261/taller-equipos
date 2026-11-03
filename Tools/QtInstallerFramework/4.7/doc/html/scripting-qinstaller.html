@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- qinstaller.qdoc -->
+  <meta name="description" content="Provides access to the installer status and pages from Qt Script.">
+  <title>QInstaller QML Type | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="scripting-qmlmodule.html" translate="no">scripting</a></li>
+<li>QInstaller</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#properties">Properties</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">QInstaller QML Type</h1>
+<!-- $$$QInstaller-brief -->
+<p>Provides access to the installer status and pages from Qt Script. <a href="#details">More...</a></p>
+<!-- @@@QInstaller -->
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Import Statement:</td><td class="memItemRight bottomAlign"> import scripting</td></tr></table></div><ul>
+<li><a href="scripting-qinstaller-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="properties">Properties</h2>
+<ul>
+<li class="fn" translate="no"><b><a href="scripting-qinstaller.html#WizardPage-prop" translate="no">WizardPage</a></b> : enumeration</li>
+<li class="fn" translate="no"><b><a href="scripting-qinstaller.html#status-prop" translate="no">status</a></b> : enumeration</li>
+</ul>
+<!-- $$$QInstaller-description -->
+<h2 id="details">Detailed Description</h2>
+<p>For more information about using the <code translate="no">QInstaller</code> object in control scripts, see <a href="noninteractive.html" translate="no">Controller Scripting</a>.</p>
+<p>For examples of using the pages to support end user workflows, see <a href="ifw-use-cases.html" translate="no">End User Workflows</a>.</p>
+<!-- @@@QInstaller -->
+<h2>Property Documentation</h2>
+<!-- $$$WizardPage -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="WizardPage-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">WizardPage</span> : <span class="type">enumeration</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>The installer has various pre-defined pages that can be used to for example insert pages in a certain place:</p>
+<div class="table"><table class="valuelist"><tr valign="top" class="odd"><th class="tblConst">Constant</th><th class="tbldscr">Description</th></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.Introduction</code></td><td class="topAlign"><a href="noninteractive.html#introduction-page" translate="no">Introduction Page</a></td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.TargetDirectory</code></td><td class="topAlign"><a href="noninteractive.html#target-directory-page" translate="no">Target Directory Page</a></td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.ComponentSelection</code></td><td class="topAlign"><a href="noninteractive.html#component-selection-page" translate="no">Component Selection Page</a></td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.LicenseCheck</code></td><td class="topAlign"><a href="noninteractive.html#license-agreement-page" translate="no">License Agreement Page</a></td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.StartMenuSelection</code></td><td class="topAlign"><a href="noninteractive.html#start-menu-directory-page" translate="no">Start Menu Directory Page</a></td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.ReadyForInstallation</code></td><td class="topAlign"><a href="noninteractive.html#ready-for-installation-page" translate="no">Ready for Installation Page</a></td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.PerformInstallation</code></td><td class="topAlign"><a href="noninteractive.html#perform-installation-page" translate="no">Perform Installation Page</a></td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.InstallationFinished</code></td><td class="topAlign"><a href="noninteractive.html#finished-page" translate="no">Finished Page</a></td></tr>
+</table></div>
+</div></div><!-- @@@WizardPage -->
+<br/>
+<!-- $$$status -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="status-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">status</span> : <span class="type">enumeration</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Status of the installer.</p>
+<p>Possible values are:</p>
+<div class="table"><table class="valuelist"><tr valign="top" class="odd"><th class="tblConst">Constant</th><th class="tbldscr">Description</th></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.Success</code></td><td class="topAlign">Installation was successful.</td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.Failure</code></td><td class="topAlign">Installation failed.</td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.Running</code></td><td class="topAlign">Installation is in progress.</td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.Canceled</code></td><td class="topAlign">Installation was canceled.</td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.Unfinished</code></td><td class="topAlign">Installation was not completed.</td></tr>
+<tr><td class="topAlign"><code translate="no">QInstaller.ForceUpdate</code></td><td class="topAlign">&nbsp;</td></tr>
+</table></div>
+</div></div><!-- @@@status -->
+<br/>
+        </div>
+       </div>
+   </div>
+   </div>
+</div>
+<div class="footer">
+   <p>
+   <acronym title="Copyright">&copy;</acronym> 2023 The Qt Company Ltd.
+   Documentation contributions included herein are the copyrights of
+   their respective owners.<br/>    The documentation provided herein is licensed under the terms of the    <a href="http://www.gnu.org/licenses/fdl.html">GNU Free Documentation    License version 1.3</a> as published by the Free Software Foundation.<br/>    Qt and respective logos are <a href="https://doc.qt.io/qt/trademarks.html">    trademarks</a> of The Qt Company Ltd. in Finland and/or other countries
+   worldwide. All other trademarks are property of their respective owners. </p>
+</div>
+</body>
+</html>

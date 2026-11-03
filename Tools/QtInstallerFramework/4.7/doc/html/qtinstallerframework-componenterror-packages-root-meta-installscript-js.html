@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- componenterror.qdoc -->
+  <meta name="description" content="Using a component script to stop the installation if the components cannot be installed.">
+  <title>Component Error Example | Qt Installer Framework Manual</title>
+  <link rel="stylesheet" type="text/css" href="style/offline-simple.css" />
+  <script type="text/javascript">
+    document.getElementsByTagName("link").item(0).setAttribute("href", "style/offline.css");
+    // loading style sheet breaks anchors that were jumped to before
+    // so force jumping to anchor again
+    setTimeout(function() {
+        var anchor = location.hash;
+        // need to jump to different anchor first (e.g. none)
+        location.hash = "#";
+        setTimeout(function() {
+            location.hash = anchor;
+        }, 0);
+    }, 0);
+  </script>
+</head>
+<body>
+<div class="header" id="qtdocheader">
+    <div class="main">
+    <div class="main-rounded">
+        <div class="navigationbar">
+        <ul>
+<li><a href="index.html" translate="no">Qt Installer Framework Manual</a></li>
+<li><a href="qtifwexamples.html" translate="no">Qt Installer Framework Examples</a></li>
+<li>Component Error Example</li>
+    </ul>
+    </div>
+</div>
+<div class="content">
+<div class="line">
+<div class="content mainContent">
+<h1 class="title">Component Error Example</h1>
+<pre class="cpp" translate="no">
+ /**************************************************************************
+ **
+ ** Copyright (C) 2020 The Qt Company Ltd.
+ ** Contact: https://www.qt.io/licensing/
+ **
+ ** This file is part of the Qt Installer Framework.
+ **
+ ** $QT_BEGIN_LICENSE:GPL-EXCEPT$
+ ** Commercial License Usage
+ ** Licensees holding valid commercial Qt licenses may use this file in
+ ** accordance with the commercial license agreement provided with the
+ ** Software or, alternatively, in accordance with the terms contained in
+ ** a written agreement between you and The Qt Company. For licensing terms
+ ** and conditions see https://www.qt.io/terms-conditions. For further
+ ** information use the contact form at https://www.qt.io/contact-us.
+ **
+ ** GNU General Public License Usage
+ ** Alternatively, this file may be used under the terms of the GNU
+ ** General Public License version 3 as published by the Free Software
+ ** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+ ** included in the packaging of this file. Please review the following
+ ** information to ensure the GNU General Public License requirements will
+ ** be met: https://www.gnu.org/licenses/gpl-3.0.html.
+ **
+ ** $QT_END_LICENSE$
+ **
+ **************************************************************************/
+
+ function abortInstaller()
+ {
+     installer.setDefaultPageVisible(QInstaller.Introduction, false);
+     installer.setDefaultPageVisible(QInstaller.TargetDirectory, false);
+     installer.setDefaultPageVisible(QInstaller.ComponentSelection, false);
+     installer.setDefaultPageVisible(QInstaller.ReadyForInstallation, false);
+     installer.setDefaultPageVisible(QInstaller.StartMenuSelection, false);
+     installer.setDefaultPageVisible(QInstaller.PerformInstallation, false);
+     installer.setDefaultPageVisible(QInstaller.LicenseCheck, false);
+
+     var abortText = &quot;&lt;font color='red' size=3&gt;&quot; + qsTr(&quot;Installation failed:&quot;) + &quot;&lt;/font&gt;&quot;;
+
+     var error_list = installer.value(&quot;component_errors&quot;).split(&quot;;;;&quot;);
+     abortText += &quot;&lt;ul&gt;&quot;;
+     // ignore the first empty one
+     for (var i = 0; i &lt; error_list.length; ++i) {
+         if (error_list[i] !== &quot;&quot;) {
+             console.log(error_list[i]);
+             abortText += &quot;&lt;li&gt;&quot; + error_list[i] + &quot;&lt;/li&gt;&quot;
+         }
+     }
+     abortText += &quot;&lt;/ul&gt;&quot;;
+     installer.setValue(&quot;FinishedText&quot;, abortText);
+ }
+
+ function reactOnAbortInstallerChange()
+ {
+     if (installer.value(&quot;ComponentError&quot;) === &quot;true&quot;)
+         abortInstaller();
+ }
+
+ function Component()
+ {
+     installer.finishAllComponentsReset.connect(reactOnAbortInstallerChange);
+ }
+</pre>
