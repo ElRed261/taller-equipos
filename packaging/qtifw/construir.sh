@@ -77,7 +77,7 @@ rm -rf "$DEPLOY/taller/ui/assets"
 cp -a src/taller/ui/assets "$DEPLOY/taller/ui/assets"
 
 # Paquete de producción para QtIFW: árbol de producción + metadatos del asistente.
-PKG="$RAIZ/packaging/qtifw/packages/taller-equipos"
+PKG="$RAIZ/packaging/qtifw/packages/com.taller.equipos"
 rm -rf "$PKG/data"
 mkdir -p "$PKG/data"
 cp -a "$DEPLOY/." "$PKG/data/"
@@ -100,7 +100,12 @@ PY
 echo "Construyendo el instalador offline…"
 mkdir -p "$DIST"
 rm -f "$DIST/taller-equipos-instalador"
-"$QTIFW_BIN" -c packaging/qtifw/config/config.xml \
+# El nivel de compresión es la palanca del tiempo de instalación del usuario:
+# 9 = instalador de 99 MB que extrae en 25 min; 0-1 = instalador pesado que
+# extrae en segundos. Elegible con TALLER_COMPRESION.
+NIVEL="${TALLER_COMPRESION:-1}"
+"$QTIFW_BIN" --compression "$NIVEL" \
+             -c packaging/qtifw/config/config.xml \
              -p packaging/qtifw/packages \
              "$DIST/taller-equipos-instalador"
 

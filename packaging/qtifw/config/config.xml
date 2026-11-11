@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
-  <Name>Taller de equipos</Name>
-  <Version>1.0.0</Version>
-  <Title>Taller de equipos</Title>
-  <Publisher>Taller de equipos</Publisher>
-  <ProductUrl></ProductUrl>
-  <StartMenuDir>Taller de equipos</StartMenuDir>
-  <TargetDir>@HomeDir@/Taller de equipos</TargetDir>
-  <AdminTargetDir>/opt/Taller de equipos</AdminTargetDir>
-  <RunProgram>@TargetDir@/taller-equipos.bin</RunProgram>
-  <!-- Windows y macOS usan el ejecutable de su plataforma; el installscript.qs es quien resuelve la extensión -->
-  <RunProgramArguments></RunProgramArguments>
-  <MaintenanceToolName>Mantenimiento</MaintenanceToolName>
-  <RemoveTargetDir>true</RemoveTargetDir>
-  <!-- no-admin: AdminTargetDir queda bajo /opt, y TargetDir bajo HomeDir -->
-  <InstallerWindowIcon></InstallerWindowIcon>
-  <WizardStyle>Modern</WizardStyle>
+    <Name>Taller de equipos</Name>
+    <Version>0.1.0</Version>
+    <Title>Taller de equipos</Title>
+    <Publisher>Taller</Publisher>
+    <StartMenuDir>Taller de equipos</StartMenuDir>
+    <TargetDir>@HomeDir@/.prueba-qtifw/Taller de equipos</TargetDir>
+    <MaintenanceToolName>Mantenimiento</MaintenanceToolName>
 </Installer>

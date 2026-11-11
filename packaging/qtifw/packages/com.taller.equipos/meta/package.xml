@@ -4,6 +4,8 @@
   <Description>Registro de entrada y salida de equipos del taller</Description>
   <Version>0.1.0</Version>
   <ReleaseDate>2026-11-03</ReleaseDate>
-  <Default>true</Default>
+  <Name>com.taller.equipos</Name>
   <Script>installscript.qs</Script>
+  <Default>true</Default>
+  <ForcedInstallation>true</ForcedInstallation>
 </Package>
