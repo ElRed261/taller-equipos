@@ -49,5 +49,7 @@ Component.prototype.createOperations = function()
             "iconId=2", "description=Open README file");
     }
 
-    component.addOperation("Execute", "@TargetDir@/taller-equipos.bin");
+    // ExecuteDetached: Execute espera a que el hijo salga, y un instalador
+    // headless quedaba colgado una hora con la app en primer plano.
+    component.addOperation("ExecuteDetached", "@TargetDir@/taller-equipos.bin");
 }
