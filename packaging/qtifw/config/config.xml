@@ -5,6 +5,6 @@
     <Title>Taller de equipos</Title>
     <Publisher>Taller</Publisher>
     <StartMenuDir>Taller de equipos</StartMenuDir>
-    <TargetDir>@HomeDir@/.prueba-qtifw/Taller de equipos</TargetDir>
+    <TargetDir>@HomeDir@/Taller de equipos</TargetDir>
     <MaintenanceToolName>Mantenimiento</MaintenanceToolName>
 </Installer>

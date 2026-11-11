@@ -43,7 +43,79 @@ git tag v0.1.0 && git push origin v0.1.0
 
 Los artefactos quedan en la corrida, disponibles por 30 días.
 
-## Linux
+## Linux con el wizard QtIFW
+
+El instalador nativo (Qt Installer Framework) abre el mismo wizard gráfico en
+Linux, Windows y macOS, con la herramienta de mantenimiento (Mantenimiento) para
+actualizar o quitar la instalación después.
+
+### Construir el instalador
+
+```bash
+cd ~/Proyectos/taller-equipos
+
+# una vez: venv de compilación con pip (los venv de uv no lo traen y
+# pyside6-deploy lo exige) y las tools de QtIFW
+uv venv --seed .venv-deploy
+uv pip install --python .venv-deploy/bin/python -e . pyside6 nuitka
+aqt install-tool linux desktop tools_ifw qt.tools.ifw.47   # deja binarycreator en Tools/
+
+packaging/qtifw/construir.sh
+```
+
+Costo medido en esta máquina: **la compilación Nuitka ~13 min** por plataforma
+(no es cross-compilable: cada SO se compila en su runner o su equipo), y el
+instalador queda en `dist/taller-equipos-instalador` (~109 MB con compresión 1).
+
+### Instalar con el wizard
+
+Doble clic en `dist/taller-equipos-instalador`, o desde la terminal:
+
+```bash
+cd ~/Proyectos/taller-equipos
+dist/taller-equipos-instalador
+```
+
+Páginas del wizard: Bienvenida → Carpeta destino (`~/Taller de equipos`, sin
+contraseña de administrador) → Componentes → Listo para instalar → Instalar →
+Final. Al terminar, el wizard **abre el programa solo**: ahí aparece la Puesta en
+marcha propia (conexión a la base, identidad), que el instalador no pide por
+diseño.
+
+**Costo conocido y medido, no es un cuelgue**: la extracción del árbol (303 MB,
+137 archivos) tarda **10–25 minutos por máquina** con la barra de progreso
+avanzando, porque el camino de extracción de `installerbase` es lento frente al
+disco (500 KB/s efectivos contra 434 MB/s medidos del disco). Con compresión 0 el
+instalador pesa 113 MB y extrae en ~10 min; el nivel se elige con
+`TALLER_COMPRESION=0|1` en `construir.sh`.
+
+### Instalación no interactiva (para una tanda de máquinas)
+
+```bash
+dist/taller-equipos-instalador install --root "$HOME/Taller de equipos" -c
+```
+
+`-c` confirma el arranque de la instalación sin pedir "¿continuar?".
+
+### Sobre una instalación existente
+
+Si `~/Taller de equipos` ya existe con una instalación del mismo instalador, al
+abrirlo entra en **modo mantenimiento** (actualizar componentes o quitar la
+instalación) en vez de la instalación nueva.
+
+### Desinstalar
+
+Con la herramienta de mantenimiento (wizard gráfico) o sin ella:
+
+```bash
+~/Taller\ de\ equipos/Mantenimiento          # wizard: quitar o actualizar
+~/Taller\ de\ equipos/Mantenimiento remove -c  # sin UI
+```
+
+La base de datos y la configuración del usuario no se tocan.
+
+## Linux con el instalador clásico
+
 
 ```bash
 scripts/empaquetar.sh                    # arma dist/taller-equipos (unos 250 MB)
