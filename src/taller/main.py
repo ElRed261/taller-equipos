@@ -104,7 +104,7 @@ def autenticar() -> tuple[str, bool] | None:
 
 
 def conectar(servicio: ServicioTaller) -> bool:
-    """Retry loop around the connectivity check."""
+    """Retry loop around the connectivity check, with an exit into configuration."""
     while True:
         ok, detalle = servicio.conexion_ok()
         if ok:
@@ -115,12 +115,20 @@ def conectar(servicio: ServicioTaller) -> bool:
             f"No se pudo conectar con la base de datos.\n\n{detalle}\n\n"
             "Lo más común: el servidor no está encendido. Si es esta computadora, "
             "corre scripts/bd.sh start. Si es un servidor de red, avisá a quien lo "
-            "administra. Después reintentá.",
-            QMessageBox.StandardButton.Retry | QMessageBox.StandardButton.Close,
+            "administra. Podés reintentar o cambiar la configuración acá mismo.",
+            QMessageBox.StandardButton.Retry
+            | QMessageBox.StandardButton.Close,
             QMessageBox.StandardButton.Retry,
         )
-        if respuesta != QMessageBox.StandardButton.Retry:
-            return False
+        if respuesta == QMessageBox.StandardButton.Retry:
+            continue
+        if respuesta == QMessageBox.StandardButton.Close:
+            # la tercera salida: abrir la conexión en la configuración, ahora
+            puesto = ConfiguracionInicialDialog(secciones=frozenset({"conexion"}))
+            if puesto.exec() == QDialog.DialogCode.Accepted:
+                reset_engine()
+                continue
+        return False
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -165,12 +173,38 @@ def main(argv: list[str] | None = None) -> int:
     app.setOrganizationName(marca.organizacion)
     app.setWindowIcon(QIcon(str(marca.logo)))
 
+    # Sin conexión configurada, la Puesta en marcha es el camino — no un error.
+    # El asistente pregunta la conexión (y guarda); después se prepara la base.
+    if not get_settings().database_url:
+        from taller.arranque import cargar_configuracion
+
+        ya_con_marca = bool(cargar_configuracion().nombre)
+        secciones = (
+            frozenset({"conexion"}) if ya_con_marca
+            else frozenset({"identidad", "conexion"})
+        )
+        puesto = ConfiguracionInicialDialog(secciones=secciones)
+        if puesto.exec() != QDialog.DialogCode.Accepted:
+            return 0  # cancelar no es un error
+        reiniciar_cache()
+        reset_engine()
+
     # La base primero: sin tablas no hay usuarios que consultar. Si es la primera
     # vez, esto las crea; si ya existía, solo se conecta.
-    lista, motivo = preparar_base(get_settings().database_url)
-    if not lista:
-        QMessageBox.critical(None, "No se pudo preparar la base", motivo)
-        return 1
+    while True:
+        lista, motivo = preparar_base(get_settings().database_url)
+        if lista:
+            break
+        respuesta = QMessageBox.critical(
+            None,
+            "No se pudo preparar la base",
+            motivo + "\n\nSi el servidor es esta computadora, corré: scripts/bd.sh start",
+            QMessageBox.StandardButton.Retry
+            | QMessageBox.StandardButton.Close,
+            QMessageBox.StandardButton.Retry,
+        )
+        if respuesta != QMessageBox.StandardButton.Retry:
+            return 1
 
     cuenta = autenticar()
     if cuenta is None:

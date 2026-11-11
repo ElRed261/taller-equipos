@@ -59,13 +59,17 @@ class Settings(BaseSettings):
     @field_validator("database_url", mode="after")
     @classmethod
     def _desde_el_asistente(cls, valor: str) -> str:
-        """Fall back to what the first-run wizard saved, if nothing else is set."""
+        """Fall back to what the first-run wizard saved, if nothing else is set.
+
+        Sin ninguna configuración queda vacío y la aplicación abre la Puesta en
+        marcha: una URL de fábrica adivinada conecta a una base equivocada o
+        falla con un error que no se puede arreglar desde la pantalla.
+        """
         if valor:
             return valor
         from taller.arranque import cargar_configuracion
 
-        guardada = cargar_configuracion().database_url
-        return guardada or "postgresql+psycopg://taller@localhost:5432/taller"
+        return cargar_configuracion().database_url
     pool_size: int = Field(default=5, ge=1, le=50)
     pool_max_overflow: int = Field(default=5, ge=0, le=50)
     search_debounce_ms: int = Field(default=250, ge=0, le=2000)
