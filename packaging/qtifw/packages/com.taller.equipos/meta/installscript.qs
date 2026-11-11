@@ -1,55 +1,60 @@
-/****************************************************************************
-**
-** Copyright (C) 2017 The Qt Company Ltd.
-** Contact: https://www.qt.io/licensing/
-**
-** This file is part of the FOO module of the Qt Toolkit.
-**
-** $QT_BEGIN_LICENSE:GPL-EXCEPT$
-** Commercial License Usage
-** Licensees holding valid commercial Qt licenses may use this file in
-** accordance with the commercial license agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company. For licensing terms
-** and conditions see https://www.qt.io/terms-conditions. For further
-** information use the contact form at https://www.qt.io/contact-us.
-**
-** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 3 as published by the Free Software
-** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
-** included in the packaging of this file. Please review the following
-** information to ensure the GNU General Public License requirements will
-** be met: https://www.gnu.org/licenses/gpl-3.0.html.
-**
-** $QT_END_LICENSE$
-**
-****************************************************************************/
+// Instalación del taller de equipos con Qt Installer Framework.
+//
+// Copia el árbol compilado (data → @TargetDir@), crea los accesos que la
+// sesión espera (entrada XDG en el menú, lanzador en ~/.local/bin), y abre el
+// programa al terminar sin bloquearse.
+//
+// Lecciones ya pagadas, en el orden en que mordieron:
+//   - QtIFW 4.7 no tiene "ExecuteDetached" (el error "Operation does not
+//     exist" lo confirmó) y "Execute" espera al hijo: un instalador headless
+//     quedaba colgado una hora con la app en primer plano.
+//   - "@StartMenuDir@" y "@DesktopDir@" quedan vacíos en el modo no
+//     interactivo; los atajos morían en rutas relativas. "@HomeDir@" sí
+//     resuelve (es lo que usa TargetDir).
+//
+// Por eso, en Linux, los accesos y el lanzamiento van por /bin/sh, que es el
+// único camino cuyo comportamiento controlamos en las dos modalidades.
 
 function Component()
 {
-    // default constructor
+    // constructor por defecto
 }
 
-Component.prototype.createOperations = function()
+Component.prototype.createOperations = function ()
 {
-    // call default implementation to actually install README.txt!
+    // primero el comportamiento estándar: extraer `data` a @TargetDir@
     component.createOperations();
 
-    if (systemInfo.productType !== "windows") {
-        component.addOperation("CreateShortcut", "@TargetDir@/taller-equipos.bin",
-            "@StartMenuDir@/Taller de equipos.desktop");
-        component.addOperation("CreateShortcut", "@TargetDir@/taller-equipos.bin",
-            "@DesktopDir@/Taller de equipos.desktop");
-    }
-
     if (systemInfo.productType === "windows") {
-        component.addOperation("CreateShortcut", "@TargetDir@/taller-equipos.bin", "@StartMenuDir@/Taller.lnk",
-            "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/system32/SHELL32.dll",
-            "iconId=2", "description=Open README file");
-    }
+        component.addOperation(
+            "CreateShortcut",
+            "@TargetDir@\\taller-equipos.exe",
+            "@HomeDir@\\.local\\share\\applications\\taller-equipos.lnk"
+        );
+        component.addOperation(
+            "Execute", "cmd", "/c", "start", "",
+            "@TargetDir@\\taller-equipos.exe"
+        );
+    } else {
+        // Entrada del menú de aplicaciones (XDG, independiente del idioma) y
+        // lanzador en ~/.local/bin, con el logo que viaja con el binario.
+        component.addOperation(
+            "Execute", "/bin/sh", "-c",
+            "mkdir -p '@HomeDir@/.local/bin' '@HomeDir@/.local/share/applications' && " +
+            "ln -sf '@TargetDir@/taller-equipos.bin' '@HomeDir@/.local/bin/taller-equipos' && " +
+            "printf '[Desktop Entry]\\nType=Application\\nName=Taller de equipos\\n" +
+            "Comment=Registro de entrada y salida de equipos\\n" +
+            "Exec=\"@TargetDir@/taller-equipos.bin\"\\n" +
+            "Icon=@TargetDir@/taller/ui/assets/logo.png\\n" +
+            "Terminal=false\\nCategories=Office;Database;\\n' " +
+            "> '@HomeDir@/.local/share/applications/taller-equipos.desktop'"
+        );
 
-    // ExecuteDetached: Execute espera a que el hijo salga, y un instalador
-    // headless quedaba colgado una hora con la app en primer plano.
-    component.addOperation("ExecuteDetached", "@TargetDir@/taller-equipos.bin");
-}
+        // Abrir al terminar: el lanzador despega y sale al instante, así el
+        // instalador termina limpio en CLI y con GUI.
+        component.addOperation(
+            "Execute", "/bin/sh", "-c",
+            "setsid '@TargetDir@/taller-equipos.bin' >/dev/null 2>&1 &"
+        );
+    }
+};
